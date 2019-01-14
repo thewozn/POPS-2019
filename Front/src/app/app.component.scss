@@ -1,0 +1,78 @@
+.button {
+  background-color: #008CBA;
+  border: none;
+  color: white;
+  padding: 10px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 4px;
+  font-size: 16px;
+  margin: 4px 8px;
+  cursor: pointer;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+}
+
+.buttonDisc:hover {
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+
+.dropimg {
+  border: none;
+}
+
+.dropdown {
+  display: inline-block;
+  overflow: visible;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 200px;
+  margin-top: -10px;
+  margin-left: 10px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  overflow: visible;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {background-color: #ddd; }
+
+.dropdown:hover .dropdown-content {display: block; position: absolute; }
+
+#snackbar {
+  visibility: visible;
+  min-width: 500px;
+  margin-left: -125px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+  padding: 16px;
+  position: fixed;
+  z-index: 1;
+  left: 50%;
+  bottom: 30px;
+  font-size: 17px;
+  animation: fadeout 0.5s 2.5s;
+}
+
+/* Bottom right text */
+.bottom-right {
+  position: absolute;
+  bottom: 8px;
+  right: 16px;
+  color: #f1f1f1;
+  font-size: 40px;
+  text-shadow: 2px 2px 8px #111111;
+}

@@ -1,0 +1,49 @@
+<div class="header" style = "box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);" id="menu">
+  <a href="." style="position: absolute;">
+    <img border="0" alt="PolyManager" style="position: absolute; margin-left:-5px; margin-top:-5px;" src="./assets/logo.png" width="60" height="60">
+  </a>
+  <div class="header-right">
+    <img border="0" alt="BellIco" src="./assets/bellicon.png" style="margin-right: 15px;"
+         width="30" height="30" *ngIf="!notified" onClick="myFunction">
+    <div *ngIf="notified" style = "display: inline;" class="dropdown">
+      <img border="0" class="dropimg" alt="BellIco" src="./assets/bellicon_notif.png" style="margin-right: 15px;"
+           width="30" height="30" onMouseOver="this.style.cursor='pointer'">
+
+        <div class="dropdown-content" style = "overflow:visible;">
+          <a *ngFor="let notification of notifications" href = "#" >{{notification}}</a>
+        </div>
+    </div>
+
+    <font color="white" style="margin-right: 15px;">{{ nom }} {{ prenom }} </font>
+    <button class="button buttonDisc">Deconnexion</button>
+  </div>
+</div>
+
+
+<div style = "height: 180px; overflow: hidden; position:relative;">
+  <img src="./assets/corporate.jpg" style="width:100%; overflow: hidden;">
+  <div class="bottom-right"><i>Service {{service}} | {{account_type}}</i></div>
+</div>
+
+<div>
+  <!-- Side navigation -->
+  <div id="sidenav" class="sidenav">
+    <a id = "annuaire_href" href="#Annuaire" class="active">Annuaire</a>
+    <a id = "service_href" href="#MyService">Mon service</a>
+    <a id = "conges_href" href="#Conges">Congés</a>
+    <a id = "frais_href" href="#Frais">Notes de frais</a>
+    <a id = "missions_href" href="#Missions">Missions</a>
+  </div>
+</div>
+
+<div id="modular_content">
+  <div id = "conges_section" style = "margin-left: 200px; margin-top: 0px; display: none;">
+    <app-conges></app-conges>
+  </div>
+</div>
+
+<div id="snackbar" onclick="this.style.visibility='hidden'">Aucune nouvelle notification...</div>
+
+
+
+<router-outlet></router-outlet>
