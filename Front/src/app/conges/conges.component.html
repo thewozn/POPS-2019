@@ -1,9 +1,13 @@
-<div id="top" class="topnav">
-  <a class="active" href="#Demander">Demander</a>
-  <a href="#Historique">Historique</a>
-  <a href="#Consulter">Consulter le planning</a>
-  <a href="#Valider"><div *ngIf="account_type == 'Chef' || service == 'RH'">Valider</div></a>
-  <a style="float: right;" href="#link5">AIDE</a>
+<div id = "conges_section">
+  <div id="top" class="topnav">
+    <a class="active" routerLink="demander">Demander</a>
+    <a routerLink="notfound">Historique</a>
+    <a routerLink="notfound">Consulter le planning</a>
+    <a routerLink="notfound"><div *ngIf="account_type == 'Chef' || service == 'RH'">Valider</div></a>
+    <a style="float: right;" href="#link5">AIDE</a>
+  </div>
+  <div style="margin-left: 10px; margin-top:10px;">
+    <router-outlet></router-outlet>
+  </div>
 </div>
-
 

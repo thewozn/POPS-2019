@@ -52,8 +52,7 @@
 
 #snackbar {
   visibility: visible;
-  min-width: 500px;
-  margin-left: -125px;
+  width: 30%;
   background-color: #333;
   color: #fff;
   text-align: center;
@@ -61,10 +60,11 @@
   padding: 16px;
   position: fixed;
   z-index: 1;
-  left: 50%;
+  left: 35%;
   bottom: 30px;
   font-size: 17px;
-  animation: fadeout 0.5s 2.5s;
+  cursor: pointer;
+  opacity: 95%;
 }
 
 /* Bottom right text */
@@ -76,3 +76,6 @@
   font-size: 40px;
   text-shadow: 2px 2px 8px #111111;
 }
+
+
+

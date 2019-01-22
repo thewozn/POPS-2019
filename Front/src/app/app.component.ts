@@ -7,6 +7,7 @@ import * as $ from 'jquery';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
+
 export class AppComponent {
   prenom: any;
   nom: any
@@ -53,5 +54,22 @@ export class AppComponent {
       });
     });
 
+    $('#snackbar').on('click', function(e) {
+      $(this).fadeOut(400, "swing");
+    });
+
+    $('#showButton').on('click', function(e) {
+      if($('#sidenav').is(":hidden")){
+        $('#sidenav').fadeIn(200, "swing");
+        $('#sidenav').show();
+      }
+      else{
+        $('#sidenav').fadeOut(200, "swing");
+      }
+    });
+
+    $('#sidenav #closeButton').on('click', function(e) {
+      $('#sidenav').fadeOut(200, "swing");
+    });
   }
 }
