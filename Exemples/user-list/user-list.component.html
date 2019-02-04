@@ -1,0 +1,23 @@
+<mat-card>
+  <mat-card-title>User List</mat-card-title>
+  <mat-card-content>
+    <mat-list>
+      <mat-list-item *ngFor="let user of users">
+        <h2 mat-line>{{user.uid}}</h2>
+        <h2 mat-line>{{user.status}}</h2>
+        <h2 mat-line>{{user.sid}}</h2>
+        <h2 mat-line>{{user.lastName}}</h2>
+        <h2 mat-line>{{user.firstName}}</h2>
+        <h2 mat-line>{{user.dateN}}</h2>
+        <h2 mat-line>{{user.email}}</h2>
+        <h2 mat-line>{{user.cp}}</h2>
+        <h2 mat-line>{{user.city}}</h2>
+        <h2 mat-line>{{user.country}}</h2>
+        <h2 mat-line>{{user.password}}</h2>
+        <h2 mat-line>{{user.picturePath}}</h2>
+        <h2 mat-line>{{user.alive}}</h2>
+
+      </mat-list-item>
+    </mat-list>
+  </mat-card-content>
+</mat-card>
