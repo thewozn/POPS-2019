@@ -1,0 +1,115 @@
+<div class="container-fluid">
+<div class=row>
+  <div class="col-lg-3">
+  
+</div>
+ <div class="col-lg-8">
+
+ <div class="row">
+
+
+  <form class="navbar-form" role="search">
+  	<div class="col-lg-11">
+      <div class="col-lg-3">
+  	<label class="control-label"> Collaborateur </label>
+    </div>
+    	
+      <input class="form-control" placeholder="ex : Julien Lavergne" name="srch-term" id="srch-term" type="text">
+   
+  </div>
+  </form>
+
+<div class="col-lg-1">
+   <label class="control-label"> Type </label>
+
+<select class="selectpicker show-menu-arrow">
+  <option>RTT</option>
+  <option>Congé Payé</option>
+  <option>Autre</option>
+</select>
+</div>
+
+
+
+</div>								
+
+<div class="row">
+  <div class="col-lg-3">
+
+<label for="depart">Départ </label>
+<div class = "pull-right">
+<input type="date" id="depart" name="trip-start"
+       value="2018-01-01"
+       min="2018-01-01" max="2020-12-31">
+   </div>
+</div>
+   <div class="col-lg-3">
+
+<label for="retour">Retour </label>
+<input type="date" id="retour" name="trip-start"
+       value="2018-01-01"
+       min="2018-01-01" max="2020-12-31">
+    </div>
+
+       <div class="col-lg-5">
+       	<label for="retour"></label>
+
+       	<div class="btn center-block">                     
+       	<button type="button" class="btn btn-primary">
+  <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Rechercher
+</button>
+</div>
+    
+</div>
+</div>
+
+<div class= "row"> <h1>    </h1></div>
+<div class= "row"> <h1>    </h1></div>
+<div class= "row"> <h1>    </h1></div>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Collaborateur</th>
+      <th scope="col">Départ</th>
+      <th scope="col">m/a</th>
+      <th scope="col">Retour</th>
+      <th scope="col">m/a</th>
+      <th scope="col">Options</th>
+      <th scope="col"> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+
+          <a routerLink="fiche">
+      <td scope="row" >Jérémie HALLE</td></a>
+      <td>18/03/2019</td>
+      <td>matin</td>
+      <td>24/03/2019</td>
+      <td>après-midi</td>
+      <td>RTT</td>
+    </tr>
+
+    <tr>
+      <a routerLink="fiche"><td scope="row">Sylvie JEAN</td></a>
+      <td>18/03/2019</td>
+      <td>matin</td>
+      <td>30/03/2019</td>
+      <td>matin</td>
+      <td>Payé</td>
+    </tr>
+    <tr>
+      <a routerLink="fiche"><td scope="row">Johnny DOE</td></a>
+      <td >05/04/2019</td>
+      <td>après-midi</td>
+      <td>15/04/2019</td>
+      <td>matin</td>
+      <td>Payé</td>
+    </tr>
+
+  </tbody>
+
+
+</table>
+

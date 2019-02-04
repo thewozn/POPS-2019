@@ -17,7 +17,11 @@ import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from '@angular/common';
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
-import  "node_modules/flatpickr/dist/flatpickr.css"
+import 'node_modules/flatpickr/dist/flatpickr.css';
+import {CserviceService} from './services/cservice.service';
+import { ValidationComponent } from './conges/validation/validation.component';
+import { FicheUtilisateurComponent } from './fiche-utilisateur/fiche-utilisateur.component';
+
 registerLocaleData(localeFr);
 
 @NgModule({
@@ -27,7 +31,9 @@ registerLocaleData(localeFr);
     NotesfraisComponent,
     MissionsComponent,
     NotfoundComponent,
-    DemanderComponent
+    DemanderComponent,
+    ValidationComponent,
+    FicheUtilisateurComponent
   ],
   imports: [
     FormsModule,
@@ -42,7 +48,7 @@ registerLocaleData(localeFr);
     NgbModalModule.forRoot(),
     FlatpickrModule.forRoot(),
   ],
-  providers: [UsersService],
+  providers: [UsersService, CserviceService],
   bootstrap: [AppComponent],
   exports: [DemanderComponent]
 })

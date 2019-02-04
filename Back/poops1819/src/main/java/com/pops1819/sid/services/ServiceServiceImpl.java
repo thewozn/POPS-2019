@@ -26,11 +26,15 @@ public class ServiceServiceImpl implements IServiceService
 	{
 		com.pops1819.sid.entities.Service newService = mapper.getService(serviceRequest);
 		User user = userRepository.findByUid(serviceRequest.getHeadOfService());
-		if(user == null) 
+		if(user == null) {
+			System.out.println("echo");
 			return null;
-		if(user.getMyService() != null)
+		}
+			
+		if(user.getMyService() != null) {
+			System.out.println("echo2");
 			return null;
-		
+		}
 		user.setService(newService);
 		
 		return serviceRepository.save(newService);

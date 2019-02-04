@@ -66,8 +66,10 @@
       </tr>
       </thead>
       <td>
-        <select class="soflow" style="margin: 0 0 0;">
-          <option>Type de congé</option>
+        <select id='type_selector' class="soflow" style="margin: 0 0 0;"
+                [(ngModel)]="new_event.title"
+        >
+          <option selected disabled hidden>Type de congé</option>
           <option>RTT</option>
           <option>Sans solde</option>
         </select>
@@ -96,7 +98,7 @@
           placeholder="Not set">
       </td>
       <td>
-        <select class="soflow" id="depart" style="width:100%; margin: 0 0 0;">
+        <select class="soflow" id="depart" style="width:100%; margin: 0 0 0;" [(ngModel)] = "start_period">
           <option>Matin</option>
           <option>Après-midi</option>
         </select>
@@ -124,7 +126,7 @@
           placeholder="Not set">
       </td>
       <td>
-        <select class="soflow" id="Retour" style="width:100%; margin: 0 0 0;">
+        <select class="soflow" id="Retour" style="width:100%; margin: 0 0 0;" [(ngModel)] = "end_period">
           <option>Matin</option>
           <option>Après-midi</option>
         </select>
@@ -141,11 +143,9 @@
     <div class="clearfix"></div></div>-->
     <div
       class="btn btn-primary"
-      mwlCalendarPreviousView
-      [view]="view"
-      [(viewDate)]="viewDate"
+      (click)="saveEvent()"
       style= "background-color: #008CBA; width: 45%; height: 40px; margin-left: 3%; float: left;"
-      (viewDateChange)="activeDayIsOpen = false">
+      >
       Valider la demande
     </div>
     <div
@@ -267,8 +267,8 @@
 
 </table>-->
 </div>
-<div style = "border: 1px solid lightgray; width: 98%; height: 180px; background: whitesmoke; margin-bottom: 50px;">
-  <table class="table table-bordered" style="width:50%; text-align: center;">
+<div class="info_div">
+  <table class="table table-bordered" style="width:70%; text-align: center;">
     <thead>
     <tr>
       <th></th>
@@ -278,7 +278,7 @@
     </tr>
     </thead>
     <td style="text-align: right;">
-      Solde<br>Congés posés<br>En cours de validation<br>Restants/Reportés
+      Solde<br>Congés posés<br>En validation<br>Restants/Reportés
     </td>
     <td>
       32<br>28<br>0<br>4

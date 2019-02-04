@@ -3,7 +3,7 @@ import * as $ from "jquery"
 import {UsersService} from '../services/users.service';
 
 @Component({
-  selector: 'app-conges',
+  selector: 'app-congesr',
   templateUrl: './conges.component.html',
   styleUrls: ['./conges.component.scss']
 })

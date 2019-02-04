@@ -25,20 +25,16 @@ import {
   CalendarEventTimesChangedEvent,
   CalendarView
 } from 'angular-calendar';
+import * as $ from 'jquery';
+import {UsersService} from '../../services/users.service';
+import {CserviceService} from '../../services/cservice.service';
 
 const colors: any = {
-  red: {
-    primary: '#157ab5',
-    secondary: '#FAE3E3'
+  red: {                    //En attente
+    primary: '#c63325',
+    secondary: '#c63325'
   },
-  blue: {
-    primary: '#13468c',
-    secondary: '#D1E8FF'
-  },
-  yellow: {
-    primary: '#081d3a',
-    secondary: '#FDF1BA'
-  }
+
 };
 
 @Component({
@@ -48,10 +44,21 @@ const colors: any = {
   styleUrls: ['./demander.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
+
+
+
 export class DemanderComponent implements OnInit {
 
   @ViewChild('modalContent')
   modalContent: TemplateRef<any>;
+
+  start_period: string;
+  end_period: string;
+  validated: boolean;
+  prenom: string;
+  nom: string;
+  srv: string;
+  account_type: any;
 
   view: CalendarView = CalendarView.Month;
 
@@ -63,6 +70,8 @@ export class DemanderComponent implements OnInit {
     action: string;
     event: CalendarEvent;
   };
+
+
 
   actions: CalendarEventAction[] = [
     {
@@ -97,7 +106,7 @@ export class DemanderComponent implements OnInit {
   };
 
   events: CalendarEvent[] = [
-    {
+    /*{
       start: subDays(startOfDay(new Date()), 1),
       end: addDays(new Date(), 1),
       title: 'RTT collaborateur A - 16 Jan. 2018 Matin | 19 Jan. 2018 AM',
@@ -134,12 +143,12 @@ export class DemanderComponent implements OnInit {
         afterEnd: true
       },
       draggable: true
-    }
+    }*/
   ];
 
   activeDayIsOpen: boolean = true;
 
-  constructor(private modal: NgbModal) {}
+  constructor(private modal: NgbModal, private UsersService: UsersService, private CserviceService: CserviceService) {}
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
@@ -171,7 +180,7 @@ export class DemanderComponent implements OnInit {
     this.modal.open(this.modalContent, { size: 'lg' });
   }
 
-  addEvent(): void {
+  /*addEvent(): void {
     this.events.push({
       title: 'New event',
       start: startOfDay(new Date()),
@@ -184,13 +193,63 @@ export class DemanderComponent implements OnInit {
       }
     });
     this.refresh.next();
+  }*/
+
+  saveEvent(): void {
+    const type_conge = this.new_event.title;
+    if (((this.new_event.title === 'RTT') || (this.new_event.title === 'Sans solde')) && (this.validated === false)) {
+      if (this.start_period === 'Matin') {
+        this.new_event.start.setHours(1, 0, 0, 0);
+      } else {
+        this.new_event.start.setHours(13, 0, 0, 0);
+      }
+      if (this.end_period === 'Matin') {
+        this.new_event.end.setHours(1, 0, 0, 0);
+      } else {
+        this.new_event.end.setHours(13, 0, 0, 0);
+      }
+
+      const mm_s = this.new_event.start.getMonth() + 1;
+      const dd_s = this.new_event.start.getDate();
+      const yy_s = this.new_event.start.getFullYear();
+
+      const mm_e = this.new_event.end.getMonth() + 1;
+      const dd_e = this.new_event.end.getDate();
+      const yy_e = this.new_event.end.getFullYear();
+
+      this.new_event.title = ('[EN VALIDATION] ' + this.nom + ' ' + this.prenom + ' - ' +
+         this.new_event.title + ' du ' + dd_s + '/' + mm_s + '/' + yy_s + ' ('
+        + this.start_period.toUpperCase() + ') au ' + dd_e + '/' + mm_e + '/' + yy_e + ' (' + this.end_period.toUpperCase() + ').');
+      this.events.push(this.new_event);
+      this.refresh.next();
+
+      this.validated = true;
+      $('select[id="type_selector"]').attr('disabled', 'disabled');
+    }
   }
 
   ngOnInit() {
+
+    this.events = this.CserviceService.self_conges;
+    this.events.concat(this.CserviceService.self_conges_en_attente);
+
+    for (const event in this.CserviceService.collaborators_list) {
+      this.events.push(this.CserviceService.collaborators_list[event]);
+    }
+
+    this.start_period = 'Matin';
+    this.end_period = 'Matin';
+    this.validated = false;
+
+    this.prenom = this.UsersService.prenom;
+    this.nom = this.UsersService.nom;
+    this.srv = this.UsersService.service;
+    this.account_type = this.UsersService.account_type;
+
     this.new_event = {
       start: startOfDay(new Date()),
       end: addDays(new Date(), 1),
-      title: 'Empty event',
+      title: 'Type de congé',
       color: colors.red,
       actions: this.actions,
       allDay: true,
@@ -200,6 +259,10 @@ export class DemanderComponent implements OnInit {
       },
       draggable: true
     };
+
+    console.log(this.new_event.start);
+    this.new_event.start.setHours(1, 0, 0, 0);
+    console.log(this.new_event.start);
   }
 
 }

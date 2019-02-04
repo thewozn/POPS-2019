@@ -8,9 +8,9 @@ import * as $ from 'jquery';
   styleUrls: ['./app.component.scss']
 })
 
-export class AppComponent {
+export class AppComponent implements OnInit {
   prenom: any;
-  nom: any
+  nom: any;
   mail: any;
   notified: any;
   notifications: any;
