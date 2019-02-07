@@ -15,7 +15,9 @@ import localeFr from '@angular/common/locales/fr';
 import 'node_modules/flatpickr/dist/flatpickr.css';
 
 import { ConnectedService } from './services/connected.service';
-import { CongesService } from '././services/conges.service';
+import { HolidayRequestService } from './services/holiday-request.service';
+import { UserService } from './services/user.service';
+import { ExpenseReportLineService } from './services/expense-report-line.service';
 
 import { CongesComponent } from './conges/conges.component';
 import { DemanderComponent } from './conges/demander/demander.component';
@@ -25,6 +27,7 @@ import { NotesfraisComponent } from './notesfrais/notesfrais.component';
 import { MissionsComponent } from './missions/missions.component';
 import { NotfoundComponent } from './notfound/notfound.component';
 import { FicheUtilisateurComponent } from './fiche-utilisateur/fiche-utilisateur.component';
+
 
 registerLocaleData(localeFr);
 
@@ -53,7 +56,7 @@ registerLocaleData(localeFr);
     NgbModalModule.forRoot(),
     FlatpickrModule.forRoot(),
   ],
-  providers: [ConnectedService, CongesService],
+  providers: [ConnectedService, HolidayRequestService, UserService, ExpenseReportLineService],
   bootstrap: [AppComponent],
   exports: [DemanderComponent]
 })

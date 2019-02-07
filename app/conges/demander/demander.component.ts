@@ -27,7 +27,7 @@ import {
 } from 'angular-calendar';
 import * as $ from 'jquery';
 import {ConnectedService} from '../../services/connected.service';
-import {CongesService} from '../../services/conges.service';
+import {HolidayRequestService} from '../../services/holiday-request.service';
 
 const colors: any = {
   red: {                    // En attente
@@ -148,7 +148,7 @@ export class DemanderComponent implements OnInit {
 
   activeDayIsOpen = true;
 
-  constructor(private modal: NgbModal, private connectedService: ConnectedService, private congesService: CongesService) {}
+  constructor(private modal: NgbModal, private connectedService: ConnectedService, private holidayrequestService: HolidayRequestService) {}
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
@@ -230,11 +230,11 @@ export class DemanderComponent implements OnInit {
 
   ngOnInit() {
 
-    this.events = this.congesService.self_conges;
-    this.events.concat(this.congesService.self_conges_en_attente);
+    this.events = this.holidayrequestService.self_conges;
+    this.events.concat(this.holidayrequestService.self_conges_en_attente);
 
-    for (const event in this.congesService.collaborators_list) {
-      this.events.push(this.congesService.collaborators_list[event]);
+    for (const event in this.holidayrequestService.collaborators_list) {
+      this.events.push(this.holidayrequestService.collaborators_list[event]);
     }
 
     this.start_period = 'Matin';

@@ -36,17 +36,5 @@ export class UserService {
   //     }
   //   );
   }
-
-  // getUsersFromServer() {
-  //   this.httpClient.get<User[]>('138.195.202.70:8080/users').subscribe(
-  //     response => {
-  //       this.users = response;
-  //       this.emitUsersSubject();
-  //     },
-  //     error => {
-  //       console.log('Erreur ! : ' + error);
-  //     }
-  //   );
-  // }
 }
 
