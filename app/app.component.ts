@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UsersService } from './services/users.service';
+import { ConnectedService } from './services/connected.service';
 import * as $ from 'jquery';
 
 @Component({
@@ -17,59 +17,58 @@ export class AppComponent implements OnInit {
   service: any;
   account_type: any;
 
-  constructor(private UsersService: UsersService) {
+  constructor(private connectedService: ConnectedService) {
 
   }
 
   ngOnInit() {
-    this.prenom = this.UsersService.prenom;
-    this.nom = this.UsersService.nom;
-    this.mail = this.UsersService.mail;
-    this.service = this.UsersService.service;
-    this.account_type = this.UsersService.account_type;
-    this.mail = this.UsersService.mail;
-    this.notified = this.UsersService.notified;
-    this.notifications = this.UsersService.notifications;
+    this.prenom = this.connectedService.prenom;
+    this.nom = this.connectedService.nom;
+    this.mail = this.connectedService.mail;
+    this.service = this.connectedService.service;
+    this.account_type = this.connectedService.account_type;
+    this.mail = this.connectedService.mail;
+    this.notified = this.connectedService.notified;
+    this.notifications = this.connectedService.notifications;
 
     $('#sidenav a').on('click', function(e) {
       $(this).addClass('active').siblings('a').removeClass('active');
     });
 
     $(document).ready(function() {
-      $("#annuaire_href").click(function() {
-        $("#modular_content").children("div").css('display', 'none');
+      $('#annuaire_href').click(function() {
+        $('#modular_content').children('div').css('display', 'none');
       });
-      $("#service_href").click(function() {
-        $("#modular_content").children("div").css('display', 'none');
+      $('#service_href').click(function() {
+        $('#modular_content').children('div').css('display', 'none');
       });
-      $("#conges_href").click(function() {
-        $("#modular_content").children("div").css('display', 'none');
-        $("#conges_section").css('display', 'block');
+      $('#conges_href').click(function() {
+        $('#modular_content').children('div').css('display', 'none');
+        $('#conges_section').css('display', 'block');
       });
-      $("#frais_href").click(function() {
-        $("#modular_content").children("div").css('display', 'none');
+      $('#frais_href').click(function() {
+        $('#modular_content').children('div').css('display', 'none');
       });
-      $("#mission_href").click(function() {
-        $("#modular_content").children("div").css('display', 'none');
+      $('#mission_href').click(function() {
+        $('#modular_content').children('div').css('display', 'none');
       });
     });
 
     $('#snackbar').on('click', function(e) {
-      $(this).fadeOut(400, "swing");
+      $(this).fadeOut(400, 'swing');
     });
 
     $('#showButton').on('click', function(e) {
-      if($('#sidenav').is(":hidden")){
-        $('#sidenav').fadeIn(200, "swing");
+      if ($('#sidenav').is(':hidden')){
+        $('#sidenav').fadeIn(200, 'swing');
         $('#sidenav').show();
-      }
-      else{
-        $('#sidenav').fadeOut(200, "swing");
+      } else {
+        $('#sidenav').fadeOut(200, 'swing');
       }
     });
 
     $('#sidenav #closeButton').on('click', function(e) {
-      $('#sidenav').fadeOut(200, "swing");
+      $('#sidenav').fadeOut(200, 'swing');
     });
   }
 }

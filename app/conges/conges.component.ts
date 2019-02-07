@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import * as $ from "jquery"
-import {UsersService} from '../services/users.service';
+import * as $ from 'jquery'
+import {ConnectedService} from '../services/connected.service';
 
 @Component({
   selector: 'app-congesr',
@@ -12,13 +12,13 @@ export class CongesComponent implements OnInit {
   account_type: any;
   service: any;
 
-  constructor(private UsersService: UsersService) {
+  constructor(private connectedService: ConnectedService) {
 
   }
 
   ngOnInit() {
-    this.account_type = this.UsersService.account_type;
-    this.service = this.UsersService.service;
+    this.account_type = this.connectedService.account_type;
+    this.service = this.connectedService.service;
 
     $('#top a').on('click', function(e) {
       $(this).addClass('active').siblings('a').removeClass('active');

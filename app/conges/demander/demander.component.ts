@@ -26,11 +26,11 @@ import {
   CalendarView
 } from 'angular-calendar';
 import * as $ from 'jquery';
-import {UsersService} from '../../services/users.service';
-import {CserviceService} from '../../services/cservice.service';
+import {ConnectedService} from '../../services/connected.service';
+import {CongesService} from '../../services/conges.service';
 
 const colors: any = {
-  red: {                    //En attente
+  red: {                    // En attente
     primary: '#c63325',
     secondary: '#c63325'
   },
@@ -65,7 +65,7 @@ export class DemanderComponent implements OnInit {
   CalendarView = CalendarView;
 
   viewDate: Date = new Date();
-  locale: string = 'fr';
+  locale = 'fr';
   modalData: {
     action: string;
     event: CalendarEvent;
@@ -146,9 +146,9 @@ export class DemanderComponent implements OnInit {
     }*/
   ];
 
-  activeDayIsOpen: boolean = true;
+  activeDayIsOpen = true;
 
-  constructor(private modal: NgbModal, private UsersService: UsersService, private CserviceService: CserviceService) {}
+  constructor(private modal: NgbModal, private connectedService: ConnectedService, private congesService: CongesService) {}
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
@@ -230,21 +230,21 @@ export class DemanderComponent implements OnInit {
 
   ngOnInit() {
 
-    this.events = this.CserviceService.self_conges;
-    this.events.concat(this.CserviceService.self_conges_en_attente);
+    this.events = this.congesService.self_conges;
+    this.events.concat(this.congesService.self_conges_en_attente);
 
-    for (const event in this.CserviceService.collaborators_list) {
-      this.events.push(this.CserviceService.collaborators_list[event]);
+    for (const event in this.congesService.collaborators_list) {
+      this.events.push(this.congesService.collaborators_list[event]);
     }
 
     this.start_period = 'Matin';
     this.end_period = 'Matin';
     this.validated = false;
 
-    this.prenom = this.UsersService.prenom;
-    this.nom = this.UsersService.nom;
-    this.srv = this.UsersService.service;
-    this.account_type = this.UsersService.account_type;
+    this.prenom = this.connectedService.prenom;
+    this.nom = this.connectedService.nom;
+    this.srv = this.connectedService.service;
+    this.account_type = this.connectedService.account_type;
 
     this.new_event = {
       start: startOfDay(new Date()),

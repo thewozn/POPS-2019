@@ -3,15 +3,17 @@ export class User {
         public uid: number,
         public status: string,
         public sid: string,
-        public lastname: string,
-        public firstname: string,
-        public dateN: Date,
+        public last_name: string,
+        public first_name: string,
+        public date_n: Date,
         public email: string,
         public address: string,
         public cp: string,
         public city: string,
         public country: string,
         public password: string,
-        public picturepath: string) {
+        public picturepath: string,
+        public alive: boolean,
+        ) {
     }
 }
