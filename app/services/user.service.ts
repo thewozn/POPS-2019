@@ -36,5 +36,9 @@ export class UserService {
   //     }
   //   );
   }
+
+  getUserByEmail(email: string): Observable<User> {
+  return this.httpclient.get<User>(this.baseUrl + '/connexion/' + email + '/ ');
+  }
 }
 

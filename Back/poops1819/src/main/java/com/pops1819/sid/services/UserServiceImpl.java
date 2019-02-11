@@ -94,5 +94,10 @@ public class UserServiceImpl implements UserService {
 		userRepository.save(user);
 		return true;
 	}
+	
+	@Override
+	public UserRequest findUserByEmail(String email) {
+		return mapper.getUserRequet(userRepository.findByEmail(email));
+	}
 
 }

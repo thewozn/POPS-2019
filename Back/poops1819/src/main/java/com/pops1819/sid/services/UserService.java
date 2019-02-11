@@ -14,4 +14,5 @@ public interface UserService
 	public List<UserRequest> getUnassignedUserList();
 	public List<UserRequest> getAssignedUserList();
 	public List<UserRequest> getUserListByService(Long sid);
+	public UserRequest findUserByEmail(String email);
 }

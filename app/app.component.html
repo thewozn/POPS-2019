@@ -1,29 +1,27 @@
-
-
-<div class="header" style = "box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); position:fixed; width: 100%; z-index:100;" id="menu">
-  <button id="showButton" class="w3-button w3-teal w3-xlarge"  style="position: absolute; margin-left:0px;" onclick="w3_open()">☰</button>
+<div class="header" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); position:fixed; width: 100%; z-index:100;"
+  id="menu">
+  <button id="showButton" class="w3-button w3-teal w3-xlarge" style="position: absolute; margin-left:0px;" onclick="w3_open()">☰</button>
   <a href="." style="position: absolute;">
-    <img border="0" alt="PolyManager" style="position: absolute; margin-left:60px; margin-top:-5px;" src="./assets/logo.png" width="60" height="60">
+    <img border="0" alt="PolyManager" style="position: absolute; margin-left:60px; margin-top:-5px;" src="./assets/logo.png"
+      width="60" height="60">
   </a>
   <div class="header-right">
-    <img border="0" alt="BellIco" src="./assets/bellicon.png" style="margin-right: 15px;"
-         width="30" height="30" *ngIf="!notified" onClick="myFunction">
-    <div *ngIf="notified" style = "display: inline;" class="dropdown">
-      <img border="0" class="dropimg" alt="BellIco" src="./assets/bellicon_notif.png" style="margin-right: 15px;"
-           width="30" height="30" onMouseOver="this.style.cursor='pointer'">
+    <img border="0" alt="BellIco" src="./assets/bellicon.png" style="margin-right: 15px;" width="30" height="30" *ngIf="!notified"
+      onClick="myFunction">
+    <div *ngIf="notified" style="display: inline;" class="dropdown">
+      <img border="0" class="dropimg" alt="BellIco" src="./assets/bellicon_notif.png" style="margin-right: 15px;" width="30"
+        height="30" onMouseOver="this.style.cursor='pointer'">
 
-        <div class="dropdown-content" style = "overflow:visible;">
-          <a *ngFor="let notification of notifications" href = "#" >{{notification}}</a>
-        </div>
+      <div class="dropdown-content" style="overflow:visible;">
+        <a *ngFor="let notification of notifications" href="#">{{notification}}</a>
+      </div>
     </div>
 
-    <font color="white" style="margin-right: 15px;">{{ nom }} {{ prenom }} </font>
-    <button class="button buttonDisc">Deconnexion</button>
+    <font color="white" style="margin-right: 15px;">{{ nom }} {{ prenom }} {{isAuth}}</font>
+    <input type="button" class="button buttonDisc" value="Deconnexion" *ngIf="isAuth">
   </div>
 </div>
-
-
-<div style = "height: 260px; overflow: hidden; position:relative;">
+<div style="height: 260px; overflow: hidden; position:relative;">
   <img src="./assets/corporate.jpg" style="width:100%; overflow: hidden; margin-top: 70px;">
   <!--<div class="bottom-right"><i>Service {{service}} | {{account_type}}</i></div>-->
 </div>
@@ -31,11 +29,11 @@
 <div>
   <div id="sidenav" class="sidenav" style="display:none">
     <br><br><br>
-    <a id = "annuaire_href" routerLink="notfound" class="active">Annuaire</a>
-    <a id = "service_href" routerLink="notfound">Mon service</a>
-    <a id = "conges_href" routerLink="conges/demander">Congés</a>
-    <a id = "frais_href"  routerLink="notfound">Notes de frais</a>
-    <a id = "missions_href" routerLink="notfound">Missions</a>
+    <a id="annuaire_href" routerLink="notfound" class="active">Annuaire</a>
+    <a id="service_href" routerLink="notfound">Mon service</a>
+    <a id="conges_href" routerLink="conges/demander">Congés</a>
+    <a id="frais_href" routerLink="notfound">Notes de frais</a>
+    <a id="missions_href" routerLink="notfound">Missions</a>
     <br>
     <!--<button id="closeButton"><span>Fermer </span></button>-->
 
@@ -43,10 +41,8 @@
 </div>
 
 
-<div id="modular_content"  style = "margin-left: 0px; margin-top: 0px;">
+<div id="modular_content" style="margin-left: 0px; margin-top: 0px;">
   <router-outlet></router-outlet>
 </div>
 
-<div id="snackbar">Aucune nouvelle notification...</div>
-
-
+<!-- <div id="snackbar">Aucune nouvelle notification...</div> -->

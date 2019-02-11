@@ -19,6 +19,8 @@ import { HolidayRequestService } from './services/holiday-request.service';
 import { UserService } from './services/user.service';
 import { ExpenseReportLineService } from './services/expense-report-line.service';
 
+import { ConnexionComponent } from './connexion/connexion.component';
+
 import { CongesComponent } from './conges/conges.component';
 import { DemanderComponent } from './conges/demander/demander.component';
 import { ValidationComponent } from './conges/validation/validation.component';
@@ -27,6 +29,7 @@ import { NotesfraisComponent } from './notesfrais/notesfrais.component';
 import { MissionsComponent } from './missions/missions.component';
 import { NotfoundComponent } from './notfound/notfound.component';
 import { FicheUtilisateurComponent } from './fiche-utilisateur/fiche-utilisateur.component';
+
 
 
 registerLocaleData(localeFr);
@@ -40,7 +43,8 @@ registerLocaleData(localeFr);
     NotfoundComponent,
     DemanderComponent,
     ValidationComponent,
-    FicheUtilisateurComponent
+    FicheUtilisateurComponent,
+    ConnexionComponent
   ],
   imports: [
     FormsModule,

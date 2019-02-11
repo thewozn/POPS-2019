@@ -16,12 +16,14 @@ export class AppComponent implements OnInit {
   notifications: any;
   service: any;
   account_type: any;
+  isAuth: boolean;
 
   constructor(private connectedService: ConnectedService) {
 
   }
 
   ngOnInit() {
+    this.isAuth = this.connectedService.isAuth;
     this.prenom = this.connectedService.prenom;
     this.nom = this.connectedService.nom;
     this.mail = this.connectedService.mail;
@@ -59,7 +61,7 @@ export class AppComponent implements OnInit {
     });
 
     $('#showButton').on('click', function(e) {
-      if ($('#sidenav').is(':hidden')){
+      if ($('#sidenav').is(':hidden')) {
         $('#sidenav').fadeIn(200, 'swing');
         $('#sidenav').show();
       } else {

@@ -36,6 +36,7 @@ public class UserRestController
 		return new ResponseEntity<>(userServiceImpl.getUserList(),HttpStatus.OK);
 	}
 	
+	// Permet de rechercher un utilisateur via l'uid
 	@RequestMapping(value="/users/{uid}", method=RequestMethod.GET)
 	public ResponseEntity<UserRequest> findUserById(@PathVariable Long uid) {
 		UserRequest user = userServiceImpl.findUserById(uid);
@@ -79,6 +80,15 @@ public class UserRestController
 	public ResponseEntity<List<UserRequest>> getTest()
 	{
 		throw new NotImplementedException("Not implemented");
+	}
+	
+	@RequestMapping(value="/connexion/{email}/{pass}", method=RequestMethod.GET)
+	public ResponseEntity<UserRequest> authentification(@PathVariable String email, @PathVariable String pass)
+	{
+		UserRequest user = userServiceImpl.findUserByEmail(email);
+		if(user==null)
+			throw new EntityNotFoundException("user not exist with this email : "+ email);
+		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 	
 }
