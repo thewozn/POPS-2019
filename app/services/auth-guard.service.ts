@@ -7,13 +7,18 @@ import { ConnectedService } from '../services/connected.service';
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
-
+  authStatus: Boolean;
   constructor(private connectedService: ConnectedService, private router: Router) { }
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    if (this.connectedService.isAuth) {
+    this.connectedService.getIsAuth().subscribe(
+      (value) => {
+        this.authStatus = value;
+      }
+      );
+    if (this.authStatus) {
       return true;
     } else {
       this.router.navigate(['/connexion']);

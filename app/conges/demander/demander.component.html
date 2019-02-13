@@ -67,7 +67,7 @@
       </thead>
       <td>
         <select id='type_selector' class="soflow" style="margin: 0 0 0;"
-                [(ngModel)]="new_event.title"
+                [(ngModel)]="user_event.type"
         >
           <option selected disabled hidden>Type de congé</option>
           <option>RTT</option>
@@ -169,7 +169,6 @@
     [refresh]="refresh"
     [activeDayIsOpen]="activeDayIsOpen"
     (dayClicked)="dayClicked($event.day)"
-    (eventClicked)="handleEvent('Clicked', $event.event)"
     [style.height.px] = "70"
     [style.cal-month-view.height.px] = "70"
     [style.cal-day-cell.px] = "70"

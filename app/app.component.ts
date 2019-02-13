@@ -1,14 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ConnectedService } from './services/connected.service';
 import * as $ from 'jquery';
-
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
 
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   prenom: any;
   nom: any;
   mail: any;
@@ -16,14 +16,20 @@ export class AppComponent implements OnInit {
   notifications: any;
   service: any;
   account_type: any;
-  isAuth: boolean;
+
+  authStatus: boolean;
+  authSubscription: Subscription;
 
   constructor(private connectedService: ConnectedService) {
 
   }
 
   ngOnInit() {
-    this.isAuth = this.connectedService.isAuth;
+    this.connectedService.getIsAuth().subscribe(
+      (value) => {
+        this.authStatus = value;
+      }
+    );
     this.prenom = this.connectedService.prenom;
     this.nom = this.connectedService.nom;
     this.mail = this.connectedService.mail;
@@ -72,5 +78,9 @@ export class AppComponent implements OnInit {
     $('#sidenav #closeButton').on('click', function(e) {
       $('#sidenav').fadeOut(200, 'swing');
     });
+  }
+
+  ngOnDestroy() {
+    this.authSubscription.unsubscribe();
   }
 }

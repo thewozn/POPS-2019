@@ -79,7 +79,7 @@
               </tr>
               </thead>
               <tr *ngFor="let item of filteredEvents(viewDate.getMonth())"
-                  (click) = "handleEvent(item.title, item)">
+                  (click) = "handleEvent(item.linked_event.title, item.linked_event)">
                 <td  *ngFor="let list of item | valcomponent"
                      [style.background-color] = "(list === 'VALIDE' ? '#8dc491' : '') ||
               (list === 'EN VALIDATION' ? '#bcb265' : '') ||
@@ -182,14 +182,11 @@
           </tr>
           </thead>
           <tr *ngFor="let item of newFilteredEvents(selectedYear.value, selectedMonth.value, selectedState.value)"
-              (click) = "handleEvent(item.title, item)">
+              (click) = "handleEvent(item.linked_event.title, item.linked_event)">
             <td  *ngFor="let list of item | valcomponent"
                  [style.background-color] = "(list === 'VALIDE' ? '#8dc491' : '') ||
               (list === 'EN VALIDATION' ? '#bcb265' : '') ||
               (list === 'REFUSE' ? '#bc6464' : '') ">{{list}}</td>
-          </tr>
-          <tr *ngFor="let item of emptyarray">
-            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
           </tr>
           <tr style="border-bottom:#4e95f4 1px solid;">
             <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
