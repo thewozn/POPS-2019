@@ -17,8 +17,7 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-outline-secondary" (click)="close()">VALIDER</button>
-      <button type="button" class="btn btn-outline-secondary" (click)="close()">REFUSER</button>
+      <button type="button" class="btn btn-outline-secondary" (click)="close()">ANNULER LA DEMANDE</button>
     </div>
   </ng-template>
 
@@ -68,19 +67,19 @@
             <table class="hoverTable" style="overflow-y:hidden;">
               <thead>
               <tr style = "background-color: #008CBA; color: white;">
-                <th>Nom</th>
-                <th>Service</th>
+                <th>Date</th>
                 <th>Type</th>
                 <th>Départ</th>
                 <th>M/A</th>
                 <th>Retour</th>
                 <th>M/A</th>
                 <th>Etat</th>
+                <th>Statut</th>
               </tr>
               </thead>
               <tr *ngFor="let item of filteredEvents(viewDate.getMonth())"
                   (click) = "handleEvent(item.title, item)">
-                <td  *ngFor="let list of item | valcomponent"
+                <td  *ngFor="let list of item | tabcomponent"
                      [style.background-color] = "(list === 'VALIDE' ? '#8dc491' : '') ||
               (list === 'EN VALIDATION' ? '#bcb265' : '') ||
               (list === 'REFUSE' ? '#bc6464' : '') ">{{list}}</td>
@@ -163,7 +162,7 @@
             Rechercher
           </div>
         </div>
-      </th>
+        </th>
     </tr>
     </thead>
     <td style="padding: 0 0 0 0;">
@@ -171,19 +170,19 @@
         <table class="hoverTable" style="overflow-y:hidden;">
           <thead>
           <tr style = "background-color: #008CBA; color: white;">
-            <th>Nom</th>
-            <th>Service</th>
+            <th>Date</th>
             <th>Type</th>
             <th>Départ</th>
             <th>M/A</th>
             <th>Retour</th>
             <th>M/A</th>
             <th>Etat</th>
+            <th>Statut</th>
           </tr>
           </thead>
           <tr *ngFor="let item of newFilteredEvents(selectedYear.value, selectedMonth.value, selectedState.value)"
-              (click) = "handleEvent(item.title, item)">
-            <td  *ngFor="let list of item | valcomponent"
+          (click) = "handleEvent(item.title, item)">
+            <td  *ngFor="let list of item | tabcomponent"
                  [style.background-color] = "(list === 'VALIDE' ? '#8dc491' : '') ||
               (list === 'EN VALIDATION' ? '#bcb265' : '') ||
               (list === 'REFUSE' ? '#bc6464' : '') ">{{list}}</td>
@@ -199,12 +198,4 @@
     </td>
   </table>
 </div>
-<div id="myModal" class="modal">
 
-  <!-- Modal content -->
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <p>Some text in the Modal..</p>
-  </div>
-
-</div>

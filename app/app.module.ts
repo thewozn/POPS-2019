@@ -29,7 +29,9 @@ import { NotesfraisComponent } from './notesfrais/notesfrais.component';
 import { MissionsComponent } from './missions/missions.component';
 import { NotfoundComponent } from './notfound/notfound.component';
 import { FicheUtilisateurComponent } from './fiche-utilisateur/fiche-utilisateur.component';
-
+import { HistoriqueComponent } from './conges/historique/historique.component';
+import { TabcomponentPipe } from './conges/tabcomponent.pipe';
+import { ValcomponentPipe } from './conges/valcomponent.pipe';
 
 
 registerLocaleData(localeFr);
@@ -44,7 +46,10 @@ registerLocaleData(localeFr);
     DemanderComponent,
     ValidationComponent,
     FicheUtilisateurComponent,
-    ConnexionComponent
+    ConnexionComponent,
+    HistoriqueComponent,
+    TabcomponentPipe,
+    ValcomponentPipe
   ],
   imports: [
     FormsModule,

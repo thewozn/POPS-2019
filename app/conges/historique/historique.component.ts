@@ -38,16 +38,13 @@ const colors: any = {
 };
 
 @Component({
-  selector: 'app-demander',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './demander.component.html',
-  styleUrls: ['./demander.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  selector: 'app-historique',
+  templateUrl: './historique.component.html',
+  styleUrls: ['./historique.component.scss']
 })
+export class HistoriqueComponent implements OnInit {
 
-
-
-export class DemanderComponent implements OnInit {
+  emptyarray = [];
 
   @ViewChild('modalContent')
   modalContent: TemplateRef<any>;
@@ -106,44 +103,6 @@ export class DemanderComponent implements OnInit {
   };
 
   events: CalendarEvent[] = [
-    /*{
-      start: subDays(startOfDay(new Date()), 1),
-      end: addDays(new Date(), 1),
-      title: 'RTT collaborateur A - 16 Jan. 2018 Matin | 19 Jan. 2018 AM',
-      color: colors.red,
-      actions: this.actions,
-      allDay: true,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true
-      },
-      draggable: true
-    },
-    {
-      start: startOfDay(new Date()),
-      title: 'SS collaborateur B - 17 Jan. 2018 Matin | N.Def',
-      color: colors.yellow,
-      actions: this.actions
-    },
-    {
-      start: subDays(endOfMonth(new Date()), 3),
-      end: addDays(endOfMonth(new Date()), 3),
-      title: 'RTT collaborateur A - 21 Dec. 2018 | 24 Dec. 2018',
-      color: colors.blue,
-      allDay: true
-    },
-    {
-      start: addHours(startOfDay(new Date()), 2),
-      end: new Date(),
-      title: 'RTT collaborateur C - 21 Dec. 2018 Matin | N.Def',
-      color: colors.yellow,
-      actions: this.actions,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true
-      },
-      draggable: true
-    }*/
   ];
 
   activeDayIsOpen = true;
@@ -180,21 +139,6 @@ export class DemanderComponent implements OnInit {
     this.modal.open(this.modalContent, { size: 'lg' });
   }
 
-  /*addEvent(): void {
-    this.events.push({
-      title: 'New event',
-      start: startOfDay(new Date()),
-      end: endOfDay(new Date()),
-      color: colors.red,
-      draggable: true,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true
-      }
-    });
-    this.refresh.next();
-  }*/
-
   saveEvent(): void {
     const type_conge = this.new_event.title;
     if (((this.new_event.title === 'RTT') || (this.new_event.title === 'Sans solde')) && (this.validated === false)) {
@@ -218,9 +162,10 @@ export class DemanderComponent implements OnInit {
       const yy_e = this.new_event.end.getFullYear();
 
       this.new_event.title = ('[EN VALIDATION] ' + this.nom + ' ' + this.prenom + ' - ' +
-         this.new_event.title + ' du ' + dd_s + '/' + mm_s + '/' + yy_s + ' ('
+        this.new_event.title + ' du ' + dd_s + '/' + mm_s + '/' + yy_s + ' ('
         + this.start_period.toUpperCase() + ') au ' + dd_e + '/' + mm_e + '/' + yy_e + ' (' + this.end_period.toUpperCase() + ').');
       this.events.push(this.new_event);
+      this.holidayrequestService.self_conges.push(this.new_event);
       this.refresh.next();
 
       this.validated = true;
@@ -228,8 +173,44 @@ export class DemanderComponent implements OnInit {
     }
   }
 
+  filteredEvents(month: any): CalendarEvent[] {
+    var eventsList = [];
+
+    for(let event of this.events){
+      if(event.start.getMonth() == month){
+        eventsList.push(event);
+      }
+    }
+    return eventsList;
+  }
+
+  newFilteredEvents(filter1: any, filter2: any, filter3: any): CalendarEvent[] {
+    var eventsList = [];
+    const states = {'2':'REFUSE', '0':'VALIDE', '1':'EN VALIDATION'};
+
+    for(let event of this.events){
+      if(filter1 === '-1' || String(event.start.getFullYear()) === filter1){
+        if(filter2 === '-1' || String(event.start.getMonth())  === filter2) {
+          if(filter3 === '-1') {
+            eventsList.push(event);
+          }
+          if(event.title.indexOf(states[filter3]) > -1){
+            eventsList.push(event);
+          }
+        }
+      }
+    }
+
+
+    return eventsList;
+  }
+
+
+  popEvent(): void {
+
+  }
+
   ngOnInit() {
-    console.log(this.events);
 
     for (const event in this.holidayrequestService.self_conges) {
       this.events.push(this.holidayrequestService.self_conges[event]);
@@ -238,23 +219,6 @@ export class DemanderComponent implements OnInit {
     for (const event in this.holidayrequestService.self_conges_en_attente) {
       this.events.push(this.holidayrequestService.self_conges_en_attente[event]);
     }
-
-    for (const event in this.holidayrequestService.collaborators_list) {
-      this.events.push(this.holidayrequestService.collaborators_list[event]);
-    }
-
-
-
-    this.start_period = 'Matin';
-    this.end_period = 'Matin';
-    this.validated = false;
-
-    this.prenom = this.connectedService.prenom;
-    this.nom = this.connectedService.nom;
-    this.srv = this.connectedService.service;
-    this.account_type = this.connectedService.account_type;
-
-
 
     this.new_event = {
       start: startOfDay(new Date()),
@@ -273,6 +237,10 @@ export class DemanderComponent implements OnInit {
     console.log(this.new_event.start);
     this.new_event.start.setHours(1, 0, 0, 0);
     console.log(this.new_event.start);
+
+    for (var _i = 0; _i < (30 - this.events.length); _i++) {
+      this.emptyarray.push(_i);
+    }
   }
 
 }

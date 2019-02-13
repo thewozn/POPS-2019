@@ -9,6 +9,7 @@ import {DemanderComponent} from './conges/demander/demander.component';
 
 import { FicheUtilisateurComponent } from './fiche-utilisateur/fiche-utilisateur.component';
 import { ValidationComponent } from './conges/validation/validation.component';
+import { HistoriqueComponent } from './conges/historique/historique.component';
 
 import { NotfoundComponent } from './notfound/notfound.component';
 
@@ -21,6 +22,7 @@ const routes: Routes = [
       { path: 'fiche', canActivate: [AuthGuard], component: FicheUtilisateurComponent },
       { path: 'accepter', canActivate: [AuthGuard], component: ValidationComponent },
       { path: 'demander', canActivate: [AuthGuard], component: DemanderComponent },
+      { path: 'historique', canActivate: [AuthGuard], component: HistoriqueComponent },
       { path: 'notfound', canActivate: [AuthGuard], component: NotfoundComponent },
       { path: '**', redirectTo: 'notfound' }
     ]
