@@ -51,6 +51,12 @@ public class ServiceRequest
 	public void setSid(Long sid) {
 		this.sid = sid;
 	}
+
+	@Override
+	public String toString() {
+		return "ServiceRequest [sid=" + sid + ", headOfService=" + headOfService + ", name=" + name + "]";
+	}
+	
 	
 	
 }

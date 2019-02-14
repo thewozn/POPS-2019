@@ -81,6 +81,14 @@ public class Service implements Serializable
 	public void setMissions(List<Mission> missions) {
 		this.missions = missions;
 	}
+
+	@Override
+	public String toString() {
+		return "Service [sid=" + sid + ", headOfService=" + headOfService + ", users=" + users + ", missions="
+				+ missions + ", name=" + name + "]";
+	}
+	
+	
 	
 	
 

@@ -33,7 +33,7 @@ public class VacationRequestServiceImpl implements VacationRequestService {
 	private ControllerMapper mapper;
 
 	@Override
-	public VacationRequest addVacationRequest(VacationRequest vacationRequest) {
+	public VacationRequest createVacationRequest(VacationRequest vacationRequest) {
 		HolidayRequest newHolidayRequest = mapper.getHolidayRequest(vacationRequest);
 		User user = userRepository.findByUid(vacationRequest.getUid());
 		TypeOfLeave typeOfLeave = typeOfLeaveRepository.findByTcid(vacationRequest.getTcid());
@@ -82,9 +82,22 @@ public class VacationRequestServiceImpl implements VacationRequestService {
 		holidayRequestRepository.delete(holidayRequest);
 		return true;
 	}
+	
+	@Override
+	public VacationRequest approveVacationRequest(Long did, Long uid) {
+		User user = userRepository.findByUid(uid);
+		if(user == null)
+			return null;
+		
+//		HolidayRequest holidayRequest = holidayRequestRepository.findById(did);
+		
+		
+		return null;
+		
+	}
 
 	@Override
-	public List<VacationRequest> getVacationRequestList(Long uid) {
+	public List<VacationRequest> getVacationRequestListByUID(Long uid) {
 		if(!userRepository.existsById(uid))
 			return null;
 		return mapper.getVacationRequestList(holidayRequestRepository.findByUser(userRepository.findByUid(uid)));
@@ -102,5 +115,7 @@ public class VacationRequestServiceImpl implements VacationRequestService {
 
 		return true;
 	}
+
+	
 
 }

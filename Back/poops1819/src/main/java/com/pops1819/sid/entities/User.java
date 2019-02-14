@@ -60,7 +60,7 @@ public class User implements Serializable
     @Column(name="DATE_N", nullable=false)
     private Date dateN;
     
-    @Column(name="EMAIL", nullable=false, length=64)
+    @Column(name="EMAIL", unique=true, nullable=false, length=64)
     private String email;
     
     @Column(name="ADDRESS", nullable=false, length=64)
@@ -295,12 +295,18 @@ public class User implements Serializable
 	public void setHolidayRequests(List<HolidayRequest> holidayRequests) {
 		this.holidayRequests = holidayRequests;
 	}
-	
 
+
+	@Override
+	public String toString() {
+		return "User [uid=" + uid + ", myService=" + myService + ", typeOfLeaves=" + typeOfLeaves + ", service="
+				+ service + ", missions=" + missions + ", expenseReportRequests=" + expenseReportRequests
+				+ ", holidayRequests=" + holidayRequests + ", status=" + status + ", lastName=" + lastName
+				+ ", firstName=" + firstName + ", dateN=" + dateN + ", email=" + email + ", address=" + address
+				+ ", cp=" + cp + ", city=" + city + ", country=" + country + ", password=" + password + ", picturePath="
+				+ picturePath + ", alive=" + alive + "]";
+	}
 	
-	
-	
-	
-	
+		
  	
 }

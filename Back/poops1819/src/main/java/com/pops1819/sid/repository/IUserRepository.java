@@ -10,7 +10,6 @@ import com.pops1819.sid.entities.User;
 public interface IUserRepository extends JpaRepository<User,Long>
 {
 	public User findByUid(Long uid);
-	public User findByEmail(String email);
 	public List<User> findByService(Service service);
 	public List<User> findByServiceIsNull();
 	public List<User> findByServiceIsNotNull();

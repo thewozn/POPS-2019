@@ -22,24 +22,24 @@ public class ServiceServiceImpl implements IServiceService
 	private ControllerMapper mapper;
 
 	@Override
-	public com.pops1819.sid.entities.Service saveService(ServiceRequest serviceRequest)
+	public com.pops1819.sid.entities.Service createService(ServiceRequest serviceRequest)
 	{
+		System.out.println(serviceRequest.toString());
 		com.pops1819.sid.entities.Service newService = mapper.getService(serviceRequest);
+		System.out.println(newService.toString());
 		User user = userRepository.findByUid(serviceRequest.getHeadOfService());
-		if(user == null) {
-			System.out.println("echo");
+		if(user == null) 
 			return null;
-		}
-			
-		if(user.getMyService() != null) {
-			System.out.println("echo2");
+		if(user.getMyService() != null)
 			return null;
-		}
+		
+		user.setStatus("HeadOfService");
 		user.setService(newService);
 		
 		return serviceRepository.save(newService);
 	}
 
+	
 	@Override
 	public List<ServiceRequest> getServiceList() {
 		return mapper.getServiceRequestList(serviceRepository.findAll());
@@ -62,6 +62,42 @@ public class ServiceServiceImpl implements IServiceService
 			serviceRepository.save(service);	
 		}		
 		return mapper.getServiceRequest(service);
+	}
+
+
+	@Override
+	public boolean updateService(ServiceRequest serviceRequest) {
+		System.out.println(serviceRequest.toString());
+		com.pops1819.sid.entities.Service service = serviceRepository.findBySid(serviceRequest.getSid());
+		if(service == null)
+			return false;
+		
+		if(service.getHeadOfService() == null)
+			return false;
+		
+		if(serviceRequest.getHeadOfService().intValue() != service.getHeadOfService().getUid())
+		{
+			User user = userRepository.findByUid(serviceRequest.getHeadOfService());
+			if(user == null)
+			{
+				// l'utilisateur n'existe pas
+				return false;
+			}
+			// on vérifie que l'utlisateur n'est pas chef de service
+			if(user.getMyService() != null) 
+				return false;
+			user.setService(service);
+			user.setStatus("HeadOfService");
+			userRepository.save(user);
+			
+			User lastHeadOfService = userRepository.findByUid(service.getHeadOfService().getUid());
+			lastHeadOfService.setStatus("Collaborateur");
+			lastHeadOfService.setMyService(null);
+		}
+		
+		com.pops1819.sid.entities.Service serviceUpdated = mapper.getService(serviceRequest);
+		serviceRepository.save(serviceUpdated);
+		return true;
 	}
 	
 	

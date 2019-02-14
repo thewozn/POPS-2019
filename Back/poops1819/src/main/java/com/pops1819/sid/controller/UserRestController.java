@@ -14,30 +14,48 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pops1819.sid.exception.EntityNotFoundException;
 import com.pops1819.sid.exception.NotImplementedException;
+import com.pops1819.sid.exception.NotUpdateEntityException;
 import com.pops1819.sid.model.UserRequest;
 import com.pops1819.sid.services.UserServiceImpl;
 
 @RestController
-@CrossOrigin(origins="*", allowedHeaders="*")
+@CrossOrigin(origins="*",allowedHeaders="*")
 public class UserRestController 
 {
 	@Autowired
 	private UserServiceImpl userServiceImpl;
  
-	@RequestMapping(value = "/users", method = RequestMethod.POST)
-	public ResponseEntity<Void> saveUser(@RequestBody UserRequest user) {
-		if(userServiceImpl.saveUser(user) == null)
+	@RequestMapping(value = "/createUser", method = RequestMethod.POST)
+	public ResponseEntity<Void> createUser(@RequestBody UserRequest user) {
+		if(userServiceImpl.createUser(user) == null)
 			throw new EntityNotFoundException("check that the service exists!");
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
-	@RequestMapping(value="/users", method=RequestMethod.GET)
+	@RequestMapping(value = "/updateUser", method = RequestMethod.PATCH)
+	public ResponseEntity<Void> updateUser(@RequestBody UserRequest userRequest)
+	{	
+		if(!userServiceImpl.updateUser(userRequest))
+			throw new NotUpdateEntityException("tototo");
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/getUserListByService/{sid}", method=RequestMethod.GET)
+	public ResponseEntity<List<UserRequest>> getUserListByService(@PathVariable int sid)
+	{
+		List<UserRequest> users = userServiceImpl.getUserListByService(new Long(sid));
+		if(users == null)
+			throw new EntityNotFoundException("service not exist with sid :"+sid);
+		return new ResponseEntity<>(users, HttpStatus.OK);
+	}
+	
+	
+	@RequestMapping(value="/getUserList", method=RequestMethod.GET)
 	public ResponseEntity<List<UserRequest>> getUserList() {
 		return new ResponseEntity<>(userServiceImpl.getUserList(),HttpStatus.OK);
 	}
 	
-	// Permet de rechercher un utilisateur via l'uid
-	@RequestMapping(value="/users/{uid}", method=RequestMethod.GET)
+	@RequestMapping(value="/getUser/{uid}", method=RequestMethod.GET)
 	public ResponseEntity<UserRequest> findUserById(@PathVariable Long uid) {
 		UserRequest user = userServiceImpl.findUserById(uid);
 		if(user==null)
@@ -57,16 +75,8 @@ public class UserRestController
 		return new ResponseEntity<>(userServiceImpl.getAssignedUserList(),HttpStatus.OK);
 	}
 
-	@RequestMapping(value="/userListByService/{sid}", method=RequestMethod.GET)
-	public ResponseEntity<List<UserRequest>> getUserListByService(@PathVariable int sid)
-	{
-		List<UserRequest> users = userServiceImpl.getUserListByService(new Long(sid));
-		if(users == null)
-			throw new EntityNotFoundException("service not exist with sid :"+sid);
-		return new ResponseEntity<>(users, HttpStatus.OK);
-	}
 	
-	@RequestMapping(value="/assignUserToService/{uid}/{sid}", method=RequestMethod.GET)
+	@RequestMapping(value="/assignUserToService/{uid}/{sid}", method=RequestMethod.PATCH)
 	public ResponseEntity<Void> assignUserToService(@PathVariable Long uid, @PathVariable Long sid)
 	{
 		if(userServiceImpl.assignUserToService(uid, sid))
@@ -80,15 +90,6 @@ public class UserRestController
 	public ResponseEntity<List<UserRequest>> getTest()
 	{
 		throw new NotImplementedException("Not implemented");
-	}
-	
-	@RequestMapping(value="/connexion/{email}/{pass}", method=RequestMethod.GET)
-	public ResponseEntity<UserRequest> authentification(@PathVariable String email, @PathVariable String pass)
-	{
-		UserRequest user = userServiceImpl.findUserByEmail(email);
-		if(user==null)
-			throw new EntityNotFoundException("user not exist with this email : "+ email);
-		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 	
 }

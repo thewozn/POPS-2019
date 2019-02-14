@@ -10,6 +10,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.pops1819.sid.exception.EntityNotFoundException;
 import com.pops1819.sid.exception.InvalidRequestException;
 import com.pops1819.sid.exception.NotImplementedException;
+import com.pops1819.sid.exception.NotUpdateEntityException;
 import com.pops1819.sid.exception.UnauthorizedModificationException;
 import com.pops1819.sid.model.ApiError;
 
@@ -42,6 +43,14 @@ public class GlobalExceptionController extends ResponseEntityExceptionHandler {
 			WebRequest request) {
 		ApiError error = new ApiError(e);
 		return new ResponseEntity<ApiError>(error, HttpStatus.UNAUTHORIZED);
-
 	}
+	
+	@ExceptionHandler(NotUpdateEntityException.class)
+	public ResponseEntity<ApiError> handleResourceUpdateEntityException(NotUpdateEntityException e,
+			WebRequest request) {
+		ApiError error = new ApiError(e);
+		return new ResponseEntity<ApiError>(error, HttpStatus.FORBIDDEN);
+	}
+	
+	
 }

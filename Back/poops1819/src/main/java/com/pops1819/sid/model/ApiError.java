@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import com.pops1819.sid.exception.EntityNotFoundException;
 import com.pops1819.sid.exception.InvalidRequestException;
 import com.pops1819.sid.exception.NotImplementedException;
+import com.pops1819.sid.exception.NotUpdateEntityException;
 import com.pops1819.sid.exception.UnauthorizedModificationException;
 
 public class ApiError {
@@ -44,6 +45,10 @@ public class ApiError {
 		this(HttpStatus.NOT_MODIFIED.toString(), UUID.randomUUID().toString(), e.getMessage(), null);
 	}
 	
+	public ApiError(NotUpdateEntityException e)
+	{
+		this(HttpStatus.FORBIDDEN.toString(), UUID.randomUUID().toString(), e.getMessage(), null);
+	}
 	
 	public ApiError(UnauthorizedModificationException e)
 	{

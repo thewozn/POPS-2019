@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
 	private ITypeOfLeaveRepository typeOfLeaveRepository;
 
 	@Override
-	public User saveUser(UserRequest user) {
+	public User createUser(UserRequest user) {
 		User newUser = mapper.getUser(user);
 		if (user.getSid() != null) {
 			com.pops1819.sid.entities.Service service = serviceRepository.findBySid(user.getSid());
@@ -94,10 +94,21 @@ public class UserServiceImpl implements UserService {
 		userRepository.save(user);
 		return true;
 	}
-	
+
 	@Override
-	public UserRequest findUserByEmail(String email) {
-		return mapper.getUserRequet(userRepository.findByEmail(email));
+	public boolean updateUser(UserRequest userRequest) {
+		System.out.println(userRequest.toString());
+		User user = userRepository.findByUid(userRequest.getUid());
+		if(user == null)
+		{
+			System.out.println("OKK1");
+			return false;
+		}
+		System.out.println("OKK2");
+		User userUpdated = mapper.getUser(userRequest);
+		userRepository.save(userUpdated);
+
+		return true;
 	}
 
 }
