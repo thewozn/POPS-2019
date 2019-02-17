@@ -54,6 +54,7 @@ import { GestionUsersComponent } from './administration/gestion-users/gestion-us
 import { GestionServicesComponent } from './administration/gestion-services/gestion-services.component';
 
 import { NotfoundComponent } from './notfound/notfound.component';
+import { NavigationComponent } from './navigation/navigation.component';
 registerLocaleData(localeFr);
 
 @NgModule({
@@ -74,7 +75,8 @@ registerLocaleData(localeFr);
     GestionUsersComponent,
     GestionServicesComponent,
     SuiviComponent,
-    CreationComponent
+    CreationComponent,
+    NavigationComponent,
   ],
   imports: [
     FormsModule,

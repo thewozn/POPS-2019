@@ -5,7 +5,7 @@ import { HttpHeaders } from '@angular/common/http';
   providedIn: 'root'
 })
 export class GlobalService {
-  private baseUrl = '//138.195.201.54:8080';
+  private baseUrl = '//138.195.207.47:8080';
   private httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',

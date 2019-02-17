@@ -29,7 +29,7 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
 
   addUser(form: NgForm) {
     const newUser: User = new User(null,
-      'Collaborateur',
+      null,
       null,
       form.value['lastName'],
       form.value['firstName'],

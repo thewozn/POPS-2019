@@ -9,17 +9,21 @@ import { ConnectedService } from '../services/connected.service';
   styleUrls: ['./connexion.component.scss']
 })
 export class ConnexionComponent implements OnInit {
+  constructor(
+    private connectedService: ConnectedService,
+    private router: Router
+  ) {}
 
-  constructor(private connectedService: ConnectedService, private router: Router) { }
-
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   onSignIn(form: NgForm) {
     console.log(form.value['user_email'] + ' ' + form.value['user_pwd']);
-    this.connectedService.signIn(form.value['user_email'], form.value['user_pwd']);
+    this.connectedService
+      .signIn(form.value['user_email'], form.value['user_pwd'])
+      .then(() => {
+        console.log('Sign in successful!');
+        this.router.navigate(['conges/demander']);
+      });
     // TODO : changer la redirection
-    this.router.navigate(['conges/demander']);
   }
-
 }

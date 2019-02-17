@@ -49,7 +49,7 @@ export class UserService {
     this.globalService.gethttpOptions()).subscribe(
       (response) => {
         console.log(response);
-        this.emitUsersSubject();
+        this.getUsersFromServer();
       },
       (error) => {
         console.log('Erreur ! : ' + error.message);
@@ -62,7 +62,7 @@ export class UserService {
     this.globalService.gethttpOptions()).subscribe(
       (response) => {
         console.log(response);
-        this.emitUsersSubject();
+        this.getUsersFromServer();
       },
       (error) => {
         console.log('Erreur ! : ' + error.message);

@@ -38,7 +38,7 @@ export class ServiceService {
     this.globalService.gethttpOptions()).subscribe(
       (response) => {
         console.log(response);
-        this.emitServicesSubject();
+        this.getServicesFromServer();
       },
       (error) => {
         console.log('Erreur ! : ' + error.message);
@@ -51,7 +51,7 @@ export class ServiceService {
     this.globalService.gethttpOptions()).subscribe(
       (response) => {
         console.log(response);
-        this.emitServicesSubject();
+        this.getServicesFromServer();
       },
       (error) => {
         console.log('Erreur ! : ' + error.message);
