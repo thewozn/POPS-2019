@@ -1,4 +1,3 @@
-
 <div style="background-color: whitesmoke; height:520px;">
   <ng-template #modalContent let-close="close">
     <div class="modal-header">
@@ -23,30 +22,16 @@
 
   <div id="calendar_actions_div" class="calendar_actions">
     <div style="height: 34px;">
-      <div>  <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'fr' }}</h3>
-        <div class="btn-group" style= "border-color: #008CBA;  margin-top: -7px; margin-right: 5px; float:right">
-          <div
-            class="btn btn-primary"
-            mwlCalendarPreviousView
-            [view]="view"
-            [(viewDate)]="viewDate"
-            style= "background-color: #008CBA;"
+      <div>
+        <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'fr' }}</h3>
+        <div class="btn-group" style="border-color: #008CBA;  margin-top: -7px; margin-right: 5px; float:right">
+          <div class="btn btn-primary" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate" style="background-color: #008CBA;"
             (viewDateChange)="activeDayIsOpen = false">
-            <
+            < </div> <div class="btn btn-outline-secondary" mwlCalendarToday [(viewDate)]="viewDate">
+              ◯
           </div>
-          <div
-            class="btn btn-outline-secondary"
-            mwlCalendarToday
-            [(viewDate)]="viewDate">
-            ◯
-          </div>
-          <div
-            class="btn btn-primary"
-            mwlCalendarNextView
-            style= "background-color: #008CBA;"
-            [view]="view"
-            [(viewDate)]="viewDate"
-            (viewDateChange)="activeDayIsOpen = false">
+          <div class="btn btn-primary" mwlCalendarNextView style="background-color: #008CBA;" [view]="view"
+            [(viewDate)]="viewDate" (viewDateChange)="activeDayIsOpen = false">
             >
           </div>
         </div>
@@ -56,39 +41,51 @@
 
 
     <div class="mod_div" style="background-color: whitesmoke; float:left; width: 100%; margin-top: -10px; border: 1px solid lightgray; ">
-      <table class="table table-bordered" >
+      <table class="table table-bordered">
         <thead>
-        <tr>
-          <th>Sur le mois</th>
-        </tr>
+          <tr>
+            <th>Sur le mois</th>
+          </tr>
         </thead>
         <td style="padding: 0 0 0 0;">
           <div style="height: 427px; overflow-y: scroll;">
             <table class="hoverTable" style="overflow-y:hidden;">
               <thead>
-              <tr style = "background-color: #008CBA; color: white;">
-                <th>Date</th>
-                <th>Type</th>
-                <th>Départ</th>
-                <th>M/A</th>
-                <th>Retour</th>
-                <th>M/A</th>
-                <th>Etat</th>
-                <th>Statut</th>
-              </tr>
+                <tr style="background-color: #008CBA; color: white;">
+                  <th>Date</th>
+                  <th>Type</th>
+                  <th>Départ</th>
+                  <th>M/A</th>
+                  <th>Retour</th>
+                  <th>M/A</th>
+                  <th>Etat</th>
+                  <th>Statut</th>
+                </tr>
               </thead>
-              <tr *ngFor="let item of filteredEvents(viewDate.getMonth())"
-                  (click) = "handleEvent(item.linked_event.title, item.linked_event)">
-                <td  *ngFor="let list of item | tabcomponent"
-                     [style.background-color] = "(list === 'VALIDE' ? '#8dc491' : '') ||
+              <tr *ngFor="let item of filteredEvents(viewDate.getMonth())" (click)="handleEvent(item.linked_event.title, item.linked_event)">
+                <td *ngFor="let list of item | tabcomponent" [style.background-color]="(list === 'VALIDE' ? '#8dc491' : '') ||
               (list === 'EN VALIDATION' ? '#bcb265' : '') ||
               (list === 'REFUSE' ? '#bc6464' : '') ">{{list}}</td>
               </tr>
               <tr *ngFor="let item of emptyarray">
-                <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
               </tr>
               <tr style="border-bottom:#4e95f4 1px solid;">
-                <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
               </tr>
             </table>
           </div>
@@ -100,21 +97,11 @@
 
 
 
-  <div [ngSwitch]="view"  class="calendar-div">
-    <mwl-calendar-month-view
-      *ngSwitchCase="CalendarView.Month"
-      [viewDate]="viewDate"
-      [events]="events"
-      [refresh]="refresh"
-      [activeDayIsOpen]="activeDayIsOpen"
-      (dayClicked)="dayClicked($event.day)"
-      (eventClicked)="handleEvent('Clicked', $event.event)"
-      [style.height.px] = "70"
-      [style.cal-month-view.height.px] = "70"
-      [style.cal-day-cell.px] = "70"
-      [style.cal-cell-top.height.px] = "70"
-      [locale]="locale"
-      (eventTimesChanged)="eventTimesChanged($event)">
+  <div [ngSwitch]="view" class="calendar-div">
+    <mwl-calendar-month-view *ngSwitchCase="CalendarView.Month" [viewDate]="viewDate" [events]="events" [refresh]="refresh"
+      [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="dayClicked($event.day)" (eventClicked)="handleEvent('Clicked', $event.event)"
+      [style.height.px]="70" [style.cal-month-view.height.px]="70" [style.cal-day-cell.px]="70"
+      [style.cal-cell-top.height.px]="70" [locale]="locale" (eventTimesChanged)="eventTimesChanged($event)">
     </mwl-calendar-month-view>
   </div>
 
@@ -124,75 +111,78 @@
 <div class="info_div">
   <table class="table table-bordered">
     <thead>
-    <tr>
-      <th>Vue d'ensemble
-        <div>
-          <select #selectedYear id='selector_year' class="soflow" style="margin: 0 0 0;">
-            <option value="-1" selected>Année</option>
-            <option>2019</option>
-            <option>2018</option>
-            <option>2017</option>
-          </select>
-          <select #selectedMonth id='selector_month' class="soflow" style="margin: 0 15px 0;">
-            <option value="-1" selected>Mois</option>
-            <option value="0">Janvier</option>
-            <option value="1">Fevrier</option>
-            <option value="2">Mars</option>
-            <option value="3">Avril</option>
-            <option value="4">Mai</option>
-            <option value="5">Juin</option>
-            <option value="6">Juillet</option>
-            <option value="7">Août</option>
-            <option value="8">Septembre</option>
-            <option value="9">Octobre</option>
-            <option value="10">Novembre</option>
-            <option value="11">Décembre</option>
-          </select>
-          <select #selectedState id='selector_state' class="soflow" style="margin: 0 0 0;">
-            <option value="-1" selected>Etat</option>
-            <option value="0">Validés</option>
-            <option value="1">En attente</option>
-            <option value="2">Refusés</option>
-          </select>
-          <!--(click)="newFilteredEvents(selectedYear.value, selectedMonth.value, selectedState.value)"-->
-          <div
-            class="btn btn-primary"
-            (click)="newFilteredEvents(selectedYear.value, selectedMonth.value, selectedState.value)"
-            style= "background-color: #008CBA; width: 120px; height: 40px; margin-left: 3%; float: right;">
-            Rechercher
+      <tr>
+        <th>Vue d'ensemble
+          <div>
+            <select #selectedYear id='selector_year' class="soflow" style="margin: 0 0 0;">
+              <option value="-1" selected>Année</option>
+              <option>2019</option>
+              <option>2018</option>
+              <option>2017</option>
+            </select>
+            <select #selectedMonth id='selector_month' class="soflow" style="margin: 0 15px 0;">
+              <option value="-1" selected>Mois</option>
+              <option value="0">Janvier</option>
+              <option value="1">Fevrier</option>
+              <option value="2">Mars</option>
+              <option value="3">Avril</option>
+              <option value="4">Mai</option>
+              <option value="5">Juin</option>
+              <option value="6">Juillet</option>
+              <option value="7">Août</option>
+              <option value="8">Septembre</option>
+              <option value="9">Octobre</option>
+              <option value="10">Novembre</option>
+              <option value="11">Décembre</option>
+            </select>
+            <select #selectedState id='selector_state' class="soflow" style="margin: 0 0 0;">
+              <option value="-1" selected>Etat</option>
+              <option value="0">Validés</option>
+              <option value="1">En attente</option>
+              <option value="2">Refusés</option>
+            </select>
+            <!--(click)="newFilteredEvents(selectedYear.value, selectedMonth.value, selectedState.value)"-->
+            <div class="btn btn-primary" (click)="newFilteredEvents(selectedYear.value, selectedMonth.value, selectedState.value)"
+              style="background-color: #008CBA; width: 120px; height: 40px; margin-left: 3%; float: right;">
+              Rechercher
+            </div>
           </div>
-        </div>
         </th>
-    </tr>
+      </tr>
     </thead>
     <td style="padding: 0 0 0 0;">
       <div style="height: 200px; overflow-y: scroll;">
         <table class="hoverTable" style="overflow-y:hidden;">
           <thead>
-          <tr style = "background-color: #008CBA; color: white;">
-            <th>Date</th>
-            <th>Type</th>
-            <th>Départ</th>
-            <th>M/A</th>
-            <th>Retour</th>
-            <th>M/A</th>
-            <th>Etat</th>
-            <th>Statut</th>
-          </tr>
+            <tr style="background-color: #008CBA; color: white;">
+              <th>Date</th>
+              <th>Type</th>
+              <th>Départ</th>
+              <th>M/A</th>
+              <th>Retour</th>
+              <th>M/A</th>
+              <th>Etat</th>
+              <th>Statut</th>
+            </tr>
           </thead>
           <tr *ngFor="let item of newFilteredEvents(selectedYear.value, selectedMonth.value, selectedState.value)"
-          (click) = "handleEvent(item.linked_event.title, item.linked_event)">
-            <td  *ngFor="let list of item | tabcomponent"
-                 [style.background-color] = "(list === 'VALIDE' ? '#8dc491' : '') ||
+            (click)="handleEvent(item.linked_event.title, item.linked_event)">
+            <td *ngFor="let list of item | tabcomponent" [style.background-color]="(list === 'VALIDE' ? '#8dc491' : '') ||
               (list === 'EN VALIDATION' ? '#bcb265' : '') ||
               (list === 'REFUSE' ? '#bc6464' : '') ">{{list}}</td>
           </tr>
           <tr style="border-bottom:#4e95f4 1px solid;">
-            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
           </tr>
         </table>
       </div>
     </td>
   </table>
 </div>
-

@@ -1,7 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ConnectedService } from './services/connected.service';
+import { Router } from '@angular/router';
 import * as $ from 'jquery';
 import { Subscription } from 'rxjs';
+
+import { ConnectedService } from './services/connected.service';
+
+import { User } from './models/user.model';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -9,18 +13,14 @@ import { Subscription } from 'rxjs';
 })
 
 export class AppComponent implements OnInit, OnDestroy {
-  prenom: any;
-  nom: any;
-  mail: any;
   notified: any;
   notifications: any;
-  service: any;
-  account_type: any;
 
   authStatus: boolean;
-  authSubscription: Subscription;
-
-  constructor(private connectedService: ConnectedService) {
+  user: any;
+  connecteduser: User;
+  connecteduserSubscription: Subscription;
+  constructor(private connectedService: ConnectedService, private router: Router) {
 
   }
 
@@ -30,12 +30,12 @@ export class AppComponent implements OnInit, OnDestroy {
         this.authStatus = value;
       }
     );
-    this.prenom = this.connectedService.prenom;
-    this.nom = this.connectedService.nom;
-    this.mail = this.connectedService.mail;
-    this.service = this.connectedService.service;
-    this.account_type = this.connectedService.account_type;
-    this.mail = this.connectedService.mail;
+    this.connecteduserSubscription = this.connectedService.connecteduserSubject.subscribe(
+      (user: User) => {
+        this.connecteduser = user;
+      }
+    );
+
     this.notified = this.connectedService.notified;
     this.notifications = this.connectedService.notifications;
 
@@ -80,7 +80,12 @@ export class AppComponent implements OnInit, OnDestroy {
     });
   }
 
+  onSignOut() {
+    this.connectedService.signOut();
+    this.router.navigate(['/connexion']);
+  }
+
   ngOnDestroy() {
-    this.authSubscription.unsubscribe();
+    this.connecteduserSubscription.unsubscribe();
   }
 }

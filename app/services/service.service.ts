@@ -1,31 +1,61 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs';
-import { Observable } from 'rxjs';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/throw';
+
+import { GlobalService } from '../services/global.service';
+
 import { Service } from '../models/service.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ServiceService {
+  serviceSubject = new Subject<Service[]>();
+  private service: Service[] = [];
 
-  private baseUrl = '//localhost:8080';
-  servicesSubject = new Subject<Service[]>();
-  private services: Service[] = [];
+  constructor(private httpclient: HttpClient, private globalService: GlobalService) { }
 
-  constructor(private httpclient: HttpClient) { }
-
-  emitUsersSubject() {
-    if (this.services != null) {
-      this.servicesSubject.next(this.services.slice());
+  emitServicesSubject() {
+    if (this.service != null) {
+      this.serviceSubject.next(this.service.slice());
     }
   }
 
-  // TODO : changez l'url "users" à ce qui correspond au ligne de note de frais
-  // getAll(): Observable<Service[]> {
-  //   return this.httpclient.get<Service[]>(this.baseUrl + '/users');
-  // }
+  getServicesFromServer() {
+    this.httpclient.get<Service[]>(this.globalService.getbaseUrl() + '/getServiceList').subscribe(
+      (response) => {
+        this.service = response;
+        this.emitServicesSubject();
+      },
+      (error) => {
+        console.log('Erreur ! : ' + error);
+      }
+    );
+  }
+
+  addServiceServer(service: Service) {
+    this.httpclient.post<Service>(this.globalService.getbaseUrl() + '/createService', JSON.stringify(service),
+    this.globalService.gethttpOptions()).subscribe(
+      (response) => {
+        console.log(response);
+        this.emitServicesSubject();
+      },
+      (error) => {
+        console.log('Erreur ! : ' + error.message);
+      }
+    );
+  }
+
+  modifServiceServer(service: Service) {
+    this.httpclient.patch<Service>(this.globalService.getbaseUrl() + '/updateUser', JSON.stringify(service),
+    this.globalService.gethttpOptions()).subscribe(
+      (response) => {
+        console.log(response);
+        this.emitServicesSubject();
+      },
+      (error) => {
+        console.log('Erreur ! : ' + error.message);
+      }
+    );
+  }
 }

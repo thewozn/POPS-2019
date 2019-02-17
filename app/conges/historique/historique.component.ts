@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {CalendarEvent, CalendarEventTimesChangedEvent, CalendarView} from 'angular-calendar';
 import {ConnectedService} from '../../services/connected.service';
-import {HolidayRequestService} from '../../services/holiday-request.service';
+import { VacationRequestService } from '../../services/vacation-request.service';
 
 
 @Component({
@@ -34,7 +34,7 @@ export class HistoriqueComponent implements OnInit {
   emptyarray = [];
   users_events = [];
 
-  constructor(private modal: NgbModal, private connectedService: ConnectedService, private holidayrequestService: HolidayRequestService) {}
+  constructor(private modal: NgbModal, private connectedService: ConnectedService, private holidayrequestService: VacationRequestService) {}
 
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {

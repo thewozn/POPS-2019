@@ -3,8 +3,9 @@ import {isSameDay, isSameMonth} from 'date-fns';
 import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {CalendarEvent, CalendarEventTimesChangedEvent, CalendarView} from 'angular-calendar';
+
 import {ConnectedService} from '../../services/connected.service';
-import {HolidayRequestService} from '../../services/holiday-request.service';
+import { VacationRequestService } from '../../services/vacation-request.service';
 
 
 @Component({
@@ -33,8 +34,36 @@ export class ValidationComponent implements OnInit {
   refresh: Subject<any> = new Subject();
   events: CalendarEvent[] = [];
   activeDayIsOpen = false;
+  collaborators_list = [];
 
-  constructor(private modal: NgbModal, private connectedService: ConnectedService, private holidayrequestService: HolidayRequestService) {}
+  constructor(private modal: NgbModal, private connectedService: ConnectedService, private holidayrequestService: VacationRequestService) {}
+
+  ngOnInit() {
+    /**
+     * INITIALISATION DU COMPONENT
+     */
+    // TODO : getall holidayrequest
+
+    for (const collaborators_list_en_attenteItem of this.holidayrequestService.collaborators_list_en_attente) {
+      this.events.push(collaborators_list_en_attenteItem.linked_event);
+      this.users_events.push(collaborators_list_en_attenteItem);
+    }
+
+    for (const self_conge of this.holidayrequestService.self_conges) {
+      this.events.push(self_conge.linked_event);
+      this.users_events.push(self_conge);
+    }
+
+    for (const collaborators_listItem of this.holidayrequestService.collaborators_list) {
+      this.events.push(collaborators_listItem.linked_event);
+      this.users_events.push(collaborators_listItem);
+    }
+
+    // Empty filler array
+    for (let _i = 0; _i < (30 - this.events.length); _i++) {
+      this.emptyarray.push(_i);
+    }
+  }
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
@@ -50,8 +79,6 @@ export class ValidationComponent implements OnInit {
     }
   }
 
-
-
   eventTimesChanged({event, newStart, newEnd}: CalendarEventTimesChangedEvent): void {
     event.start = newStart;
     event.end = newEnd;
@@ -59,13 +86,10 @@ export class ValidationComponent implements OnInit {
     this.refresh.next();
   }
 
-
-
   handleEvent(action: string, event: CalendarEvent): void {
     this.modalData = { event, action };
     this.modal.open(this.modalContent, { size: 'lg' });
   }
-
 
   filteredEvents(month: any): CalendarEvent[] {
     /**
@@ -81,7 +105,6 @@ export class ValidationComponent implements OnInit {
     }
     return eventsList;
   }
-
 
   newFilteredEvents(filter1: any, filter2: any, filter3: any): CalendarEvent[] {
     /**
@@ -113,32 +136,6 @@ export class ValidationComponent implements OnInit {
     /**
      * TODO: Met à jour l'event dans la base de données (fait passer validate à true)
      */
-  }
-
-  ngOnInit() {
-    /**
-     * INITIALISATION DU COMPONENT
-     */
-
-    for (const collaborators_list_en_attenteItem of this.holidayrequestService.collaborators_list_en_attente) {
-      this.events.push(collaborators_list_en_attenteItem.linked_event);
-      this.users_events.push(collaborators_list_en_attenteItem);
-    }
-
-    for (const self_conge of this.holidayrequestService.self_conges) {
-      this.events.push(self_conge.linked_event);
-      this.users_events.push(self_conge);
-    }
-
-    for (const collaborators_listItem of this.holidayrequestService.collaborators_list) {
-      this.events.push(collaborators_listItem.linked_event);
-      this.users_events.push(collaborators_listItem);
-    }
-
-    // Empty filler array
-    for (let _i = 0; _i < (30 - this.events.length); _i++) {
-      this.emptyarray.push(_i);
-    }
   }
 
 }

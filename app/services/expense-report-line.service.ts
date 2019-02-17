@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs';
-import { Observable } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { GlobalService } from '../services/global.service';
 import { ExpenseReportLine } from '../models/expense-report-line.model';
 
 @Injectable({
@@ -11,11 +9,10 @@ import { ExpenseReportLine } from '../models/expense-report-line.model';
 })
 export class ExpenseReportLineService {
 
-  private baseUrl = '//localhost:8080';
   erlsSubject = new Subject<ExpenseReportLine[]>();
   private erls: ExpenseReportLine[] = [];
 
-  constructor(private httpclient: HttpClient) { }
+  constructor(private httpclient: HttpClient, private globalService: GlobalService) { }
 
   emitUsersSubject() {
     if (this.erls != null) {
@@ -23,8 +20,4 @@ export class ExpenseReportLineService {
     }
   }
 
-  // TODO : changez l'url "users" à ce qui correspond au ligne de note de frais
-  // getAll(): Observable<ExpenseReportLine[]> {
-  //   return this.httpclient.get<ExpenseReportLine[]>(this.baseUrl + '/users');
-  // }
 }

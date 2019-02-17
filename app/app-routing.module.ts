@@ -12,9 +12,14 @@ import { ValidationComponent } from './conges/validation/validation.component';
 import { HistoriqueComponent } from './conges/historique/historique.component';
 
 import { NotfoundComponent } from './notfound/notfound.component';
+import { AdministrationComponent } from './administration/administration.component';
 
+
+import { MissionsComponent } from './missions/missions.component';
 const routes: Routes = [
   { path: 'connexion', component: ConnexionComponent },
+  { path: 'mission', canActivate: [AuthGuard], component: MissionsComponent},
+  { path: 'administration', canActivate: [AuthGuard], component: AdministrationComponent},
 
   {
     path: 'conges', canActivate: [AuthGuard], component: CongesComponent,

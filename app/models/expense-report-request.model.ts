@@ -3,7 +3,7 @@ export class ExpenseReportRequest {
     public did: number,
     public request_date: Date,
     public status: string,
-    public traitment_date: Date,
+    public traitmentDate: Date,
     public uid: number,
   ) {
   }

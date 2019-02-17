@@ -5,8 +5,9 @@ import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {CalendarEvent, CalendarEventTimesChangedEvent, CalendarView} from 'angular-calendar';
 import * as $ from 'jquery';
+
 import {ConnectedService} from '../../services/connected.service';
-import {HolidayRequestService} from '../../services/holiday-request.service';
+import {VacationRequestService} from '../../services/vacation-request.service';
 
 
 
@@ -82,7 +83,7 @@ export class DemanderComponent implements OnInit {
   activeDayIsOpen = false;      // Détermine l'ouverture de la modale
 
 
-  constructor(private modal: NgbModal, private connectedService: ConnectedService, private holidayrequestService: HolidayRequestService) {}
+  constructor(private modal: NgbModal, private connectedService: ConnectedService, private holidayrequestService: VacationRequestService) {}
 
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {

@@ -1,7 +1,6 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
-import { Subscription } from 'rxjs';
 
 import { ConnectedService } from '../services/connected.service';
 @Component({
@@ -23,7 +22,4 @@ export class ConnexionComponent implements OnInit {
     this.router.navigate(['conges/demander']);
   }
 
-  onSignOut() {
-    this.connectedService.signOut();
-  }
 }

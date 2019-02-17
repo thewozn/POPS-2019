@@ -1,31 +1,47 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subject } from 'rxjs';
-import { Observable } from 'rxjs';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/throw';
+
+import { GlobalService } from '../services/global.service';
 import { Mission } from '../models/mission.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MissionService {
+  missionSubject = new Subject<Mission[]>();
+  private mission: Mission[] = [];
 
-  private baseUrl = '//localhost:8080';
-  missionsSubject = new Subject<Mission[]>();
-  private missions: Mission[] = [];
+  constructor(private httpclient: HttpClient, private globalService: GlobalService) { }
 
-  constructor(private httpclient: HttpClient) { }
-
-  emitUsersSubject() {
-    if (this.missions != null) {
-      this.missionsSubject.next(this.missions.slice());
+  emitMissionsSubject() {
+    if (this.mission != null) {
+      this.missionSubject.next(this.mission.slice());
     }
   }
 
-  // TODO : changez l'url "users" à ce qui correspond au ligne de note de frais
-  // getAll(): Observable<Mission[]> {
-  //   return this.httpclient.get<Mission[]>(this.baseUrl + '/users');
-  // }
+  getMissionsFromServer() {
+    this.httpclient.get<Mission[]>(this.globalService.getbaseUrl() + '/getMissionrList').subscribe(
+      (response) => {
+        this.mission = response;
+        this.emitMissionsSubject();
+      },
+      (error) => {
+        console.log('Erreur ! : ' + error);
+      }
+    );
+  }
+
+  addMissionServer(mission: Mission) {
+    this.httpclient.post<Mission>(this.globalService.getbaseUrl() + '/createMission', JSON.stringify(mission),
+    this.globalService.gethttpOptions()).subscribe(
+      (response) => {
+        console.log(response);
+        this.getMissionsFromServer();
+      },
+      (error) => {
+        console.log('Erreur ! : ' + error.message);
+      }
+    );
+  }
 }

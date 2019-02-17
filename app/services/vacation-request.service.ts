@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Subject } from 'rxjs';
+import { Observable } from 'rxjs';
+
+import { GlobalService } from '../services/global.service';
 import { ConnectedService } from './connected.service';
-
-
+import { VacationRequest } from '../models/vacation-request.model';
 /**
  * Affectation de codes couleurs aux différents types d'évènements.
  * colleagues color si cela concerne les collègues
@@ -24,15 +28,16 @@ const colors: any = {
 };
 
 @Injectable()
-export class HolidayRequestService {
-
+export class VacationRequestService {
+  hrSubject = new Subject<VacationRequest[]>();
+  private hrs: VacationRequest[] = [];
 
   collaborators_list = [];            // Liste des congés validés ou refusés des collaborateurs
   collaborators_list_en_attente = []; // Liste des congés en attente des collaborateurs
   self_conges = [];                   // Liste des congés validés ou refusés de l'employé connecté
   self_conges_en_attente = [];        // Liste des congés en attente de l'employé connecté
 
-  constructor(private connectedService: ConnectedService) {
+  constructor(private connectedService: ConnectedService, private httpclient: HttpClient, private globalService: GlobalService) {
     /**
      * Initialise les champs relatifs aux congés
      * /!\ POUR LE MOMENT, IL S'AGIT DE DONNEES BRUTES
@@ -203,5 +208,11 @@ export class HolidayRequestService {
           }
       }
       ];
+
   }
+
+  getAll(uid: number): Observable<VacationRequest[]> {
+    return this.httpclient.get<VacationRequest[]>(this.globalService.getbaseUrl() + '/getVacationRequestListByUID/' + uid);
+  }
+
 }
