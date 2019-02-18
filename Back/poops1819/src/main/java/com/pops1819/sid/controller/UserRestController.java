@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pops1819.sid.exception.AuthenticationFailedException;
 import com.pops1819.sid.exception.EntityNotFoundException;
 import com.pops1819.sid.exception.NotImplementedException;
 import com.pops1819.sid.exception.NotUpdateEntityException;
@@ -25,19 +26,45 @@ public class UserRestController
 	@Autowired
 	private UserServiceImpl userServiceImpl;
  
+	@RequestMapping(value = "/authentication/{email}/{password}", method = RequestMethod.GET)
+	public ResponseEntity<UserRequest> authentication(@PathVariable String email, @PathVariable String password)
+	{
+		UserRequest userRequest = userServiceImpl.authentication(email, password);
+		if(userRequest == null)
+			throw new AuthenticationFailedException("Your email or password was incorrect. please try again");
+		return new ResponseEntity<UserRequest>(userRequest, HttpStatus.ACCEPTED);
+
+	}
+	
+	
 	@RequestMapping(value = "/createUser", method = RequestMethod.POST)
 	public ResponseEntity<Void> createUser(@RequestBody UserRequest user) {
+		System.out.println("CreateUser");
+		System.out.println(user.toString());
 		if(userServiceImpl.createUser(user) == null)
-			throw new EntityNotFoundException("check that the service exists!");
+			throw new EntityNotFoundException("- check that the service exists! - the email already exists !");
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
 	@RequestMapping(value = "/updateUser", method = RequestMethod.PATCH)
 	public ResponseEntity<Void> updateUser(@RequestBody UserRequest userRequest)
 	{	
+		System.out.println("UpdateUser");
+		System.out.println(userRequest.toString());
 		if(!userServiceImpl.updateUser(userRequest))
 			throw new NotUpdateEntityException("tototo");
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/mailTest/{email}", method = RequestMethod.GET)
+	public ResponseEntity<UserRequest> getUserByEmail(@PathVariable String email)
+	{	
+		System.out.println("[getUserByEmail]");
+		UserRequest returnValue = userServiceImpl.getUserByEmail(email);
+		if(returnValue == null)
+			throw new NotUpdateEntityException("il n'existe pas");
+		System.out.println(returnValue.toString());
+		return new ResponseEntity<>(returnValue, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/getUserListByService/{sid}", method=RequestMethod.GET)

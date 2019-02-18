@@ -1,5 +1,7 @@
 package com.pops1819.sid;
 
+import java.util.Date;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -9,7 +11,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-import com.pops1819.sid.services.VacationService;
+import com.pops1819.sid.entities.TypeOfLeave;
+import com.pops1819.sid.entities.User;
+import com.pops1819.sid.entities.Vacations;
+import com.pops1819.sid.repository.IServiceRepository;
+import com.pops1819.sid.repository.ITypeOfLeaveRepository;
+import com.pops1819.sid.repository.IUserRepository;
+import com.pops1819.sid.repository.IVacationRepository;
 
 @EnableAutoConfiguration
 @SpringBootApplication
@@ -23,13 +31,98 @@ public class Poops1819Application {
 	}
 	
 	@Bean
-	CommandLineRunner start(VacationService vacationService )
+	CommandLineRunner start(IVacationRepository vacationRepository, IUserRepository userRepository, IServiceRepository serviceRepository, ITypeOfLeaveRepository typeOfLeaveRepository)
 	{
 		return args->
 		{
-			vacationService.addVacation("RTT", 365L);
-			vacationService.addVacation("Congè payé", 30L);
+			
+			if(userRepository.findByEmail("aboubakr.oudghiri@gmail.com") == null)
+			{
+				
+				Vacations rtt = new Vacations(1L, "RTT", 365.);
+				Vacations congesPayes = new Vacations(2L, "Congés payés", 30.);
+				
+				vacationRepository.save(rtt);
+				vacationRepository.save(congesPayes);
+				
+				User headOfAccountingService = new User( 1L,
+														"HeadOfService",
+														"Aboubakr",
+														"OUDGHIRI",
+														new Date(1995, 04, 9),
+														"aboubakr.oudghiri@gmail.com",
+														"2 rue vernier",
+														"94100",
+														"Saint Maur",
+														"France",
+														"mymdp",
+														"./imgs/aboubakr_oudghiri.jpg"
+														) ;
+				User headOfHumanResourceService = new User(2L,
+														"HeadOfService",
+														"Mourad",
+														"HAMOU-MAMAR",
+														new Date(1995, 02, 16),
+														"mourad.hamou-mamar@gmail.com",
+														"34 rue de verdun",
+														"37300",
+														"Joué-Lès-Tours",
+														"France",
+														"92ppbqay",
+														"./imgs/mourad_hamou-mamr.jpg"
+														);
+				User headManagementService = new User(3L,
+														"HeadOfService",
+														"Adam",
+														"ROCHE",
+														new Date(1995, 02, 16),
+														"adam.roche@gmail.com",
+														"10 rue de la paix",
+														"75002",
+														"Paris",
+														"France",
+														"0G8lKJ34",
+														"./imgs/adam_roche.jpg"
+														) ;
+			
+				
+	
+				com.pops1819.sid.entities.Service accountingService = new com.pops1819.sid.entities.Service(1L, headOfAccountingService, "Accounting");
+				com.pops1819.sid.entities.Service humanResourceService = new com.pops1819.sid.entities.Service(2L, headOfHumanResourceService, "HumanResource");
+				com.pops1819.sid.entities.Service ManagementService = new com.pops1819.sid.entities.Service(3L, headManagementService, "Management");
 
+				
+				userRepository.save(headOfAccountingService);
+				userRepository.save(headOfHumanResourceService);
+				userRepository.save(headManagementService);
+
+				serviceRepository.save(accountingService);
+				serviceRepository.save(humanResourceService);
+				serviceRepository.save(ManagementService);
+
+				headOfAccountingService.setService(accountingService);
+				headOfHumanResourceService.setService(humanResourceService);
+				headManagementService.setService(ManagementService);
+				
+				userRepository.save(headOfAccountingService);
+				userRepository.save(headOfHumanResourceService);
+				userRepository.save(headManagementService);
+
+				
+				
+				typeOfLeaveRepository.save(new TypeOfLeave(rtt.getMaxDays(), rtt, headOfAccountingService));
+				typeOfLeaveRepository.save(new TypeOfLeave(congesPayes.getMaxDays(), congesPayes, headOfAccountingService));
+
+				
+				typeOfLeaveRepository.save(new TypeOfLeave(rtt.getMaxDays(), rtt, headOfHumanResourceService));
+				typeOfLeaveRepository.save(new TypeOfLeave(congesPayes.getMaxDays(), congesPayes, headOfHumanResourceService));
+				
+				typeOfLeaveRepository.save(new TypeOfLeave(rtt.getMaxDays(), rtt, headManagementService));
+				typeOfLeaveRepository.save(new TypeOfLeave(congesPayes.getMaxDays(), congesPayes, headManagementService));
+
+			}
+			
+		
 		};
 		
 	}

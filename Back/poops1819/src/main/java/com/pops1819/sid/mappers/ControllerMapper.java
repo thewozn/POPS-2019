@@ -88,7 +88,7 @@ public interface ControllerMapper {
 	
 	@Mappings({ @Mapping(source = "holidayRequest.did", target = "did"),
 				@Mapping(source = "holidayRequest.user.uid", target = "uid"),
-				@Mapping(source = "holidayRequest.typeOfLeave.tcid", target = "tcid")
+				@Mapping(source = "holidayRequest.typeOfLeave.vacations.vid", target = "vid")
 		})
 	VacationRequest getVacationRequest(HolidayRequest holidayRequest);
 

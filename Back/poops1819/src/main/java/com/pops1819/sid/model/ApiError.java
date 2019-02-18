@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 
+import com.pops1819.sid.exception.AuthenticationFailedException;
 import com.pops1819.sid.exception.EntityNotFoundException;
 import com.pops1819.sid.exception.InvalidRequestException;
 import com.pops1819.sid.exception.NotImplementedException;
@@ -41,6 +42,11 @@ public class ApiError {
 		this.informationLink = informationLink;
 	}
 	
+	public ApiError(AuthenticationFailedException e)
+	{
+		this(HttpStatus.NOT_ACCEPTABLE.toString(), UUID.randomUUID().toString(), e.getMessage(), null);
+	}
+
 	public ApiError(InvalidRequestException e) {
 		this(HttpStatus.NOT_MODIFIED.toString(), UUID.randomUUID().toString(), e.getMessage(), null);
 	}

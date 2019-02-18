@@ -21,11 +21,13 @@ public class TypeOfLeave {
 	@Column(name = "TCID", unique = true, nullable = false, precision = 10)
 	private Long tcid;
 
-	@Column(name = "TYPE", nullable = false, length = 64)
-	private String type;
-	private long remainingBalance;
-	private long maxDays;
-
+	@Column(name = "REMAINING_BALANCE", nullable = false, length = 64)
+	private Double remainingBalance;
+	
+	@ManyToOne
+	@JoinColumn(name = "VID")
+	private Vacations vacations;
+	
 	@ManyToOne
 	@JoinColumn(name = "UID")
 	private User user;
@@ -33,24 +35,50 @@ public class TypeOfLeave {
 	@OneToMany(mappedBy = "typeOfLeave", fetch = FetchType.LAZY)
 	private List<HolidayRequest> holidayRequest = new ArrayList<>();
 
-	public TypeOfLeave(Long tcid, String type, long remainingBalance, long maxDays, User user,
+	public TypeOfLeave(Double remainingBalance, Vacations vacations, User user) {
+		super();
+		this.remainingBalance = remainingBalance;
+		this.vacations = vacations;
+		this.user = user;
+	}
+	
+	public TypeOfLeave(Double remainingBalance, Vacations vacations, User user,
 			List<HolidayRequest> holidayRequest) {
 		super();
-		this.tcid = tcid;
-		this.type = type;
 		this.remainingBalance = remainingBalance;
-		this.maxDays = maxDays;
+		this.vacations = vacations;
 		this.user = user;
 		this.holidayRequest = holidayRequest;
 	}
-
-	public TypeOfLeave(String type, long remainingBalance, long maxDays, User user) {
+	
+	public TypeOfLeave(Long tcid, Double remainingBalance, Vacations vacations, User user,
+			List<HolidayRequest> holidayRequest) {
 		super();
-		this.type = type;
+		this.tcid = tcid;
 		this.remainingBalance = remainingBalance;
-		this.maxDays = maxDays;
+		this.vacations = vacations;
+		this.user = user;
+		this.holidayRequest = holidayRequest;
+	}
+	
+	public TypeOfLeave(Long tcid, Double remainingBalance, Vacations vacations, User user) {
+		super();
+		this.tcid = tcid;
+		this.remainingBalance = remainingBalance;
+		this.vacations = vacations;
 		this.user = user;
 	}
+	
+	
+
+	public TypeOfLeave(Long tcid, Double remainingBalance, List<HolidayRequest> holidayRequest) {
+		super();
+		this.tcid = tcid;
+		this.remainingBalance = remainingBalance;
+		this.holidayRequest = holidayRequest;
+	}
+
+
 
 	public TypeOfLeave() {
 		super();
@@ -64,29 +92,28 @@ public class TypeOfLeave {
 		this.tcid = tcid;
 	}
 
-	public String getType() {
-		return type;
-	}
 
-	public void setType(String type) {
-		this.type = type;
-	}
-
-	public long getRemainingBalance() {
+	public Double getRemainingBalance() {
 		return remainingBalance;
 	}
 
-	public void setRemainingBalance(long remainingBalance) {
+	public void setRemainingBalance(Double remainingBalance) {
 		this.remainingBalance = remainingBalance;
 	}
 
-	public long getMaxDays() {
-		return maxDays;
+	
+
+	public Vacations getVacations() {
+		return vacations;
 	}
 
-	public void setMaxDays(long maxDays) {
-		this.maxDays = maxDays;
+
+
+	public void setVacations(Vacations vacations) {
+		this.vacations = vacations;
 	}
+
+
 
 	public User getUser() {
 		return user;

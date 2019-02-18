@@ -27,7 +27,7 @@ public class User implements Serializable
 	@Column(name="UID", unique=true, nullable=false, precision=10)
     private Long uid;
 	
-	@OneToOne(mappedBy = "headOfService", fetch = FetchType.LAZY)
+	@OneToOne(mappedBy = "headOfService", fetch = FetchType.EAGER)
 	private Service myService;
 	
 	@OneToMany(mappedBy = "user")
@@ -111,7 +111,7 @@ public class User implements Serializable
 	}
 
 
-	public User(String status, String lastName, String firstName, Date dateN, String email, String address, String cp,
+	public User(Long uid,String status, String lastName, String firstName, Date dateN, String email, String address, String cp,
 			String city, String country, String password, String picturePath) {
 		super();
 		this.status = status;

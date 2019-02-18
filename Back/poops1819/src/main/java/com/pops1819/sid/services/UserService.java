@@ -15,4 +15,7 @@ public interface UserService
 	public List<UserRequest> getUnassignedUserList();
 	public List<UserRequest> getAssignedUserList();
 	public List<UserRequest> getUserListByService(Long sid);
+	public UserRequest getUserByEmail(String email);
+	public UserRequest authentication(String email, String password);
+
 }

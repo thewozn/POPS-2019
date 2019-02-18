@@ -1,10 +1,16 @@
 package com.pops1819.sid.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Vacations
@@ -16,16 +22,20 @@ public class Vacations
 	
 	private String name;
 	
-	private long maxDays;
+	private Double maxDays;
 	
-	public Vacations(Long vid, String name, long maxDays) {
+	@JsonIgnore
+	@OneToMany(mappedBy = "vacations")
+	private List<TypeOfLeave> vacations = new ArrayList<>();
+	
+	public Vacations(Long vid, String name, Double maxDays) {
 		super();
 		this.vid = vid;
 		this.name = name;
 		this.maxDays = maxDays;
 	}
 	
-	public Vacations( String name, long maxDays) {
+	public Vacations( String name, Double maxDays) {
 		super();
 		this.name = name;
 		this.maxDays = maxDays;
@@ -33,6 +43,14 @@ public class Vacations
 	
 	public Vacations() {
 		super();
+	}
+
+	public List<TypeOfLeave> getVacations() {
+		return vacations;
+	}
+
+	public void setVacations(List<TypeOfLeave> vacations) {
+		this.vacations = vacations;
 	}
 
 	public Long getVid() {
@@ -51,11 +69,11 @@ public class Vacations
 		this.name = name;
 	}
 
-	public long getMaxDays() {
+	public Double getMaxDays() {
 		return maxDays;
 	}
 
-	public void setMaxDays(long maxDays) {
+	public void setMaxDays(Double maxDays) {
 		this.maxDays = maxDays;
 	}
 	

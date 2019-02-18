@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,7 @@ import com.pops1819.sid.model.UserRequest;
 import com.pops1819.sid.services.ServiceServiceImpl;
 
 @RestController
+@CrossOrigin(origins="*",allowedHeaders="*")
 public class ServiceRestController {
 	@Autowired
 	private ServiceServiceImpl serviceImpl;
@@ -27,7 +29,8 @@ public class ServiceRestController {
 	public ResponseEntity<Void> createService(@RequestBody ServiceRequest serviceRequest) {
 		if(serviceImpl.createService(serviceRequest) == null)
 			throw new InvalidRequestException("- Check that the user exists\r\n" + 
-					"- check that the user is not a manager of another department");
+					"- check that the user is not a manager of another department\\r\\n"+
+					"- the service already exists");
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 
@@ -39,13 +42,21 @@ public class ServiceRestController {
 			return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/services", method = RequestMethod.GET)
-	public ResponseEntity<List<ServiceRequest>> getUserList() {
+	@RequestMapping(value = "/getServiceList", method = RequestMethod.GET)
+	public ResponseEntity<List<ServiceRequest>> getServiceList() {
 		return new ResponseEntity<>(serviceImpl.getServiceList(), HttpStatus.OK);
 	}
 	
+	@RequestMapping(value="/getServiceBySID/{sid}", method=RequestMethod.GET)
+	public ResponseEntity<ServiceRequest> getServiceBySID(@PathVariable Long sid) {
+		ServiceRequest serviceRequest = serviceImpl.getServiceBySID(sid);
+		if(serviceRequest ==null)
+			throw new EntityNotFoundException("Service does not exist with sid : "+sid);
+		return new ResponseEntity<>(serviceRequest, HttpStatus.OK);
+	}
+	
 
-	@RequestMapping(value = "/assignUserToHeadOfService/{uid}/{sid}", method = RequestMethod.GET)
+	@RequestMapping(value = "/assignUserToHeadOfService/{uid}/{sid}", method = RequestMethod.PATCH)
 	public ResponseEntity<Void> assignUserToHeadOfService(@PathVariable Long uid, @PathVariable Long sid) {
 		ServiceRequest serviceRequest = serviceImpl.assignUserToHeadOfService(uid, sid);
 		if(serviceRequest == null)

@@ -24,9 +24,11 @@ public class ServiceServiceImpl implements IServiceService
 	@Override
 	public com.pops1819.sid.entities.Service createService(ServiceRequest serviceRequest)
 	{
-		System.out.println(serviceRequest.toString());
 		com.pops1819.sid.entities.Service newService = mapper.getService(serviceRequest);
-		System.out.println(newService.toString());
+		
+		if(serviceRepository.existsByName(newService.getName()))
+			return null;
+		
 		User user = userRepository.findByUid(serviceRequest.getHeadOfService());
 		if(user == null) 
 			return null;
@@ -57,7 +59,10 @@ public class ServiceServiceImpl implements IServiceService
 			service.setHeadOfService(user);
 			if(lastHeadOfService != null)
 				lastHeadOfService.setMyService(null);
+			lastHeadOfService.setStatus("Collaborator");
 			user.setService(service);
+			user.setStatus("HeadOfService");
+			userRepository.save(lastHeadOfService);
 			userRepository.save(user);
 			serviceRepository.save(service);	
 		}		
@@ -67,10 +72,16 @@ public class ServiceServiceImpl implements IServiceService
 
 	@Override
 	public boolean updateService(ServiceRequest serviceRequest) {
-		System.out.println(serviceRequest.toString());
+		
 		com.pops1819.sid.entities.Service service = serviceRepository.findBySid(serviceRequest.getSid());
 		if(service == null)
 			return false;
+		
+		if(!service.getName().toLowerCase().equals(serviceRequest.getName().toLowerCase()))
+		{
+			if(serviceRepository.existsByName(serviceRequest.getName()))
+				return false;
+		}
 		
 		if(service.getHeadOfService() == null)
 			return false;
@@ -91,7 +102,7 @@ public class ServiceServiceImpl implements IServiceService
 			userRepository.save(user);
 			
 			User lastHeadOfService = userRepository.findByUid(service.getHeadOfService().getUid());
-			lastHeadOfService.setStatus("Collaborateur");
+			lastHeadOfService.setStatus("Collaborator");
 			lastHeadOfService.setMyService(null);
 		}
 		
@@ -99,6 +110,11 @@ public class ServiceServiceImpl implements IServiceService
 		serviceRepository.save(serviceUpdated);
 		return true;
 	}
-	
+
+	public ServiceRequest getServiceBySID(Long sid)
+	{
+		return mapper.getServiceRequest(serviceRepository.findBySid(sid));
+	}
+
 	
 }

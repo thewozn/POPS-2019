@@ -1,5 +1,6 @@
 package com.pops1819.sid.entities;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 @Entity
-public class Mission {
+public class Mission implements Serializable{
 
 	@Id
 	private Long mid;

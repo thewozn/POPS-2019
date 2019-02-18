@@ -12,5 +12,7 @@ public interface IHolidayRequestRepository extends JpaRepository<HolidayRequest,
 
 	public List<HolidayRequest> findByUser(User user);
 	public HolidayRequest findByDidAndUser(Long did, User user);
+	public HolidayRequest findByDid(Long did);
+	public List<HolidayRequest> findByStatus(String status);
 
 }
