@@ -82,7 +82,7 @@ public class User implements Serializable
     private String picturePath;
     
     @Column(name="ALIVE", length=3)
-    private boolean alive;
+    private boolean alive = true;
 
 	public User(Long uid, Service myService, List<TypeOfLeave> typeOfLeaves, Service service, List<Mission> missions,
 			List<ExpenseReportRequest> expenseReportRequests, List<HolidayRequest> holidayRequests, String status,
@@ -306,6 +306,35 @@ public class User implements Serializable
 				+ ", cp=" + cp + ", city=" + city + ", country=" + country + ", password=" + password + ", picturePath="
 				+ picturePath + ", alive=" + alive + "]";
 	}
+
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((uid == null) ? 0 : uid.hashCode());
+		return result;
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		if (uid == null) {
+			if (other.uid != null)
+				return false;
+		} else if (!uid.equals(other.uid))
+			return false;
+		return true;
+	}
+	
+	
 	
 		
  	

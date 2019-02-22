@@ -17,6 +17,8 @@ public interface IUserRepository extends JpaRepository<User, Long> {
 	public List<User> findByServiceIsNotNull();
 
 	public boolean existsByEmail(String email);
+	
+	public boolean existsByUid(Long uid);
 
 	public User findByEmail(String email);
 

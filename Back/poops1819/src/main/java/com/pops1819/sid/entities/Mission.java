@@ -2,22 +2,34 @@ package com.pops1819.sid.entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.UniqueConstraint;
 
 @Entity
 public class Mission implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name="MID", unique=true, nullable=false, precision=10)
 	private Long mid;
 	
 	@OneToOne(mappedBy = "mission", fetch = FetchType.EAGER)
@@ -29,8 +41,9 @@ public class Mission implements Serializable{
 	    })
 	@JoinTable(name = "user_mission",
 	        joinColumns = @JoinColumn(name = "MID"),
-	        inverseJoinColumns = @JoinColumn(name = "UID")
-	    )
+	        inverseJoinColumns = @JoinColumn(name = "UID"),
+            uniqueConstraints=@UniqueConstraint(columnNames={"MID","UID"}))
+
 	private List<User> users = new ArrayList<>();
 	
 	@ManyToOne
@@ -43,12 +56,17 @@ public class Mission implements Serializable{
 	
 	private String description;
 	
+	private Date startDate;
+	
+	private Date endDate;
+	
 	public Mission() {
 		super();
 	}
 	
+
 	public Mission(Long mid, ExpenseReportLine expenseReportLine, List<User> users, Service service, String title,
-			String status, String description) {
+			String status, String description, Date startDate, Date endDate) {
 		super();
 		this.mid = mid;
 		this.expenseReportLine = expenseReportLine;
@@ -57,7 +75,61 @@ public class Mission implements Serializable{
 		this.title = title;
 		this.status = status;
 		this.description = description;
+		this.startDate = startDate;
+		this.endDate = endDate;
 	}
+
+	public void addUser(User user)
+	{
+		users.add(user);
+		user.getMissions().add(this);
+	}
+	
+	public void removeUser(User user)
+	{
+		users.remove(user);
+		user.getMissions().remove(this);
+	}
+	
+	public void removeAllUsers()
+	{
+		for (User user : users) {
+			if(user.getMissions()!= null)
+				user.getMissions().remove(this);
+
+		}
+		users.clear();
+	}
+	
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	@Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Mission)) return false;
+        return mid != null && mid.equals(((Mission) o).mid);
+    }
+
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
+
 
 	public Long getMid() {
 		return mid;
@@ -114,6 +186,15 @@ public class Mission implements Serializable{
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+
+	@Override
+	public String toString() {
+		return "Mission [mid=" + mid + ", expenseReportLine=" + expenseReportLine + ", users=" + users + ", service="
+				+ service + ", title=" + title + ", status=" + status + ", description=" + description + ", startDate="
+				+ startDate + ", endDate=" + endDate + "]";
+	}
+	
 	
 	
 	

@@ -104,8 +104,5 @@ public class Service implements Serializable
 				+ missions + ", name=" + name + "]";
 	}
 	
-	
-	
-	
 
 }
