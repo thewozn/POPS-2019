@@ -1,0 +1,68 @@
+@media screen and (min-width: 1024px){
+    .top_div{
+      border: 1px solid lightgray;
+      width: 96%;
+      margin: 20px 2% 20px;
+      background: whitesmoke;
+    }
+  
+    .top_div:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+  }
+  
+  input[type=text] {
+    width: 96%;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    margin: 10px 10px 10px;
+    background-color: white;
+    background-position: 10px 10px;
+    background-repeat: no-repeat;
+    padding: 12px 20px 12px 40px;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+  }
+  
+  .style-textarea {
+    width: 96%;
+    height: 215px;
+    border: 2px solid #ccc;
+    padding: 5px;
+    border-radius: 4px;
+    font-size: 16px;
+    margin: 10px 10px 10px;
+    background-color: white;
+    background-position: 10px 10px;
+    background-repeat: no-repeat;
+    padding: 12px 20px 12px 40px;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+    resize: none;
+  }
+  .labels_div {
+    margin: 0 10px 10px;
+    font-size: 20px;
+    text-align: left;
+  }
+  
+  .validate-button {
+    border-radius: 3px;
+    background-color: #008CBA;
+    color: white;
+    border: 2px solid #008CBA;
+    width: 96%;
+    padding: 10px 10px 10px;
+    cursor: pointer;
+  }
+  
+  .center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+   
+  }

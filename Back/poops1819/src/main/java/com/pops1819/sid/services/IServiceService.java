@@ -10,4 +10,5 @@ public interface IServiceService
 	public boolean updateService(ServiceRequest serviceRequest);
 	public ServiceRequest assignUserToHeadOfService(Long uid, Long sid);
 	public List<ServiceRequest> getServiceList();
+	public ServiceRequest getServiceBySID(Long sid);
 }

@@ -1,0 +1,25 @@
+<div id="sidenav" class="sidenav">
+
+  <div id="conuser" style="height: 80px;">
+    <div>
+      <img src="../../assets/user.png" style="height: 40px; width: 40px; margin-left: 10px;">
+      <font color="white" style="font-size: 15px; margin-left: 10px">
+        {{ connecteduser.lastName }} {{ connecteduser.firstName }}
+      </font>
+    </div>
+  </div>
+
+
+  <a id="annuaire_href" routerLink="notfound">Annuaire</a>
+  <a id="service_href" routerLink="notfound">Mon service</a>
+  <a id="conges_href" routerLink="conges/historique">Congés</a>
+  <a id="frais_href" routerLink="notfound">Notes de frais</a>
+  <a id="missions_href" routerLink="mission/suivi">Missions</a>
+<a id="administration_href" routerLink="administration/gestionusers">Admin</a>
+<!-- *ngIf="this.connecteduser.status === 'Admin'" -->
+
+  <input type="button" class="button buttonDisc" value="Deconnexion" (click)="onSignOut()">
+  <br>
+  <!--<button id="closeButton"><span>Fermer </span></button>-->
+  <img src="../../assets/pattern.png" style=" position: fixed; width: 210px; height: auto; margin-left:0px; bottom: 0px">
+</div>

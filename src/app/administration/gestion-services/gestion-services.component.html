@@ -1,0 +1,118 @@
+<!--Modal d'ajout de service-->
+<ng-template #ajout let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Ajout d'utilisateur</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form (ngSubmit)="onSubmit(f)" #f="ngForm">
+    <div class="modal-body">
+      <div class="container">
+
+        <div class="form-group">
+          <label for="name">
+            Nom
+          </label>
+          <input [(ngModel)]="name" name="name" type="text" id="name" class="form-control" ngModel required>
+        </div>
+
+        <div class="form-group">
+          <label for="hos">
+            Chef de service
+          </label>
+          <select class="form-control" [(ngModel)]="hos" name="hos" id="hos" required>
+            <option *ngFor="let el of user" [value]="el.uid">{{el.lastName}}</option>
+          </select>
+        </div>
+
+      </div>
+    </div>
+  </form>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success" [disabled]="f.invalid" (click)="addService(f)">Enregistrer</button>
+    <button type="button" class="btn btn-danger" [disabled]="f.invalid" (click)="modal.dismiss('Annuler')">Annuler</button>
+  </div>
+</ng-template>
+
+<!--Modal de modification de service-->
+<ng-template #modif let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Modification d'utilisateur</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form (ngSubmit)="onSubmit(f)" #f="ngForm">
+    <div class="modal-body">
+      <div class="container">
+
+        <div class="form-group">
+          <label for="name">
+            Nom
+          </label>
+          <input [(ngModel)]="name" name="name" type="text" id="name" class="form-control" ngModel required>
+        </div>
+
+        <div class="form-group">
+          <label for="hos">
+            Chef de service
+          </label>
+          <select class="form-control" [(ngModel)]="hos" name="hos" id="hos" required>
+            <option *ngFor="let el of user" [value]="el.uid">{{el.lastName}}</option>
+          </select>
+        </div>
+
+      </div>
+    </div>
+  </form>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success" [disabled]="f.invalid" (click)="modifService(f)">Enregistrer</button>
+    <button type="button" class="btn btn-danger" [disabled]="f.invalid" (click)="modal.dismiss('Annuler')">Annuler</button>
+  </div>
+</ng-template>
+
+<!--Modal de suppression de service-->
+<ng-template #suppr let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Suppression d'utilisateur</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>MODAL DE SUPPRESSION</p>
+  </div>
+</ng-template>
+
+<button id="btncreate" type="button" class="btn btn-success" (click)="openCreer(ajout)">Ajouter un service</button>
+<table mat-table #table [dataSource]="service" class="mat-elevation-z8">
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef> Nom</th>
+    <td mat-cell *matCellDef="let element"> {{ element.name }} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="head">
+    <th mat-header-cell *matHeaderCellDef> Chef de service </th>
+    <td mat-cell *matCellDef="let element"> {{ this.userService.getUserById(element.headOfService).lastName }}
+      {{this.userService.getUserById(element.headOfService).firstName }} </td>
+  </ng-container>
+
+  <!--TODO : Ajouter la fonction au button -->
+  <ng-container matColumnDef="modif">
+    <th mat-header-cell *matHeaderCellDef> Modif </th>
+    <td mat-cell *matCellDef="let element">
+      <button class="btn btn-success" (click)="openModif(modif, element)"><i class="fa fa-edit" aria-hidden="true"></i></button>
+    </td>
+  </ng-container>
+
+  <!--TODO : Ajouter la fonction au button -->
+  <ng-container matColumnDef="supprimer">
+    <th mat-header-cell *matHeaderCellDef> Supprimer </th>
+    <td mat-cell *matCellDef="let element">
+      <button class="btn btn-danger" (click)="openSuppr(suppr)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+    </td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>

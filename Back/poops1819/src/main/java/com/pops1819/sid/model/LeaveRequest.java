@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class LeaveRequest {
@@ -12,23 +13,23 @@ public class LeaveRequest {
 	@NotNull
 	private Long uid;
 	
-	@JsonProperty("tcid")
+	@JsonProperty(required = true, value ="tcid")
 	@NotNull
 	private Long tcid;
 
-	@JsonProperty("startDate")
+	@JsonProperty(required = true, value ="startDate")
 	@NotNull
 	private Date startDate;
 
-	@JsonProperty("endDate")
+	@JsonProperty(required = true, value ="endDate")
 	@NotNull
 	private Date endDate;
 
-	@JsonProperty("start")
+	@JsonProperty(required = true, value ="start")
 	@NotNull
 	private boolean start;
 
-	@JsonProperty("end")
+	@JsonProperty(required = true, value ="end")
 	@NotNull
 	private boolean end;
 
@@ -38,6 +39,7 @@ public class LeaveRequest {
 
 	private String status;
 
+	@JsonCreator
 	public LeaveRequest(@NotNull Long uid, @NotNull Long tcid, @NotNull Date startDate, @NotNull Date endDate,
 			@NotNull boolean start, @NotNull boolean end, Date requestDate, Date traitmentDate, String status) {
 		super();

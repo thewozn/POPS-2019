@@ -2,6 +2,7 @@ package com.pops1819.sid.model;
 
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ServiceRequest
@@ -9,11 +10,11 @@ public class ServiceRequest
 	@JsonProperty("sid")
 	private Long sid;
 	
-	@JsonProperty("headOfService")
+	@JsonProperty(required = true, value ="headOfService")
 	@NotNull
 	private Long headOfService;
 	
-	@JsonProperty("name")
+	@JsonProperty(required = true, value ="name")
 	@NotNull
 	private String name;
 	
@@ -21,6 +22,7 @@ public class ServiceRequest
 		super();
 	}
 	
+	@JsonCreator
 	public ServiceRequest(Long sid, @NotNull Long headOfService, @NotNull String name) {
 		super();
 		this.sid = sid;

@@ -38,7 +38,23 @@ public class Service implements Serializable
 	
 	@Column(name = "name", nullable = false, length = 64)
 	private String name;
-
+	
+	public Service() {
+		super();
+	}
+	
+	public Service(User headOfService, String name) {
+		super();
+		this.headOfService = headOfService;
+		this.name = name;
+	}
+	
+	public Service(Long sid, User headOfService, String name) {
+		super();
+		this.sid = sid;
+		this.headOfService = headOfService;
+		this.name = name;
+	}
 
 	public Long getSid() {
 		return sid;
@@ -87,9 +103,6 @@ public class Service implements Serializable
 		return "Service [sid=" + sid + ", headOfService=" + headOfService + ", users=" + users + ", missions="
 				+ missions + ", name=" + name + "]";
 	}
-	
-	
-	
 	
 
 }

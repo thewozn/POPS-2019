@@ -8,4 +8,6 @@ public interface IVacationRepository extends JpaRepository<Vacations, Long>{
 
 	public Vacations findByName(String name);
 
+	public Vacations findByVid(Long vid);
+
 }

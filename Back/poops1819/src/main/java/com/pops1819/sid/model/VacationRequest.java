@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class VacationRequest {
@@ -11,27 +12,27 @@ public class VacationRequest {
 	@JsonProperty("did")
 	private Long did;
 	
-	@JsonProperty("uid")
+	@JsonProperty(required = true, value ="uid")
 	@NotNull
 	private Long uid;
 	
-	@JsonProperty("tcid")
+	@JsonProperty(required = true, value ="vid")
 	@NotNull
-	private Long tcid;
+	private Long vid;
 
-	@JsonProperty("startDate")
+	@JsonProperty(required = true, value ="startDate")
 	@NotNull
 	private Date startDate;
 
-	@JsonProperty("endDate")
+	@JsonProperty(required = true, value ="endDate")
 	@NotNull
 	private Date endDate;
 
-	@JsonProperty("start")
+	@JsonProperty(required = true, value ="start")
 	@NotNull
 	private boolean start;
 
-	@JsonProperty("end")
+	@JsonProperty(required = true, value ="end")
 	@NotNull
 	private boolean end;
 
@@ -39,6 +40,8 @@ public class VacationRequest {
 
 	private Date traitmentDate;
 
+	@JsonProperty(required = true, value ="status")
+	@NotNull
 	private String status;
 
 	
@@ -46,16 +49,15 @@ public class VacationRequest {
 		super();
 	}
 	
-	
 
-
-	public VacationRequest(Long did, @NotNull Long uid, @NotNull Long tcid, @NotNull Date startDate,
+	@JsonCreator
+	public VacationRequest(Long did, @NotNull Long uid, @NotNull Long vid, @NotNull Date startDate,
 			@NotNull Date endDate, @NotNull boolean start, @NotNull boolean end, Date requestDate, Date traitmentDate,
 			String status) {
 		super();
 		this.did = did;
 		this.uid = uid;
-		this.tcid = tcid;
+		this.vid = vid;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.start = start;
@@ -76,12 +78,12 @@ public class VacationRequest {
 		this.uid = uid;
 	}
 
-	public Long getTcid() {
-		return tcid;
+	public Long getVid() {
+		return vid;
 	}
 
-	public void setTcid(Long tcid) {
-		this.tcid = tcid;
+	public void setVid(Long vid) {
+		this.vid = vid;
 	}
 
 	public Date getStartDate() {

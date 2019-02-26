@@ -33,8 +33,8 @@ public class HolidayRequest
 	private Date endDate;
 	
 	@ManyToOne
-	@JoinColumn(name="TCID")
-	private TypeOfLeave typeOfLeave;
+	@JoinColumn(name="VID")
+	private Vacations vacations;
 	
 	private boolean start;
 	
@@ -46,8 +46,10 @@ public class HolidayRequest
 		super();
 	}
 
+
+
 	public HolidayRequest(Long did, User user, Date requestDate, Date traitmentDate, Date startDate, Date endDate,
-			TypeOfLeave typeOfLeave, boolean start, boolean end, String status) {
+			Vacations vacations, boolean start, boolean end, String status) {
 		super();
 		this.did = did;
 		this.user = user;
@@ -55,11 +57,12 @@ public class HolidayRequest
 		this.traitmentDate = traitmentDate;
 		this.startDate = startDate;
 		this.endDate = endDate;
-		this.typeOfLeave = typeOfLeave;
+		this.vacations = vacations;
 		this.start = start;
 		this.end = end;
 		this.status = status;
 	}
+
 
 
 	public Date getStartDate() {
@@ -78,12 +81,12 @@ public class HolidayRequest
 		this.endDate = endDate;
 	}
 
-	public TypeOfLeave getTypeOfLeave() {
-		return typeOfLeave;
+	public Vacations getVacations() {
+		return vacations;
 	}
 
-	public void setTypeOfLeave(TypeOfLeave typeOfLeave) {
-		this.typeOfLeave = typeOfLeave;
+	public void setVacations(Vacations vacations) {
+		this.vacations = vacations;
 	}
 
 	public boolean isStart() {

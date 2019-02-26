@@ -27,11 +27,11 @@ public class User implements Serializable
 	@Column(name="UID", unique=true, nullable=false, precision=10)
     private Long uid;
 	
-	@OneToOne(mappedBy = "headOfService", fetch = FetchType.LAZY)
+	@OneToOne(mappedBy = "headOfService", fetch = FetchType.EAGER)
 	private Service myService;
 	
 	@OneToMany(mappedBy = "user")
-	private List<TypeOfLeave> typeOfLeaves = new ArrayList<>();
+	private List<Balance> balances = new ArrayList<>();
 	
 	@ManyToOne
 	@JoinColumn(name = "SID")
@@ -82,16 +82,16 @@ public class User implements Serializable
     private String picturePath;
     
     @Column(name="ALIVE", length=3)
-    private boolean alive;
+    private boolean alive = true;
 
-	public User(Long uid, Service myService, List<TypeOfLeave> typeOfLeaves, Service service, List<Mission> missions,
+	public User(Long uid, Service myService, List<Balance> balances, Service service, List<Mission> missions,
 			List<ExpenseReportRequest> expenseReportRequests, List<HolidayRequest> holidayRequests, String status,
 			String lastName, String firstName, Date dateN, String email, String address, String cp, String city,
 			String country, String password, String picturePath, boolean alive) {
 		super();
 		this.uid = uid;
 		this.myService = myService;
-		this.typeOfLeaves = typeOfLeaves;
+		this.balances = balances;
 		this.service = service;
 		this.missions = missions;
 		this.expenseReportRequests = expenseReportRequests;
@@ -111,7 +111,7 @@ public class User implements Serializable
 	}
 
 
-	public User(String status, String lastName, String firstName, Date dateN, String email, String address, String cp,
+	public User(Long uid,String status, String lastName, String firstName, Date dateN, String email, String address, String cp,
 			String city, String country, String password, String picturePath) {
 		super();
 		this.status = status;
@@ -248,13 +248,13 @@ public class User implements Serializable
 	}
 
 	@JsonIgnore
-	public List<TypeOfLeave> getTypeOfLeaves() {
-		return typeOfLeaves;
+	public List<Balance> getTypeOfLeaves() {
+		return balances;
 	}
 	
 	@JsonIgnore
-	public void setTypeOfLeaves(List<TypeOfLeave> typeOfLeaves) {
-		this.typeOfLeaves = typeOfLeaves;
+	public void setTypeOfLeaves(List<Balance> balances) {
+		this.balances = balances;
 	}
 
 	@JsonIgnore
@@ -299,13 +299,42 @@ public class User implements Serializable
 
 	@Override
 	public String toString() {
-		return "User [uid=" + uid + ", myService=" + myService + ", typeOfLeaves=" + typeOfLeaves + ", service="
+		return "User [uid=" + uid + ", myService=" + myService + ", balances=" + balances + ", service="
 				+ service + ", missions=" + missions + ", expenseReportRequests=" + expenseReportRequests
 				+ ", holidayRequests=" + holidayRequests + ", status=" + status + ", lastName=" + lastName
 				+ ", firstName=" + firstName + ", dateN=" + dateN + ", email=" + email + ", address=" + address
 				+ ", cp=" + cp + ", city=" + city + ", country=" + country + ", password=" + password + ", picturePath="
 				+ picturePath + ", alive=" + alive + "]";
 	}
+
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((uid == null) ? 0 : uid.hashCode());
+		return result;
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		if (uid == null) {
+			if (other.uid != null)
+				return false;
+		} else if (!uid.equals(other.uid))
+			return false;
+		return true;
+	}
+	
+	
 	
 		
  	

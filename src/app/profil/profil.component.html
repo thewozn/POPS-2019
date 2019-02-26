@@ -1,0 +1,27 @@
+<div id="top_box_profil" class="top_div" style="">
+  <!-- <form (ngSubmit)="onSubmit(f)" #f="ngForm"> -->
+    <div id="infos_profil" class = "column">
+
+      {{ connecteduser.lastName }} {{ connecteduser.firstName }}
+     <img class="center" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCfmDcLwr_Pl_t3I_EYFoYmsCEs5zCmAAPpuK_eRgE3Po5hYdLlA" />
+     <div class="labels_div">{{ email }}</div>
+     <div class="labels_div">Email </div>
+     <div class="labels_div">Date de Naissance </div>
+     <div class="labels_div">Adresse </div>
+    </div>
+  <!-- </form> -->
+
+  </div>
+  <div id="top_box_profil" class="top_div" style="">
+
+  <div class = "column">
+    <div class="labels_div">Demande de modification d'informations personnelles</div>
+    <textarea #infoDescription class="style-textarea" id="styled" name="message" placeholder="                                                                                                        "></textarea>
+  </div>
+  <div class = "column">
+    <button class="validate-button" type="submit" value="Register"
+    (click)="validate(missionTitle.value, missionStart.value, missionEnd.value, missionDescription.value)"
+             ng-disabled="register.$invalid"
+    >Soumettre ma demande</button>
+  </div>
+  </div>

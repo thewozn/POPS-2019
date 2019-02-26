@@ -1,0 +1,158 @@
+<div id="top_box_missions" class="top_div" style="">
+  <div id="infos_missions" class = "column">
+    <div class="labels_div">Informations</div>
+    <input #missionTitle [value]="mission.title" type="text"
+           id="m_name" name="m_name" placeholder="Intitulé de la mission (Requis)" readonly>
+
+    <div class="labels_div">Dates</div>
+    <input
+      [value]="mission.start"
+      #missionStart
+      class="form-control"
+      type="text"
+      mwlFlatpickr
+      dateFormat="Y-m-d"
+      altFormat="F j, Y"
+      placeholder="Date de début (YYYY-MM-DD) (Requis)"
+      [readonly]= "isReadOnly"
+      [clickOpens]="!isReadOnly"
+      required>
+    <input
+      #missionEnd
+      class="form-control"
+      type="text"
+      mwlFlatpickr
+      dateFormat="Y-m-d"
+      altFormat="F j, Y"
+      placeholder="Date de fin (Laisser vide pour indéfini)">
+
+  </div>
+
+  <div class = "column">
+    <div class="labels_div">Description (facultative)</div>
+    <textarea #missionDescription class="style-textarea" id="styled" name="message" placeholder="Ajouter une description (facultative)"></textarea>
+  </div>
+
+</div>
+
+<div id="bottom_box_missions" class="top_div" style="">
+
+  <div class = "column">
+    <div class="labels_div">Personnes affectées</div>
+    <div class="example-container">
+      <table mat-table [dataSource]="dataSource_selected">
+
+        <!-- Position Column -->
+        <ng-container matColumnDef="NOM">
+          <th mat-header-cell *matHeaderCellDef> NOM </th>
+          <td mat-cell *matCellDef="let element"> {{element.NOM}} </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="PRENOM">
+          <th mat-header-cell *matHeaderCellDef> PRENOM </th>
+          <td mat-cell *matCellDef="let element"> {{element.PRENOM}} </td>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="SERVICE">
+          <th mat-header-cell *matHeaderCellDef> SERVICE </th>
+          <td mat-cell *matCellDef="let element"> {{element.SERVICE}} </td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="FONCTION">
+          <th mat-header-cell *matHeaderCellDef> FONCTION </th>
+          <td mat-cell *matCellDef="let element"> {{element.FONCTION}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="ACTION">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let element">
+            <button class="delete-button"
+                    (click)="popEmployee(element)">
+              <!--<img border="0" alt="PolyManager" src="./assets/delete.png" width="30" height="30">-->
+            </button>
+
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+
+    <div class = "column">
+      <button class="validate-button" type="submit" value="Register"
+              (click)="validate(missionTitle.value, missionStart.value, missionEnd.value, missionDescription.value)"
+              ng-disabled="register.$invalid"
+      >Valider la création</button>
+    </div>
+    <div class = "column">
+      <button class="abort-button">Abandonner</button>
+    </div>
+
+  </div>
+  <div class = "column">
+    <div class="labels_div">Rechercher</div>
+    <div style = "border: 1px solid lightgray; padding: 10px 10px 10px;">
+      <input #selectedCollaborator type="text" id="r_name" name="r_name" placeholder="Maria DUPONTEZ">
+      <div style="height: 60px;">
+        <select #selectedService id='selector_year' class="soflow" style="margin: 0 10px 0; width: 43%">
+          <option value="" selected>Service</option>
+          <option *ngFor="let option of services" [value]="option">{{option}}</option>
+        </select>
+
+        <select #selectedFunction id='selector_function' class="soflow" style="margin: 0 10px 0; width: 43%; float: right;">
+          <option value="" selected>Fonction</option>
+          <option *ngFor="let option of functions" [value]="option">{{option}}</option>
+        </select>
+
+      </div>
+      <button class="validate-button" style="margin: 0 2% 0;"
+              (click)="findEmployee(selectedCollaborator.value, selectedService.value, selectedFunction.value)">Rechercher</button>
+
+      <div class="example-container mat-elevation-z8" style="height:200px;">
+        <table mat-table [dataSource]="dataSource">
+
+          <!-- Position Column -->
+          <ng-container matColumnDef="NOM">
+            <th mat-header-cell *matHeaderCellDef> NOM </th>
+            <td mat-cell *matCellDef="let element"> {{element.NOM}} </td>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="PRENOM">
+            <th mat-header-cell *matHeaderCellDef> PRENOM </th>
+            <td mat-cell *matCellDef="let element"> {{element.PRENOM}} </td>
+          </ng-container>
+
+          <!-- Weight Column -->
+          <ng-container matColumnDef="SERVICE">
+            <th mat-header-cell *matHeaderCellDef> SERVICE </th>
+            <td mat-cell *matCellDef="let element"> {{element.SERVICE}} </td>
+          </ng-container>
+
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="FONCTION">
+            <th mat-header-cell *matHeaderCellDef> FONCTION </th>
+            <td mat-cell *matCellDef="let element"> {{element.FONCTION}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="ACTION">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let element">
+              <button class="add-button"
+                      (click)="pushEmployee(element)">
+              </button>
+
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

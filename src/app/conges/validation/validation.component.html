@@ -1,0 +1,198 @@
+<!-- FENETRE MODALE -->
+<ng-template #modalContent let-close="close">
+  <div class="modal-header">
+    <h5 class="modal-title">Fiche de l'employé</h5>
+    <button type="button" class="close" (click)="close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div>
+      Congé:
+      <pre>{{ modalData?.action }}</pre>
+    </div>
+    <div>
+      Ici on doit afficher la fiche profil de l'employé:
+      <!--<pre>{{ modalData?.event | json }}</pre>-->
+      <pre>Empty</pre>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #modalRefuse let-close="close">
+  <div class="modal-header">
+    <h5 class="modal-title">Refuser le congé</h5>
+    <button type="button" class="close" (click)="close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div>
+      Congé concerné:
+      <pre>{{ modalData?.action }}</pre>
+    </div>
+    <div>
+      Justification
+      <textarea #motif class = "style-textarea" placeholder="Veuillez indiquer la raison du refus (20 caractères mimimum)"></textarea>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="updateEvent(modalData.event, 'Refuser', motif.value); close()">CONFIRMER LE REFUS</button>
+  </div>
+</ng-template>
+
+<div style="padding: 10px 0px 20px; ">
+  <h3 style="margin-left: 20px; display: block;">VALIDER DES CONGES</h3>
+</div>
+
+<div id="top_box_missions" class="top_div" style="">
+  <div style="margin-top: 10px;">
+    <select #selectedYear id='selector_year' class="soflow" style="display: inline-block;">
+      <option value="-1" selected>Année</option>
+      <option>2019</option>
+      <option>2018</option>
+      <option>2017</option>
+    </select>
+
+    <select #selectedMonth id='selector_month' class="soflow" style="display: inline-block;">
+      <option value="-1" selected>Mois</option>
+      <option value="0">Janvier</option>
+      <option value="1">Fevrier</option>
+      <option value="2">Mars</option>
+      <option value="3">Avril</option>
+      <option value="4">Mai</option>
+      <option value="5">Juin</option>
+      <option value="6">Juillet</option>
+      <option value="7">Août</option>
+      <option value="8">Septembre</option>
+      <option value="9">Octobre</option>
+      <option value="10">Novembre</option>
+      <option value="11">Décembre</option>
+    </select>
+
+    <select #selectedService id='selector_state' class="soflow" style="display: inline-block;">
+      <option value="Service" selected>Service</option>
+      <option value="Data">Data</option>
+      <option value="RH">RH</option>
+      <option value="Support">Support</option>
+    </select>
+
+    <button class="validate-button" style=""
+            (click)="newFilteredEvents(selectedYear.value, selectedMonth.value, selectedService.value)">Trier</button>
+
+
+  </div>
+  <div class="example-container mat-elevation-z8" style="height:200px;">
+    <table mat-table [dataSource]="dataSource">
+
+      <!-- Position Column -->
+      <ng-container matColumnDef="NOM">
+        <th mat-header-cell *matHeaderCellDef> NOM </th>
+        <td mat-cell *matCellDef="let element"> {{(element  | valcomponent)[0]}} </td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="FICHE">
+        <th mat-header-cell *matHeaderCellDef> FICHE </th>
+        <td mat-cell *matCellDef="let element">
+          <button class="consult-button"
+                  (click)="handleEvent(element.linked_event.title, element.linked_event)">
+          </button>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="SERVICE">
+        <th mat-header-cell *matHeaderCellDef> SERVICE </th>
+        <td mat-cell *matCellDef="let element"> {{(element  | valcomponent)[1]}}</td>
+      </ng-container>
+      <ng-container matColumnDef="TYPE">
+        <th mat-header-cell *matHeaderCellDef> TYPE </th>
+        <td mat-cell *matCellDef="let element"> {{(element  | valcomponent)[2]}}</td>
+      </ng-container>
+      <ng-container matColumnDef="DEPART">
+        <th mat-header-cell *matHeaderCellDef> DU </th>
+        <td mat-cell *matCellDef="let element"> {{(element  | valcomponent)[3]}}</td>
+      </ng-container>
+      <ng-container matColumnDef="DMA">
+        <th mat-header-cell *matHeaderCellDef>M/A</th>
+        <td mat-cell *matCellDef="let element"> {{(element  | valcomponent)[4]}}</td>
+      </ng-container>
+      <ng-container matColumnDef="RETOUR">
+        <th mat-header-cell *matHeaderCellDef> AU </th>
+        <td mat-cell *matCellDef="let element"> {{(element  | valcomponent)[5]}}</td>
+      </ng-container>
+      <ng-container matColumnDef="RMA">
+        <th mat-header-cell *matHeaderCellDef>M/A</th>
+        <td mat-cell *matCellDef="let element"> {{(element  | valcomponent)[6]}}</td>
+      </ng-container>
+      <ng-container matColumnDef="VALIDER">
+        <th mat-header-cell *matHeaderCellDef>VAL. </th>
+        <td mat-cell *matCellDef="let element">
+          <button class="accept-button"
+                  (click)="updateEvent(element, 'Valider', '')">
+          </button>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="REFUSER">
+        <th mat-header-cell *matHeaderCellDef>REF.</th>
+        <td mat-cell *matCellDef="let element">
+          <button class="refuse-button"
+                  (click)="handleRefuseEvent(element.linked_event.title, element)">
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+</div>
+
+<div style="padding: 10px 0 10px;">
+  <h3 style="margin-left: 20px;">CALENDRIER SUR {{ viewDate | calendarDate:(view + 'ViewTitle'):'fr' }}</h3>
+  <div class="btn-group" style= "border-color: #008CBA; margin-right: 20px; float:right">
+    <div
+      class="btn btn-primary"
+      mwlCalendarPreviousView
+      [view]="view"
+      [(viewDate)]="viewDate"
+      style= "background-color: #008CBA;"
+      (viewDateChange)="activeDayIsOpen = false">
+      <
+    </div>
+    <div
+      class="btn btn-outline-secondary"
+      mwlCalendarToday
+      [(viewDate)]="viewDate">
+      ◯
+    </div>
+    <div
+      class="btn btn-primary"
+      mwlCalendarNextView
+      style= "background-color: #008CBA;"
+      [view]="view"
+      [(viewDate)]="viewDate"
+      (viewDateChange)="activeDayIsOpen = false">
+      >
+    </div>
+  </div>
+</div>
+<div style="margin-top: 40px; display: block; width: 96%; margin-left:2%;">
+  <div [ngSwitch]="view">
+    <mwl-calendar-month-view
+      *ngSwitchCase="CalendarView.Month"
+      [viewDate]="viewDate"
+      [events]="events"
+      [refresh]="refresh"
+      [activeDayIsOpen]="activeDayIsOpen"
+      (dayClicked)="dayClicked($event.day)"
+      (eventClicked)="handleEvent('Clicked', $event.event)"
+      [style.height.px] = "70"
+      [style.cal-month-view.height.px] = "70"
+      [style.cal-day-cell.px] = "70"
+      [style.cal-cell-top.height.px] = "70"
+      [locale]="locale"
+      (eventTimesChanged)="eventTimesChanged($event)">
+    </mwl-calendar-month-view>
+  </div>
+
+</div>

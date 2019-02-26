@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.pops1819.sid.exception.AuthenticationFailedException;
+import com.pops1819.sid.exception.EntityNotCreatedException;
 import com.pops1819.sid.exception.EntityNotFoundException;
 import com.pops1819.sid.exception.InvalidRequestException;
 import com.pops1819.sid.exception.NotImplementedException;
@@ -52,5 +54,18 @@ public class GlobalExceptionController extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<ApiError>(error, HttpStatus.FORBIDDEN);
 	}
 	
+	@ExceptionHandler(AuthenticationFailedException.class)
+	public ResponseEntity<ApiError> handleResourceAuthentifacationFailedException(AuthenticationFailedException e,
+			WebRequest request) {
+		ApiError error = new ApiError(e);
+		return new ResponseEntity<ApiError>(error, HttpStatus.NOT_ACCEPTABLE);
+	}
+	
+	@ExceptionHandler(EntityNotCreatedException.class)
+	public ResponseEntity<ApiError> handleResourceEntityNotCreatedException(EntityNotCreatedException e,
+			WebRequest request) {
+		ApiError error = new ApiError(e);
+		return new ResponseEntity<ApiError>(error, HttpStatus.NOT_ACCEPTABLE);
+	}
 	
 }

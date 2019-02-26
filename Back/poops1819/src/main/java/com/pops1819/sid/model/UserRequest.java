@@ -2,9 +2,9 @@ package com.pops1819.sid.model;
 
 import java.util.Date;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class UserRequest {
@@ -12,56 +12,57 @@ public class UserRequest {
 	@JsonProperty("uid")
 	private Long uid;
 	
-	@JsonProperty("status")
+	@JsonProperty( value = "status")
 	@NotNull
 	private String status;
 
-	@JsonProperty("sid")
+	@JsonProperty(value ="sid")
 	private Long sid;
 
-	@JsonProperty("lastName")
+	@JsonProperty( value ="lastName")
 	@NotNull
 	private String lastName;
 
-	@JsonProperty("firstName")
+	@JsonProperty( value ="firstName")
 	@NotNull
 	private String firstName;
 
-	@JsonProperty("dateN")
+	@JsonProperty( value ="dateN")
 	@NotNull
 	private Date dateN;
 
-	@JsonProperty("email")
+	@JsonProperty( value ="email")
 	@NotNull
 	private String email;
 
-	@JsonProperty("address")
+	@JsonProperty( value ="address")
 	@NotNull
 	private String address;
 
-	@JsonProperty("cp")
+	@JsonProperty(value ="cp")
 	@NotNull
 	private String cp;
 
-	@JsonProperty("city")
+	@JsonProperty( value ="city")
 	@NotNull
 	private String city;
 
-	@JsonProperty("country")
+	@JsonProperty(value ="country")
 	@NotNull
 	private String country;
 
-	@JsonProperty("password")
+	@JsonProperty( value ="password")
 	@NotNull
 	private String password;
 
-	@JsonProperty("picturePath")
+	@JsonProperty( value ="picturePath")
 	@NotNull
 	private String picturePath;
 
 	@JsonProperty("alive")
 	private boolean alive;
-
+    
+//	@JsonCreator
 	public UserRequest(Long uid, @NotNull String status, Long sid, @NotNull String lastName, @NotNull String firstName,
 			@NotNull Date dateN, @NotNull String email, @NotNull String address, @NotNull String cp,
 			@NotNull String city, @NotNull String country, @NotNull String password, @NotNull String picturePath,
@@ -82,6 +83,27 @@ public class UserRequest {
 		this.picturePath = picturePath;
 		this.alive = alive;
 	}
+	
+	public UserRequest(@NotNull String status, Long sid, @NotNull String lastName, @NotNull String firstName,
+			@NotNull Date dateN, @NotNull String email, @NotNull String address, @NotNull String cp,
+			@NotNull String city, @NotNull String country, @NotNull String password, @NotNull String picturePath,
+			boolean alive) {
+		super();
+		this.status = status;
+		this.sid = sid;
+		this.lastName = lastName;
+		this.firstName = firstName;
+		this.dateN = dateN;
+		this.email = email;
+		this.address = address;
+		this.cp = cp;
+		this.city = city;
+		this.country = country;
+		this.password = password;
+		this.picturePath = picturePath;
+		this.alive = alive;
+	}
+	
 
 	public UserRequest() {
 		super();
