@@ -19,6 +19,7 @@ public class VacationServiceImpl implements VacationService {
 	@Autowired
 	private IBalanceRepository balanceRepository;
 
+	
 	@Override
 	public Vacations addVacation(String name, Double maxDays) {
 		Vacations vacation = vacationRepository.findByName(name);

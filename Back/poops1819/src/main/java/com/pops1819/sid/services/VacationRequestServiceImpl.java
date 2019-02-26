@@ -61,6 +61,9 @@ public class VacationRequestServiceImpl implements VacationRequestService {
 
 	@Autowired
 	private ControllerMapper mapper;
+	
+	@Autowired
+	private IServiceRepository serviceRepository;
 
 	@Autowired
 	private IServiceRepository serviceRepository;
@@ -97,7 +100,7 @@ public class VacationRequestServiceImpl implements VacationRequestService {
 		holidayRequestRepository.save(newHolidayRequest);
 		return mapper.getVacationRequest(newHolidayRequest);
 	}
-
+	
 	@Override
 	public VacationRequest updateVacationRequest(VacationRequest vacationRequest) {
 		HolidayRequest newHolidayRequest = mapper.getHolidayRequest(vacationRequest);
@@ -340,7 +343,6 @@ public class VacationRequestServiceImpl implements VacationRequestService {
 			return null;
 		return mapper.getVacationRequestList(holidayRequestRepository.findByUser(userRepository.findByUid(uid)));
 	}
-
 	@Override
 	public List<VacationRequest> getVacationRequestListByStatus(String status) {
 		return mapper.getVacationRequestList(holidayRequestRepository.findByStatus(status));

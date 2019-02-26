@@ -31,8 +31,9 @@ public class UserRestController
 	{
 		UserRequest userRequest = userServiceImpl.authentication(email, password);
 		if(userRequest == null)
-			throw new AuthenticationFailedException("authentification Issue - PLEASE CHECK the email and the password.");
+			throw new AuthenticationFailedException("Your email or password was incorrect. please try again");
 		return new ResponseEntity<UserRequest>(userRequest, HttpStatus.ACCEPTED);
+
 	}
 	
 	

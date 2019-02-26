@@ -28,9 +28,9 @@ public class ServiceRestController {
 	@RequestMapping(value = "/createService", method = RequestMethod.POST)
 	public ResponseEntity<Void> createService(@RequestBody ServiceRequest serviceRequest) {
 		if(serviceImpl.createService(serviceRequest) == null)
-			throw new InvalidRequestException("createService Issue - PLEASE CHECK that the user|service exists"
-					+ "ONLY a Collaborator who is not in charge of a Department can be designed as a HeadOfService\r\n" + 
-					"PLEASE CHECK that the service name is not already taken");
+			throw new InvalidRequestException("- Check that the user exists\r\n" + 
+					"- check that the user is not a manager of another department\\r\\n"+
+					"- the service already exists");
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 
@@ -51,7 +51,7 @@ public class ServiceRestController {
 	public ResponseEntity<ServiceRequest> getServiceBySID(@PathVariable Long sid) {
 		ServiceRequest serviceRequest = serviceImpl.getServiceBySID(sid);
 		if(serviceRequest ==null)
-			throw new EntityNotFoundException("getServiceBySID/{sid} Issue - PLESE CHECK the sid");
+			throw new EntityNotFoundException("Service does not exist with sid : "+sid);
 		return new ResponseEntity<>(serviceRequest, HttpStatus.OK);
 	}
 	
