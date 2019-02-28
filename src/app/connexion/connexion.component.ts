@@ -20,7 +20,6 @@ export class ConnexionComponent implements OnInit {
     this.connectedService
       .signIn(form.value['user_email'], form.value['user_pwd'])
       .then(() => {
-        console.log('Sign in successful!');
         this.router.navigate(['conges/historique']);
       });
   }

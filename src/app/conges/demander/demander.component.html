@@ -4,16 +4,12 @@
 
 
 <div id="top_box_missions" class="top_div" style="padding-top: 10px;">
-  <div id="infos_missions" class = "column">
+  <div id="infos_missions" class="column">
     <div class="labels_div">Type</div>
     <div style="margin-top: 10px; padding: 0 0 20px;">
-      <select id='type_selector' class="soflow"
-              [(ngModel)]="user_event.type"
-      >
+      <select id='type_selector' class="soflow" [(ngModel)]="user_event.type" required>
         <option selected disabled hidden>Type de congé</option>
-        <option>Congé payé</option>
-        <option>RTT</option>
-        <option>Sans solde</option>
+        <option *ngFor="let el of vacations" [value]="el.vid">{{ el.name }}</option>
       </select>
     </div>
 
@@ -53,30 +49,21 @@
   </div>
 
 
-  <div class = "column">
+  <div class="column">
     <table class="table table-bordered" style="padding:0 0 0;">
       <thead>
-      <tr>
-        <th>Du</th>
-        <th>Matin/AM</th>
-      </tr>
+        <tr>
+          <th>Du</th>
+          <th>Matin/AM</th>
+        </tr>
       </thead>
       <td style="padding:0 0 0;">
-        <input
-          class="form-control"
-          type="text"
-          mwlFlatpickr
-          [(ngModel)] = "new_event.start"
-          (ngModelChange)="refresh.next()"
-          [altInput]="true"
-          [convertModelValue]="true"
-          [enableTime]="true"
-          dateFormat="Y-m-d"
-          altFormat="F j, Y"
+        <input class="form-control" type="text" mwlFlatpickr [(ngModel)]="new_event.start" (ngModelChange)="refresh.next()"
+          [altInput]="true" [convertModelValue]="true" [enableTime]="true" dateFormat="Y-m-d" altFormat="F j, Y"
           placeholder="Not set">
       </td>
       <td style="padding:0 0 0;">
-        <select class="soflow" id="depart" style="margin: 12px 3px 10px;" [(ngModel)] = "start_period">
+        <select class="soflow" id="depart" style="margin: 12px 3px 10px;" [(ngModel)]="start_period">
           <option>Matin</option>
           <option>Après-midi</option>
         </select>
@@ -84,37 +71,28 @@
     </table>
     <table class="table table-bordered">
       <thead>
-      <tr>
-        <th>Au</th>
-        <th>Matin/AM</th>
-      </tr>
+        <tr>
+          <th>Au</th>
+          <th>Matin/AM</th>
+        </tr>
       </thead>
       <td style="padding:0 0 0;">
-        <input
-          class="form-control"
-          type="text"
-          mwlFlatpickr
-          [(ngModel)] = "new_event.end"
-          (ngModelChange)="refresh.next()"
-          [altInput]="true"
-          [convertModelValue]="true"
-          [enableTime]="true"
-          dateFormat="Y-m-d"
-          altFormat="F j, Y"
+        <input class="form-control" type="text" mwlFlatpickr [(ngModel)]="new_event.end" (ngModelChange)="refresh.next()"
+          [altInput]="true" [convertModelValue]="true" [enableTime]="true" dateFormat="Y-m-d" altFormat="F j, Y"
           placeholder="Not set">
       </td>
       <td style="padding:0 0 0;">
-        <select class="soflow" id="Retour" style="margin: 12px 3px 10px;" [(ngModel)] = "end_period">
+        <select class="soflow" id="Retour" style="margin: 12px 3px 10px;" [(ngModel)]="end_period">
           <option>Matin</option>
           <option>Après-midi</option>
         </select>
       </td>
     </table>
 
-    <button
-      class="validate-button"
-      (click)="saveEvent()"
-    >
+    <button class="save-button" (click)="saveEvent(false)">
+      Sauvegarder
+    </button>
+    <button class="validate-button" (click)="saveEvent(true)">
       Valider la demande
     </button>
   </div>
@@ -122,29 +100,15 @@
 
 
 <div style="padding: 10px 0 10px;">
-  <h3 style="margin-left: 20px; float: left;">CALENDRIER SUR {{ (viewDate | calendarDate:(view + 'ViewTitle'):'fr').toUpperCase() }}</h3>
-  <div class="btn-group" style= "border-color: #008CBA; margin-right: 20px; float:right">
-    <div
-      class="btn btn-primary"
-      mwlCalendarPreviousView
-      [view]="view"
-      [(viewDate)]="viewDate"
-      style= "background-color: #008CBA;"
+  <h3 style="margin-left: 20px; float: left;">CALENDRIER SUR {{ (viewDate | calendarDate:(view +
+    'ViewTitle'):'fr').toUpperCase() }}</h3>
+  <div class="btn-group" style="border-color: #008CBA; margin-right: 20px; float:right">
+    <div class="btn btn-primary" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate" style="background-color: #008CBA;"
       (viewDateChange)="activeDayIsOpen = false">
-      <
+      < </div> <div class="btn btn-outline-secondary" mwlCalendarToday [(viewDate)]="viewDate">
+        ◯
     </div>
-    <div
-      class="btn btn-outline-secondary"
-      mwlCalendarToday
-      [(viewDate)]="viewDate">
-      ◯
-    </div>
-    <div
-      class="btn btn-primary"
-      mwlCalendarNextView
-      style= "background-color: #008CBA;"
-      [view]="view"
-      [(viewDate)]="viewDate"
+    <div class="btn btn-primary" mwlCalendarNextView style="background-color: #008CBA;" [view]="view" [(viewDate)]="viewDate"
       (viewDateChange)="activeDayIsOpen = false">
       >
     </div>
@@ -152,18 +116,9 @@
 </div>
 <div style="margin-top: 40px; display: block; width: 96%; margin-left:2%;">
   <div [ngSwitch]="view">
-    <mwl-calendar-month-view
-      *ngSwitchCase="CalendarView.Month"
-      [viewDate]="viewDate"
-      [events]="events"
-      [refresh]="refresh"
-      [activeDayIsOpen]="activeDayIsOpen"
-      (dayClicked)="dayClicked($event.day)"
-      [style.height.px] = "70"
-      [style.cal-month-view.height.px] = "70"
-      [style.cal-day-cell.px] = "70"
-      [style.cal-cell-top.height.px] = "70"
-      [locale]="locale"
+    <mwl-calendar-month-view *ngSwitchCase="CalendarView.Month" [viewDate]="viewDate" [events]="events" [refresh]="refresh"
+      [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="dayClicked($event.day)" [style.height.px]="70"
+      [style.cal-month-view.height.px]="70" [style.cal-day-cell.px]="70" [style.cal-cell-top.height.px]="70" [locale]="locale"
       (eventTimesChanged)="eventTimesChanged($event)">
     </mwl-calendar-month-view>
   </div>

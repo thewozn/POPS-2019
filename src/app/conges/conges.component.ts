@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 
 import {ConnectedService} from '../services/connected.service';
+import { ServiceService } from '../services/service.service';
+
 import { User } from '../models/user.model';
 @Component({
   selector: 'app-congesr',
@@ -14,11 +15,13 @@ export class CongesComponent implements OnInit {
   activeLinkIndex = -1;
 
   connecteduser: User;
-  constructor(private connectedService: ConnectedService, private router: Router) {
-    this.connecteduser = this.connectedService.getConnectedUser();
+  constructor(private connectedService: ConnectedService, private serviceService: ServiceService, private router: Router) {
+    this.serviceService.getServicesFromServer();
   }
 
   ngOnInit() {
+    this.connecteduser = this.connectedService.getConnectedUser();
+
     this.generateNavLinks();
 
     this.router.events.subscribe((res) => {
@@ -40,7 +43,8 @@ export class CongesComponent implements OnInit {
       }
     );
 
-    if (this.connecteduser.status === 'HeadOfService') {
+    if (this.connecteduser.status === 'HeadOfService' ||
+    this.serviceService.getServiceById(this.connecteduser.sid).name === 'HumanResource') {
       this.navLinks.push(
         {
           label: 'Accepter',

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -11,7 +11,7 @@ import { User } from './models/user.model';
   styleUrls: ['./app.component.scss']
 })
 
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit {
   notified: any;
   notifications: any;
 
@@ -27,23 +27,5 @@ export class AppComponent implements OnInit, OnDestroy {
         this.authStatus = value;
       }
     );
-
-    this.connecteduserSubscription = this.connectedService.connecteduserSubject.subscribe(
-      (user: User) => {
-        this.connecteduser = user;
-      }
-    );
-
-    this.notified = this.connectedService.notified;
-    this.notifications = this.connectedService.notifications;
-  }
-
-  onSignOut() {
-    this.connectedService.signOut();
-    this.router.navigate(['/connexion']);
-  }
-
-  ngOnDestroy() {
-    this.connecteduserSubscription.unsubscribe();
   }
 }

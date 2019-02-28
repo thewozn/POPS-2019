@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 import { GlobalService } from '../services/global.service';
@@ -7,7 +7,6 @@ import { User } from '../models/user.model';
 @Injectable()
 export class ConnectedService {
   private isAuth: BehaviorSubject<boolean>;
-  connecteduserSubject = new Subject<User>();
   private connecteduser: User;
 
   prenom = 'Didier';
@@ -30,11 +29,6 @@ export class ConnectedService {
     return this.connecteduser;
   }
 
-  emitConnectedUserSubject() {
-    if (this.connecteduser != null) {
-      this.connecteduserSubject.next(this.connecteduser);
-    }
-  }
 
   public getIsAuth(): Observable<boolean> {
     return this.isAuth.asObservable();
@@ -55,7 +49,6 @@ export class ConnectedService {
         .then(
           response => { // Success
             this.connecteduser = response;
-            this.emitConnectedUserSubject();
             this.setIsAuth(true);
             resolve();
           },
@@ -68,5 +61,6 @@ export class ConnectedService {
 
   conMen() {
     this.setIsAuth(true);
+    this.connecteduser = null;
   }
 }

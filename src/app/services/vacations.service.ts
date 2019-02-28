@@ -11,28 +11,49 @@ import { User } from '../models/user.model';
   providedIn: 'root'
 })
 export class VacationsService {
-  vacationSubject = new Subject<Vacations[]>();
-  private vacation: Vacations[] = [];
-  private connecteduser: User;
+  vacationsSubject = new Subject<Vacations[]>();
+  private vacations: Vacations[] = [];
 
   constructor(private connectedService: ConnectedService, private httpclient: HttpClient, private globalService: GlobalService) {
-    this.connecteduser = this.connectedService.getConnectedUser();
   }
 
   emitVacationsSubject() {
-    if (this.vacation != null) {
-      this.vacationSubject.next(this.vacation.slice());
+    if (this.vacations != null) {
+      this.vacationsSubject.next(this.vacations.slice());
     }
   }
 
-  getVacationsByUidFromServer() {
-    this.httpclient.get<Vacations[]>(this.globalService.getbaseUrl() + '/getVacationListByUID/' + this.connecteduser.uid).subscribe(
+  getVacationsById(id: number) {
+    const v = this.vacations.find(
+      (res) => {
+        return res.vid === id;
+      }
+    );
+    return v;
+  }
+
+  getVacationsListFromServer() {
+    this.httpclient.get<Vacations[]>(this.globalService.getbaseUrl() + '/getVacationListAll').subscribe(
       (response) => {
-        this.vacation = response;
+        this.vacations = response;
         this.emitVacationsSubject();
       },
       (error) => {
-        console.log('Erreur ! : ' + error);
+        console.log('Erreur ! : ' + error.message);
+      }
+    );
+  }
+
+
+  getVacationsByConUserUidFromServer() {
+    this.httpclient.get<Vacations[]>(this.globalService.getbaseUrl() + '/getVacationListByUID/' +
+    this.connectedService.getConnectedUser().uid).subscribe(
+      (response) => {
+        this.vacations = response;
+        this.emitVacationsSubject();
+      },
+      (error) => {
+        console.log('Erreur ! : ' + error.message);
       }
     );
   }

@@ -41,7 +41,6 @@ import { DemanderComponent } from './conges/demander/demander.component';
 import { ValidationComponent } from './conges/validation/validation.component';
 import { HistoriqueComponent } from './conges/historique/historique.component';
 import { TabcomponentPipe } from './conges/tabcomponent.pipe';
-import { ValcomponentPipe } from './conges/valcomponent.pipe';
 
 import { NotesfraisComponent } from './notesfrais/notesfrais.component';
 
@@ -56,6 +55,7 @@ import { GestionServicesComponent } from './administration/gestion-services/gest
 import { ProfilComponent } from './profil/profil.component';
 
 import { NotfoundComponent } from './notfound/notfound.component';
+import { EditercongesComponent } from './conges/editerconges/editerconges.component';
 
 registerLocaleData(localeFr);
 
@@ -71,7 +71,6 @@ registerLocaleData(localeFr);
     ConnexionComponent,
     HistoriqueComponent,
     TabcomponentPipe,
-    ValcomponentPipe,
     AdministrationComponent,
     GestionUsersComponent,
     GestionServicesComponent,
@@ -80,6 +79,7 @@ registerLocaleData(localeFr);
     EditerComponent,
     ProfilComponent,
     NavigationComponent,
+    EditercongesComponent,
   ],
   imports: [
     FormsModule,
@@ -99,7 +99,7 @@ registerLocaleData(localeFr);
       provide: DateAdapter,
       useFactory: adapterFactory
     }),
-    NgbModalModule.forRoot(),
+    NgbModalModule,
     FlatpickrModule.forRoot()
   ],
   providers: [

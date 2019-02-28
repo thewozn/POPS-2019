@@ -5,48 +5,36 @@ import { Subject, Subscription } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarEvent, CalendarEventTimesChangedEvent, CalendarView } from 'angular-calendar';
 import * as $ from 'jquery';
+import { ActivatedRoute } from '@angular/router';
 
 import { ConnectedService } from '../../services/connected.service';
 import { VacationRequestService } from '../../services/vacation-request.service';
 import { VacationsService } from '../../services/vacations.service';
 import { ParsingService } from '../../services/parsing.service';
+
+
 import { User } from '../../models/user.model';
 import { VacationRequest} from '../../models/vacation-request.model';
 import { Vacations } from '../../models/vacations.model';
-
-// Couleur de la nouvelle demande
 const colors: any = {
   red: {
     primary: '#c63325',
     secondary: '#c63325'
   },
-  colleagues_color: {          // Waiting
-    primary: '#157ab5',
-    secondary: '#FAE3E3'
-  },
-  self_color: {
-    primary: '#13468c',
-    secondary: '#D1E8FF'
-  },
-  waiting_color: {
-    primary: '#081d3a',
-    secondary: '#FDF1BA'
-  }
 };
 
-
 @Component({
-  selector: 'app-demander',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './demander.component.html',
-  styleUrls: ['./demander.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  selector: 'app-editerconges',
+  templateUrl: './editerconges.component.html',
+  styleUrls: ['./editerconges.component.scss']
 })
+export class EditercongesComponent implements OnInit, OnDestroy {
 
-export class DemanderComponent implements OnInit, OnDestroy {
+  private OwnVacationRequest: VacationRequest;
   private vacationRequest: VacationRequest[];
   vacationRequestSubscription: Subscription;
   connecteduser: User;
+  
 
   private vacations: Vacations[];
   private vacationsSubscription;
@@ -110,7 +98,7 @@ export class DemanderComponent implements OnInit, OnDestroy {
   constructor(private connectedService: ConnectedService,
     private vacationRequestService: VacationRequestService,
     private vacationsService: VacationsService,
-    private modal: NgbModal, private parsingService: ParsingService) {
+    private modal: NgbModal, private parsingService: ParsingService, private route: ActivatedRoute) {
   }
 
 
@@ -154,7 +142,7 @@ export class DemanderComponent implements OnInit, OnDestroy {
         this.new_event.start.setHours(13, 0, 0, 0);
       }
 
-      // Inititialise l'heure de retour de congés
+      // Inititialise l'heure de retour de 
       if (this.end_period === 'Matin') {
         this.new_event.end.setHours(8, 0, 0, 0);
       } else {
@@ -191,6 +179,13 @@ export class DemanderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    // TODO: Recuperer la vacationRequest via le DID passée par la route
+    // vrRonan: VacationRequest = this.vacationRequest.getVacationRequestByDid(did)
+    // console.log(vrRonan)
+
+    const did = this.route.snapshot.params['did'];
+    this.OwnVacationRequest = this.vacationRequestService.getVacationRequestByDid(+did);
+    
     this.connecteduser = this.connectedService.getConnectedUser();
 
     this.vacationsService.getVacationsByConUserUidFromServer();
@@ -218,25 +213,42 @@ export class DemanderComponent implements OnInit, OnDestroy {
     this.start_period = 'Matin';
     this.end_period = 'Matin';
     this.validated = false;
+      
+    let vacR: VacationRequest[] = [];
+    vacR[0] = this.OwnVacationRequest;
 
-    // Initialisation du nouvel event
-    this.new_event = {
-      start: startOfDay(new Date()),
-      end: addDays(new Date(), 1),
-      title: 'Type de congé',
-      color: colors.red,
-      actions: null,
-      allDay: true,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true
-      },
-      draggable: true,
-    };
+    this.user_event = this.parsingService.parseData(vacR, false)[0];
+
+    // this.user_event = {
+    //   did: this.OwnVacationRequest.did,        // did de la demande
+    //   status: this.OwnVacationRequest.status,    // status de la demande
+    //   name: this.userService.getUserById(this.OwnVacationRequest.uid),         // Nom utilisateur
+    //   surname: this.user,      // Prénom utilisateur
+    //   service: this.OwnVacationRequest.service,      // Service de l'utilisateur
+    //   validated: this.OwnVacationRequest.validated, // Booléen indiquant si le congé est à valider ou déjà validé
+    //   type: this.OwnVacationRequest.type,         // Type de congé
+    //   date: new Date(), // Date de la demande
+    //   linked_event: this.new_event  // Evenement lié à la demande
+    // };
+    // // Initialisation du nouvel event
+    // this.new_event = {
+    //   start: startOfDay(new Date()),
+    //   end: addDays(new Date(), 1),
+    //   title: 'Type de congé',
+    //   color: colors.red,
+    //   actions: null,
+    //   allDay: true,
+    //   resizable: {
+    //     beforeStart: true,
+    //     afterEnd: true
+    //   },
+    //   draggable: true,
+    // };
   }
 
   ngOnDestroy() {
     this.vacationRequestSubscription.unsubscribe();
     this.vacationsSubscription.unsubscribe();
   }
+
 }

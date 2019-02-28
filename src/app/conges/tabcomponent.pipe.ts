@@ -34,6 +34,14 @@ export class TabcomponentPipe implements PipeTransform {
     // 6 : Statut de la demande
     tabcomponent.push(value.linked_event.title.split('[')[1].split(']')[0]);
 
+    // 7 : Nom du demandeur
+    tabcomponent.push(value.name + ' ' + value.surname);
+
+    // 8 : Service du demandeur
+    tabcomponent.push(value.service.name);
+
+    // 9 : Type de la demande
+    tabcomponent.push(value.type.name);
     return tabcomponent;
   }
 

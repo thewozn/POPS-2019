@@ -12,6 +12,7 @@ import { CongesComponent } from './conges/conges.component';
 import { DemanderComponent } from './conges/demander/demander.component';
 import { ValidationComponent } from './conges/validation/validation.component';
 import { HistoriqueComponent } from './conges/historique/historique.component';
+import { EditercongesComponent } from './conges/editerconges/editerconges.component';
 
 import { MissionsComponent } from './missions/missions.component';
 import { CreerComponent } from './missions/creer/creer.component';
@@ -40,6 +41,7 @@ children: [
       { path: 'historique', canActivate: [AuthGuard], component: HistoriqueComponent },
       { path: 'demander', canActivate: [AuthGuard], component: DemanderComponent },
       { path: 'accepter', canActivate: [AuthGuard], component: ValidationComponent },
+      { path: 'editer/:did', canActivate: [AuthGuard], component: EditercongesComponent },
       { path: 'notfound', canActivate: [AuthGuard], component: NotfoundComponent },
       { path: '**', redirectTo: 'notfound' }
     ]
