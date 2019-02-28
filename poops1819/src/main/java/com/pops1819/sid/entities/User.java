@@ -40,6 +40,9 @@ public class User implements Serializable
 	@ManyToMany(mappedBy = "users")
     private List<Mission> missions = new ArrayList<>();
 	
+	@ManyToMany(mappedBy = "requestedUsers")
+    private List<Mission> missionsRequest = new ArrayList<>();
+	
 	@JsonIgnore
 	@OneToMany(mappedBy="user", fetch=FetchType.LAZY)
 	private List<ExpenseReportRequest> expenseReportRequests = new ArrayList<>();
@@ -127,7 +130,38 @@ public class User implements Serializable
 		this.picturePath = picturePath;
 	}
 	
+	
+	
     
+	public User(Long uid, Service myService, List<Balance> balances, Service service, List<Mission> missions,
+			List<Mission> missionsRequest, List<ExpenseReportRequest> expenseReportRequests,
+			List<HolidayRequest> holidayRequests, String status, String lastName, String firstName, Date dateN,
+			String email, String address, String cp, String city, String country, String password, String picturePath,
+			boolean alive) {
+		super();
+		this.uid = uid;
+		this.myService = myService;
+		this.balances = balances;
+		this.service = service;
+		this.missions = missions;
+		this.missionsRequest = missionsRequest;
+		this.expenseReportRequests = expenseReportRequests;
+		this.holidayRequests = holidayRequests;
+		this.status = status;
+		this.lastName = lastName;
+		this.firstName = firstName;
+		this.dateN = dateN;
+		this.email = email;
+		this.address = address;
+		this.cp = cp;
+		this.city = city;
+		this.country = country;
+		this.password = password;
+		this.picturePath = picturePath;
+		this.alive = alive;
+	}
+
+
 	public User() {
 		super();
 	}
@@ -294,6 +328,26 @@ public class User implements Serializable
 
 	public void setHolidayRequests(List<HolidayRequest> holidayRequests) {
 		this.holidayRequests = holidayRequests;
+	}
+	
+	
+	public List<Balance> getBalances() {
+		return balances;
+	}
+
+
+	public void setBalances(List<Balance> balances) {
+		this.balances = balances;
+	}
+
+
+	public List<Mission> getMissionsRequest() {
+		return missionsRequest;
+	}
+
+
+	public void setMissionsRequest(List<Mission> missionsRequest) {
+		this.missionsRequest = missionsRequest;
 	}
 
 

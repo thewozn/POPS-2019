@@ -9,23 +9,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pops1819.sid.entities.Vacations;
-import com.pops1819.sid.services.VacationServiceImpl;
+import com.pops1819.sid.model.BalanceRequest;
+import com.pops1819.sid.services.BalanceRequestServiceImpl;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-public class VacationRestController {
-
+public class BalanceRequestRestController
+{
 	@Autowired
-	private VacationServiceImpl vacationServiceImpl;
+	private BalanceRequestServiceImpl balanceRequestServiceImpl;
 
-	public Vacations addVacation(String name, Double maxDays) {
-		return vacationServiceImpl.addVacation(name, maxDays);
+	@RequestMapping(value = "/getBalanceRestControllerListByUID/{uid}", method = RequestMethod.GET)
+	public List<BalanceRequest> getBalanceRequestListByUID(@PathVariable Long uid) {
+		return balanceRequestServiceImpl.getBalanceRequestListByUID(uid);
 	}
-
-	@RequestMapping(value = "/getVacationList/{uid}", method = RequestMethod.GET)
-	public List<Vacations> getVacationList(@PathVariable Long uid) {
-		return vacationServiceImpl.getVacationListByUID(uid);
-	}
-
+	
+	
 }

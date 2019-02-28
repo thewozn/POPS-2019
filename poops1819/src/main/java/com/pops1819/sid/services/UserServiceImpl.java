@@ -40,7 +40,8 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private IBalanceRepository balanceRepository;
 	
-//	MessageDigest
+	
+	
 	@Override
 	public User createUser(UserRequest user) {
 		if (userRepository.existsByEmail(user.getEmail()))

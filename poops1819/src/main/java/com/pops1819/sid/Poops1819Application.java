@@ -18,7 +18,10 @@ import com.pops1819.sid.repository.IBalanceRepository;
 import com.pops1819.sid.repository.IServiceRepository;
 import com.pops1819.sid.repository.IUserRepository;
 import com.pops1819.sid.repository.IVacationRepository;
-
+/**
+ * @author aboubakr
+ *
+ */
 @EnableAutoConfiguration
 @SpringBootApplication
 @EntityScan("com.pops1819.sid.entities")
@@ -47,8 +50,8 @@ public class Poops1819Application {
 				
 				User headOfAccountingService = new User( 1L,
 														"HeadOfService",
-														"Aboubakr",
 														"OUDGHIRI",
+														"Aboubakr",
 														new Date(1995-1900, 04, 9),
 														"aboubakr.oudghiri@gmail.com",
 														"2 rue vernier",
@@ -60,8 +63,8 @@ public class Poops1819Application {
 														) ;
 				User headOfHumanResourceService = new User(2L,
 														"HeadOfService",
-														"Mourad",
 														"HAMOU-MAMAR",
+														"Mourad",
 														new Date(1995-1900, 02, 16),
 														"mourad.hamou-mamar@gmail.com",
 														"34 rue de verdun",
@@ -73,8 +76,8 @@ public class Poops1819Application {
 														);
 				User headManagementService = new User(3L,
 														"HeadOfService",
-														"Adam",
 														"ROCHE",
+														"Adam",
 														new Date(1995-1900, 02, 16),
 														"adam.roche@gmail.com",
 														"10 rue de la paix",

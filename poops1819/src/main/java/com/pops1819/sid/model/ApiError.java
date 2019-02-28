@@ -11,7 +11,10 @@ import com.pops1819.sid.exception.InvalidRequestException;
 import com.pops1819.sid.exception.NotImplementedException;
 import com.pops1819.sid.exception.NotUpdateEntityException;
 import com.pops1819.sid.exception.UnauthorizedModificationException;
-
+/**
+ * @author aboubakr
+ *
+ */
 public class ApiError {
 
 	private final static String UNKNOWN_ERROR = "UNKNOWN_ERROR";

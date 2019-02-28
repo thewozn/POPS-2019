@@ -7,7 +7,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.pops1819.sid.entities.HolidayRequest;
 import com.pops1819.sid.entities.Service;
 import com.pops1819.sid.entities.User;
-
+/**
+ * @author aboubakr
+ *
+ */
 public interface IHolidayRequestRepository extends JpaRepository<HolidayRequest, Long> {
 
 	public List<HolidayRequest> findByUser(User user);

@@ -14,12 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pops1819.sid.exception.EntityNotFoundException;
 import com.pops1819.sid.exception.InvalidRequestException;
-import com.pops1819.sid.exception.NotImplementedException;
 import com.pops1819.sid.exception.NotUpdateEntityException;
 import com.pops1819.sid.model.VacationRequest;
 import com.pops1819.sid.services.VacationRequestServiceImpl;
-
-import net.bytebuddy.implementation.bytecode.Throw;
 
 @RestController
 @CrossOrigin(origins="*",allowedHeaders="*")
@@ -54,7 +51,6 @@ public class VacationRequestRestController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	//NEW
 	@RequestMapping(value = "/createVacationRequest", method = RequestMethod.POST)
 	public ResponseEntity<Void> createVacationRequest(@RequestBody VacationRequest vacationRequest) {
 		System.out.println(vacationRequest.toString());
@@ -66,7 +62,6 @@ public class VacationRequestRestController {
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 
-	//NEW
 	@RequestMapping(value = "/updateVacationRequest", method = RequestMethod.PATCH)
 	public ResponseEntity<VacationRequest> updateVacationRequest(@RequestBody VacationRequest vacationRequest)
 	{	
@@ -101,9 +96,7 @@ public class VacationRequestRestController {
 	{
 		return new ResponseEntity<List<VacationRequest>>(vacationRequestServiceImpl.getVacationRequestListBySID(sid),HttpStatus.OK);
 	}
-	
-	//NEW
-	////
+
 	@RequestMapping(value = "/getSelectedVacationRequestListBySID/{sid}", method = RequestMethod.GET)
 	public ResponseEntity<List<VacationRequest>> getSelectedVacationRequestListBySID(@PathVariable Long sid)
 	{
@@ -122,9 +115,6 @@ public class VacationRequestRestController {
 		return new ResponseEntity<List<VacationRequest>>(vacationRequestServiceImpl.getVacationRequestAll(),HttpStatus.OK);
 	}
 	
-	
-	//NEW
-	/////
 	@RequestMapping(value = "/getVacationRequestListByVid/{vid}", method = RequestMethod.GET)
 	public ResponseEntity<List<VacationRequest>> getVacationRequestByVID(@PathVariable Long vid)
 	{

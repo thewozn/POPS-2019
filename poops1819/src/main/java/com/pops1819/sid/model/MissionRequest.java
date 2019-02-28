@@ -1,6 +1,8 @@
 package com.pops1819.sid.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
@@ -34,6 +36,12 @@ public class MissionRequest {
 	@JsonProperty(required = true, value = "endDate")
 	@NotNull
 	private Date endDate;
+	
+	@JsonProperty(required = true, value = "usersRequested")
+	private List<UserRequest> usersRequested = new ArrayList<UserRequest>();
+	
+	@JsonProperty(required = true, value = "users")
+	private List<UserRequest> users = new ArrayList<UserRequest>();
 
 	public MissionRequest(Long mid, @NotNull Long sid, @NotNull String title, @NotNull String status,
 			@NotNull String description, @NotNull Date startDate, @NotNull Date endDate) {
@@ -61,6 +69,23 @@ public class MissionRequest {
 		this.description = description;
 		this.startDate = startDate;
 		this.endDate = endDate;
+	}
+	
+	
+
+	public MissionRequest(Long mid, @NotNull Long sid, @NotNull String title, @NotNull String status,
+			@NotNull String description, @NotNull Date startDate, @NotNull Date endDate,
+			List<UserRequest> usersRequested, List<UserRequest> users) {
+		super();
+		this.mid = mid;
+		this.sid = sid;
+		this.title = title;
+		this.status = status;
+		this.description = description;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.usersRequested = usersRequested;
+		this.users = users;
 	}
 
 	public Long getMid() {
@@ -119,6 +144,22 @@ public class MissionRequest {
 		this.endDate = endDate;
 	}
 	
+	public List<UserRequest> getUsersRequested() {
+		return usersRequested;
+	}
+
+	public void setUsersRequested(List<UserRequest> usersRequested) {
+		this.usersRequested = usersRequested;
+	}
+
+	public List<UserRequest> getUsers() {
+		return users;
+	}
+
+	public void setUsers(List<UserRequest> users) {
+		this.users = users;
+	}
+
 	@Override
 	public String toString() {
 		return "MissionRequest [mid=" + mid + ", sid=" + sid + ", title=" + title + ", status=" + status

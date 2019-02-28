@@ -46,6 +46,16 @@ public class Mission implements Serializable{
 
 	private List<User> users = new ArrayList<>();
 	
+	@ManyToMany(cascade = {
+	        CascadeType.PERSIST,
+	        CascadeType.MERGE
+	    })
+	@JoinTable(name = "user_mission_request",
+	        joinColumns = @JoinColumn(name = "MID"),
+	        inverseJoinColumns = @JoinColumn(name = "UID"),
+            uniqueConstraints=@UniqueConstraint(columnNames={"MID","UID"}))
+	private List<User> requestedUsers  = new ArrayList<>();
+
 	@ManyToOne
 	@JoinColumn(name = "SID")
 	private Service service;
@@ -78,7 +88,36 @@ public class Mission implements Serializable{
 		this.startDate = startDate;
 		this.endDate = endDate;
 	}
+	
+	
 
+	public Mission(Long mid, ExpenseReportLine expenseReportLine, List<User> users, List<User> requestedUsers,
+			Service service, String title, String status, String description, Date startDate, Date endDate) {
+		super();
+		this.mid = mid;
+		this.expenseReportLine = expenseReportLine;
+		this.users = users;
+		this.requestedUsers = requestedUsers;
+		this.service = service;
+		this.title = title;
+		this.status = status;
+		this.description = description;
+		this.startDate = startDate;
+		this.endDate = endDate;
+	}
+
+	public void addRequestUser(User user)
+	{
+		requestedUsers.add(user);
+		user.getMissionsRequest().add(this);
+	}
+
+	public void removeRequestUser(User user)
+	{
+		requestedUsers.remove(user);
+		user.getMissionsRequest().remove(this);
+	}
+	
 	public void addUser(User user)
 	{
 		users.add(user);
@@ -112,24 +151,17 @@ public class Mission implements Serializable{
         return mid != null && mid.equals(((Mission) o).mid);
     }
 
-
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
-
-
 
 	public Date getEndDate() {
 		return endDate;
 	}
 
-
-
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
-
-
 
 	public Long getMid() {
 		return mid;
@@ -154,6 +186,16 @@ public class Mission implements Serializable{
 	public void setUsers(List<User> users) {
 		this.users = users;
 	}
+	
+	public List<User> getRequestedUsers() {
+		return requestedUsers;
+	}
+
+
+	public void setRequestedUsers(List<User> requestedUsers) {
+		this.requestedUsers = requestedUsers;
+	}
+
 
 	public Service getService() {
 		return service;

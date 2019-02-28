@@ -55,14 +55,14 @@ public class MissionRestController {
 		List<MissionRequest> returnValue = missionServiceImpl.getMissionByUID(uid);
 		if(returnValue == null)
 			throw new EntityNotFoundException("");
-		return new ResponseEntity<>(returnValue, HttpStatus.OK);	}
+		return new ResponseEntity<>(returnValue, HttpStatus.OK);	
+	}
 
 	@RequestMapping(value = "/affectUserToMission/{mid}/{uid}", method = RequestMethod.POST)
 	public ResponseEntity<Void> affectUserToMission(@PathVariable Long mid, @PathVariable Long uid) {
 		if (!missionServiceImpl.affectUserToMission(mid, uid))
 			throw new NotUpdateEntityException("");
 		return new ResponseEntity<Void>(HttpStatus.OK);
-
 	}
 
 	@RequestMapping(value = "/removeUserFromMission/{mid}/{uid}", method = RequestMethod.DELETE)
@@ -70,7 +70,6 @@ public class MissionRestController {
 		if (!missionServiceImpl.removeUserFromMission(mid, uid))
 			throw new NotUpdateEntityException("");
 		return new ResponseEntity<Void>(HttpStatus.OK);
-
 	}
 	
 	@RequestMapping(value = "/deleteMission", method = RequestMethod.DELETE)
@@ -78,8 +77,22 @@ public class MissionRestController {
 		if(!missionServiceImpl.deleteMission(missionRequest))
 			throw new NotUpdateEntityException("");
 		return new ResponseEntity<Void>(HttpStatus.OK);
-
-
 	}
+
+	@RequestMapping(value = "/acceptUserRequestedForMission/{mid}/{uid}", method = RequestMethod.PATCH)
+	public ResponseEntity<Void> acceptUserRequestedForMission(@PathVariable Long uid, @PathVariable Long mid) {
+		if(!missionServiceImpl.acceptUserRequestedForMission(uid, mid))
+			throw new NotUpdateEntityException("");
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/refuseUserRequestedForMission/{mid}/{uid}", method = RequestMethod.PATCH)
+	public ResponseEntity<Void> refuseUserRequestedForMission(@PathVariable Long uid, @PathVariable Long mid) {
+		if(!missionServiceImpl.refuseUserRequestedForMission(uid, mid))
+			throw new NotUpdateEntityException("");
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
+	
 
 }

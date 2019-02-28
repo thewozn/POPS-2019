@@ -25,7 +25,6 @@ public class Vacations
 	
 	private Double maxDays;
 	
-	@JsonIgnore
 	@OneToMany(mappedBy = "vacations", fetch = FetchType.LAZY)
 	private List<HolidayRequest> holidayRequest = new ArrayList<>();
 
@@ -50,7 +49,6 @@ public class Vacations
 		super();
 	}
 
-	@JsonIgnore
 	public List<Balance> getVacations() {
 		return vacations;
 	}
@@ -83,7 +81,6 @@ public class Vacations
 		this.maxDays = maxDays;
 	}
 
-	@JsonIgnore
 	public List<HolidayRequest> getHolidayRequest() {
 		return holidayRequest;
 	}

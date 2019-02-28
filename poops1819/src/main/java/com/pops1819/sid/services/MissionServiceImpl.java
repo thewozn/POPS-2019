@@ -83,10 +83,20 @@ public class MissionServiceImpl implements IMissionService
 		if(user == null || mission == null)
 			return false;
 		
-		if(mission.getUsers().contains(user))
+		if(user.getService() == null)
+			 return false;
+		
+		if(mission.getUsers().contains(user) || mission.getRequestedUsers().contains(user))
 			return false;
-
-		mission.addUser(user);
+		
+		
+		if(user.getService().equals(mission.getService()))
+		{
+			mission.addUser(user);
+		}else
+		{
+			mission.addRequestUser(user);
+		}
 		
 		userRepository.save(user);
 		missionRepository.save(mission);
@@ -124,6 +134,45 @@ public class MissionServiceImpl implements IMissionService
 		return true;
 	}
 
+	@Override
+	public boolean acceptUserRequestedForMission(Long uid, Long mid) {
+		User user = userRepository.findByUid(uid);
+		Mission mission = missionRepository.findByMid(mid);
+		
+		if(user == null || mission ==null)
+			return false;
+		
+		if(!mission.getRequestedUsers().contains(user))
+			return false;
+		
+		if(mission.getUsers().contains(user))
+			return false;
+		
+		mission.removeRequestUser(user);
+		mission.addUser(user);
+		
+		userRepository.save(user);
+		missionRepository.save(mission);		
+		return true;
+	}
+
+	@Override
+	public boolean refuseUserRequestedForMission(Long uid, Long mid) {
+		User user = userRepository.findByUid(uid);
+		Mission mission = missionRepository.findByMid(mid);
+		
+		if(user == null || mission ==null)
+			return false;
+		
+		if(!mission.getRequestedUsers().contains(user))
+			return false;
+		
+		mission.removeRequestUser(user);
+		
+		userRepository.save(user);
+		missionRepository.save(mission);		
+		return true;
+	}
 	
 	
 }

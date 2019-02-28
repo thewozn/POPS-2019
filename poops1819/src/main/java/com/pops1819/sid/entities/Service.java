@@ -104,5 +104,12 @@ public class Service implements Serializable
 				+ missions + ", name=" + name + "]";
 	}
 	
+	@Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Service)) return false;
+        return sid != null && sid.equals(((Service) o).sid);
+    }
+	
 
 }
