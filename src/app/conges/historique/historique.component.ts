@@ -49,6 +49,7 @@ export class HistoriqueComponent implements OnInit, OnDestroy {
   constructor(private modal: NgbModal, private connectedService: ConnectedService,
     private vacationRequestService: VacationRequestService,
     private parsingService: ParsingService) {
+
   }
 
   ngOnInit() {

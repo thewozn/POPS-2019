@@ -49,6 +49,7 @@ export class ParsingService {
   }
 
   parseData(brutData: VacationRequest[], check: boolean) {
+    this.connecteduser = this.connectedService.getConnectedUser();
     while (this.connecteduser === undefined) {
       this.connecteduser = this.connectedService.getConnectedUser();
     }
@@ -120,6 +121,69 @@ export class ParsingService {
     }
 
     return parsedData;
+  }
+
+  filterData(brutData: VacationRequest[], check: boolean) {
+    this.connecteduser = this.connectedService.getConnectedUser();
+    while (this.connecteduser === undefined) {
+      this.connecteduser = this.connectedService.getConnectedUser();
+    }
+    const connecteduserService = this.serviceService.getServiceById(this.connecteduser.sid);
+
+    const filteredData: VacationRequest[] = [];
+    if (connecteduserService.name === 'HumanResource') {
+      if (this.connecteduser.status === 'HeadOfService') {
+        // DRH
+        for (const vr of brutData) {
+          const user = this.userService.getUserById(vr.uid);
+          if (vr.status !== 'Brouillon') {
+            if (user.sid === this.connecteduser.sid || this.serviceService.getServiceById(user.sid).name === 'Management') {
+              filteredData.push(vr);
+            } else if (vr.status !== 'En cours de validation 1') {
+              filteredData.push(vr);
+            }
+          }
+        }
+      } else {
+        // RH
+        for (const vr of brutData) {
+          const user = this.userService.getUserById(vr.uid);
+          if (this.serviceService.getServiceById(user.sid).name !== 'Management' &&
+          this.serviceService.getServiceById(user.sid).name === 'HumanResource') {
+            if (vr.status !== 'En cours de validation 1' && vr.status !== 'Brouillon') {
+              filteredData.push(vr);
+            }
+          }
+        }
+      }
+    } else if (this.connecteduser.status === 'HeadOfService' && connecteduserService.name !== 'Management') {
+      // CS
+      for (const vr of brutData) {
+        const user = this.userService.getUserById(vr.uid);
+
+        if (user.sid === this.connecteduser.sid) {
+          if (vr.status !== 'En cours de validation 2' && vr.status !== 'Brouillon') {
+            filteredData.push(vr);
+          }
+        }
+      }
+    } else {
+      // CEO
+      for (const vr of brutData) {
+        const user = this.userService.getUserById(vr.uid);
+        if (vr.status !== 'Brouillon') {
+          if (user.status === 'HeadOfService') {
+            if (this.serviceService.getServiceById(user.sid).name === 'HumanResource') {
+              filteredData.push(vr);
+            } else if (vr.status !== 'En cours de validation 2') {
+              filteredData.push(vr);
+            }
+          }
+        }
+      }
+    }
+
+    return this.parseData(filteredData, check);
   }
 
   getValueDemiJ(data) {

@@ -146,7 +146,6 @@ export class DemanderComponent implements OnInit, OnDestroy {
 
     // On vérifie que l'utilisateur a bien saisi les champs requis
     if ((this.user_event.type !== 'Type de congé') && (this.validated === false)) {
-      console.log(this.user_event.type);
       // Initialise l'heure de départ en congés
       if (this.start_period === 'Matin') {
         this.new_event.start.setHours(8, 0, 0, 0);
@@ -163,7 +162,7 @@ export class DemanderComponent implements OnInit, OnDestroy {
 
       const start: boolean = this.start_period === 'Matin' ? false : true;
       const end: boolean = this.end_period === 'Matin' ? false : true;
-      console.log(new Date().toISOString());
+
       const status = state ? 'En cours de validation 1' : 'Brouillon';
       const newVR: VacationRequest = new VacationRequest(null,
         end,

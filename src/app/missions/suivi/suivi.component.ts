@@ -100,17 +100,17 @@ export class SuiviComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
 
   ngOnInit() {
-    this.missions.sort = this.sort;
-    // on recupere les missions
-    this.missionService.getMissionsFromServer();
+  //   this.missions.sort = this.sort;
+  //   // on recupere les missions
+  //   this.missionService.getMissionsFromServer();
 
-    // 1. On souscrit aux missions
-    this.missionSubscription = this.missionService.missionSubject.subscribe(
-      (missions: Mission[]) => {
-        this.mission = missions;
-      }
-    );
-  }
+  //   // 1. On souscrit aux missions
+  //   this.missionSubscription = this.missionService.missionSubject.subscribe(
+  //     (missions: Mission[]) => {
+  //       this.mission = missions;
+  //     }
+  //   );
+  // }
   //  generateMission(){
   //   //Creation d'un tableau avec l'ensemble des missions a afficher
   //   reponses: const[];
@@ -145,4 +145,5 @@ export class SuiviComponent implements OnInit {
   //   }
   // Instanciation d'un tableau de reponses contenant les missions du collaborateur
   // }
+}
 }

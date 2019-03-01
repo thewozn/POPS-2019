@@ -44,7 +44,8 @@ export class CongesComponent implements OnInit {
     );
 
     if (this.connecteduser.status === 'HeadOfService' ||
-    this.serviceService.getServiceById(this.connecteduser.sid).name === 'HumanResource') {
+      this.serviceService.getServiceById(this.connecteduser.sid).name === 'HumanResource' ||
+      this.serviceService.getServiceById(this.connecteduser.sid).name === 'Management') {
       this.navLinks.push(
         {
           label: 'Accepter',

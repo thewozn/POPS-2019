@@ -13,7 +13,6 @@ import { User } from '../models/user.model';
 export class VacationsService {
   vacationsSubject = new Subject<Vacations[]>();
   private vacations: Vacations[] = [];
-
   constructor(private connectedService: ConnectedService, private httpclient: HttpClient, private globalService: GlobalService) {
   }
 

@@ -206,7 +206,6 @@ export class ValidationComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    let hr;
     this.connecteduser = this.connectedService.getConnectedUser();
 
     this.userService.getUsersFromServer();
@@ -230,40 +229,16 @@ export class ValidationComponent implements OnInit, OnDestroy {
       }
     );
 
-    if (
-      this.serviceService.getServiceById(this.connecteduser.sid).name ===
-      'HumanResource'
-    ) {
-      this.vacationRequestService.getVacationRequestsListFromServer();
-      console.log('HR');
-      hr = true;
-    } else {
-      this.vacationRequestService.getSelectedVacationRequestListByConUserSidFromServer();
-      hr = false;
-    }
+    this.vacationRequestService.getVacationRequestsListFromServer();
     this.vacationRequestSubscription = this.vacationRequestService.vacationRequestSubject.subscribe(
       (vacationrequests: VacationRequest[]) => {
         this.vacationRequest = vacationrequests;
         this.events = [];
-        for (const item of this.parsingService.parseData(
-          this.vacationRequest,
-          false
-        )) {
-          if (
-            !(item.name === this.connecteduser.firstName) &&
-            !(item.surname === this.connecteduser.lastName)
-          ) {
-            if (hr) {
-              if (item.status !== 'En cours de validation 1') {
-                this.events.push(item.linked_event);
-                this.users_events.push(item);
-              }
-            } else {
-              if (item.status !== 'En cours de validation 2') {
-                this.events.push(item.linked_event);
-                this.users_events.push(item);
-              }
-            }
+        for (const item of this.parsingService.filterData(this.vacationRequest, false)) {
+          if (!(item.name === this.connecteduser.firstName) &&
+            !(item.surname === this.connecteduser.lastName)) {
+            this.events.push(item.linked_event);
+            this.users_events.push(item);
           }
         }
 
