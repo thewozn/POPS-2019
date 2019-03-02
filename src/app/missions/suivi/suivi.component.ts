@@ -9,7 +9,7 @@ import { UserService } from './../../services/user.service';
 
 import { Mission } from './../../models/mission.model';
 import { User } from './../../models/user.model';
-
+import { Service } from './../../models/service.model';
 
 @Component({
   selector: 'app-suivi',
@@ -20,6 +20,7 @@ import { User } from './../../models/user.model';
 export class SuiviComponent implements OnInit {
   private user: User[];
   private mission: Mission[];
+  private service: Service[];
 
   constructor(
     private connectedService: ConnectedService,
@@ -48,12 +49,22 @@ export class SuiviComponent implements OnInit {
   }
 
   loadData() {
+    this.serviceService.getServicesFromServer().then(
+      (response) => {
+        this.service = response;
+      }
+    );
+
     if (this.connectedService.getConnectedUser().status === 'HeadOfService') {
       Promise.all([this.missionService.getMissionsByConUserSidFromServer(),
         this.userService.getUsersByConUserSidFromServer()]).then(
         values => {
           this.mission = values[0];
           this.user = values[1];
+
+            for (const u of this.user) {
+              this.collaborateurListService.push(u.lastName);
+            }
         }
       );
     } else {

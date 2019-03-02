@@ -53,7 +53,7 @@ export class DemanderComponent implements OnInit {
   end_period: string;
   validated: boolean;
 
-  displayedColumns = ['type', 'solde', 'poses'];
+  displayedColumns = ['type', 'solde'];
 
   view: CalendarView = CalendarView.Month;
 
@@ -257,11 +257,14 @@ export class DemanderComponent implements OnInit {
                 }
               }
 
+
               this.dataSource.push({
                 obj: b,
                 taken: t
               });
             }
+
+            console.log(this.dataSource);
           },
           (error) => {
             console.log('Erreur ! : ' + error);
