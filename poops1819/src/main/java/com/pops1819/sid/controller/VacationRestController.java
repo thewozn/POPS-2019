@@ -38,5 +38,6 @@ public class VacationRestController {
 	public ResponseEntity<List<Vacations>> getVacationListAll() {
 		return new ResponseEntity<List<Vacations>>(vacationServiceImpl.getVacationListAll(), HttpStatus.OK);
 	}
+	
 
 }

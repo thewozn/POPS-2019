@@ -3,25 +3,16 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 import { GlobalService } from '../services/global.service';
+import { ServiceService } from '../services/service.service';
+
 import { User } from '../models/user.model';
+import { Service } from '../models/service.model';
 @Injectable()
 export class ConnectedService {
   private isAuth: BehaviorSubject<boolean>;
   private connecteduser: User;
-
-  prenom = 'Didier';
-  nom = 'LEBLANC';
-  mail = 'didier.leblanc@polytech.com';
-  service = 'RH';
-  account_type = 'Collaborateur'; // Can be Chef or Collaborateur
-  notified = true;
-  notifications = [
-    'Congés validés (CDS)',
-    'Affectation mission (E6835)',
-    'Congés validés (RH)'
-  ];
-
-  constructor(private httpclient: HttpClient, private globalService: GlobalService) {
+  private connecteduserservice: Service;
+  constructor(private httpclient: HttpClient, private globalService: GlobalService, private serviceService: ServiceService) {
     this.isAuth = new BehaviorSubject<boolean>(false);
   }
 
@@ -29,6 +20,9 @@ export class ConnectedService {
     return this.connecteduser;
   }
 
+  getConnectedUserService() {
+    return this.connecteduserservice;
+  }
 
   public getIsAuth(): Observable<boolean> {
     return this.isAuth.asObservable();
@@ -49,6 +43,11 @@ export class ConnectedService {
         .then(
           response => { // Success
             this.connecteduser = response;
+            this.serviceService.getServiceByIdFromServer(this.connecteduser.sid).then(
+              (data) => {
+                this.connecteduserservice = data;
+              }
+            );
             this.setIsAuth(true);
             resolve();
           },

@@ -1,6 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Subscription } from 'rxjs';
 import { NgForm } from '@angular/forms';
 
 import { UserService } from '../../services/user.service';
@@ -14,27 +13,22 @@ import { ServiceService } from '../../services/service.service';
   templateUrl: './gestion-users.component.html',
   styleUrls: ['./gestion-users.component.scss']
 })
-export class GestionUsersComponent implements OnInit, OnDestroy {
+export class GestionUsersComponent implements OnInit {
   displayedColumns: string[] = ['lastName', 'firstName', 'service', 'modif', 'supprimer'];
   user: User[];
-  userSubscription: Subscription;
-
   service: Service[];
-  serviceSubscription: Subscription;
   constructor(private userService: UserService, private serviceService: ServiceService, private modalService: NgbModal) { }
 
   ngOnInit() {
-    this.userService.getUsersFromServer();
-    this.userSubscription = this.userService.userSubject.subscribe(
-      (users: User[]) => {
-        this.user = users;
-      }
-    );
+    this.loadData();
+  }
 
-    this.serviceService.getServicesFromServer();
-    this.serviceSubscription = this.serviceService.serviceSubject.subscribe(
-      (services: Service[]) => {
-        this.service = services;
+  loadData() {
+    Promise.all([this.userService.getUsersFromServer(),
+    this.serviceService.getServicesFromServer()]).then(
+      values => {
+        this.user = values[0];
+        this.service = values[1];
       }
     );
   }
@@ -55,8 +49,15 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
       'picturepath',
       true);
 
-    this.userService.addUserServer(newUser);
-    this.userService.getUsersFromServer();
+    this.userService.addUserServer(newUser).then(
+      (response) => {
+        this.loadData();
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+
     this.modalService.dismissAll();
   }
 
@@ -76,9 +77,16 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
       'picturepath',
       true);
 
-      this.userService.modifUserServer(modUser);
-      this.userService.getUsersFromServer();
-      this.modalService.dismissAll();
+    this.userService.modifUserServer(modUser).then(
+      (response) => {
+        this.loadData();
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+
+    this.modalService.dismissAll();
   }
 
   openCreer(content) {
@@ -93,10 +101,5 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
 
   openSuppr(content) {
     this.modalService.open(content, { centered: true });
-  }
-
-  ngOnDestroy() {
-    this.userSubscription.unsubscribe();
-    this.serviceSubscription.unsubscribe();
   }
 }

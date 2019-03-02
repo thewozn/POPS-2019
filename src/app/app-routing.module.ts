@@ -41,7 +41,7 @@ children: [
       { path: 'historique', canActivate: [AuthGuard], component: HistoriqueComponent },
       { path: 'demander', canActivate: [AuthGuard], component: DemanderComponent },
       { path: 'accepter', canActivate: [AuthGuard], component: ValidationComponent },
-      { path: 'editer/:did', canActivate: [AuthGuard], component: EditercongesComponent },
+      { path: 'editerconges', canActivate: [AuthGuard], component: EditercongesComponent },
       { path: 'notfound', canActivate: [AuthGuard], component: NotfoundComponent },
       { path: '**', redirectTo: 'notfound' }
     ]

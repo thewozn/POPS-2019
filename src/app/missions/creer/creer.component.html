@@ -1,6 +1,7 @@
-<div id="top_box_missions" class="top_div" style="">
+<div id="top_box_missions" class="top_div">
   <div id="infos_missions" class = "column">
     <div class="labels_div">Informations</div>
+
     <input #missionTitle type="text" id="m_name" name="m_name" placeholder="Intitulé de la mission (Requis)">
 
     <div class="labels_div">Dates</div>
@@ -31,7 +32,7 @@
 
 </div>
 
-<div id="bottom_box_missions" class="top_div" style="">
+<div id="bottom_box_missions" class="top_div">
 
   <div class = "column">
     <div class="labels_div">Personnes affectées</div>
@@ -41,29 +42,23 @@
         <!-- Position Column -->
         <ng-container matColumnDef="NOM">
           <th mat-header-cell *matHeaderCellDef> NOM </th>
-          <td mat-cell *matCellDef="let element"> {{element.NOM}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.lastName}} </td>
         </ng-container>
 
         <!-- Name Column -->
         <ng-container matColumnDef="PRENOM">
           <th mat-header-cell *matHeaderCellDef> PRENOM </th>
-          <td mat-cell *matCellDef="let element"> {{element.PRENOM}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.firstName}} </td>
         </ng-container>
 
         <!-- Weight Column -->
         <ng-container matColumnDef="SERVICE">
           <th mat-header-cell *matHeaderCellDef> SERVICE </th>
-          <td mat-cell *matCellDef="let element"> {{element.SERVICE}} </td>
-        </ng-container>
-
-        <!-- Symbol Column -->
-        <ng-container matColumnDef="FONCTION">
-          <th mat-header-cell *matHeaderCellDef> FONCTION </th>
-          <td mat-cell *matCellDef="let element"> {{element.FONCTION}} </td>
+          <td mat-cell *matCellDef="let element"> {{this.serviceService.getServiceById(element.sid).name}}</td>
         </ng-container>
 
         <ng-container matColumnDef="ACTION">
-          <th mat-header-cell *matHeaderCellDef></th>
+          <th mat-header-cell *matHeaderCellDef> ACTION </th>
           <td mat-cell *matCellDef="let element">
             <button class="delete-button"
                     (click)="popEmployee(element)">
@@ -92,51 +87,52 @@
   <div class = "column">
     <div class="labels_div">Rechercher</div>
     <div style = "border: 1px solid lightgray; padding: 10px 10px 10px;">
-      <input #selectedCollaborator type="text" id="r_name" name="r_name" placeholder="Maria DUPONTEZ">
+
+      <form class="example-form">
+        <mat-form-field class="example-full-width">
+          <input type="text" placeholder="Collaborateur" aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto">
+          <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">{{option}}</mat-option>
+            <!-- <mat-option *ngFor="let option of filteredOptions2 | async" [value]="option">{{option}}</mat-option> -->
+          </mat-autocomplete>
+        </mat-form-field>
+      </form>
+
       <div style="height: 60px;">
-        <select #selectedService id='selector_year' class="soflow" style="margin: 0 10px 0; width: 43%">
+        <select #selectedService id='selector_year' class="soflow" style="margin: 0 10px 0; width: 95%">
           <option value="" selected>Service</option>
-          <option *ngFor="let option of services" [value]="option">{{option}}</option>
+          <option *ngFor="let option of service" [value]="option">{{this.serviceService.getServiceById(this.service, option.sid).name}}</option>
         </select>
 
-        <select #selectedFunction id='selector_function' class="soflow" style="margin: 0 10px 0; width: 43%; float: right;">
-          <option value="" selected>Fonction</option>
-          <option *ngFor="let option of functions" [value]="option">{{option}}</option>
-        </select>
 
       </div>
       <button class="validate-button" style="margin: 0 2% 0;"
       (click)="findEmployee(selectedCollaborator.value, selectedService.value, selectedFunction.value)">Rechercher</button>
 
       <div class="example-container mat-elevation-z8" style="height:200px;">
-        <table mat-table [dataSource]="dataSource">
+        <table mat-table [dataSource]="user">
 
           <!-- Position Column -->
           <ng-container matColumnDef="NOM">
             <th mat-header-cell *matHeaderCellDef> NOM </th>
-            <td mat-cell *matCellDef="let element"> {{element.NOM}} </td>
+            <td mat-cell *matCellDef="let element"> {{element.firstName}} </td>
           </ng-container>
 
           <!-- Name Column -->
           <ng-container matColumnDef="PRENOM">
             <th mat-header-cell *matHeaderCellDef> PRENOM </th>
-            <td mat-cell *matCellDef="let element"> {{element.PRENOM}} </td>
+            <td mat-cell *matCellDef="let element"> {{element.lastName}} </td>
           </ng-container>
 
           <!-- Weight Column -->
           <ng-container matColumnDef="SERVICE">
             <th mat-header-cell *matHeaderCellDef> SERVICE </th>
-            <td mat-cell *matCellDef="let element"> {{element.SERVICE}} </td>
+            <td mat-cell *matCellDef="let element"> {{this.serviceService.getServiceById(this.service, element.sid).name}} </td>
           </ng-container>
 
-          <!-- Symbol Column -->
-          <ng-container matColumnDef="FONCTION">
-            <th mat-header-cell *matHeaderCellDef> FONCTION </th>
-            <td mat-cell *matCellDef="let element"> {{element.FONCTION}} </td>
-          </ng-container>
 
           <ng-container matColumnDef="ACTION">
-            <th mat-header-cell *matHeaderCellDef></th>
+            <th mat-header-cell *matHeaderCellDef> ACTION </th>
             <td mat-cell *matCellDef="let element">
               <button class="add-button"
                       (click)="pushEmployee(element)">

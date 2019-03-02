@@ -10,19 +10,13 @@ import { User } from '../models/user.model';
   styleUrls: ['./navigation.component.scss']
 })
 export class NavigationComponent implements OnInit {
-
-  notified: any;
-  notifications: any;
-
-  connecteduser: User;
   constructor(private connectedService: ConnectedService, private router: Router) {
-    this.connecteduser = this.connectedService.getConnectedUser();
+
   }
 
   ngOnInit() {
-    this.notified = this.connectedService.notified;
-    this.notifications = this.connectedService.notifications;
-  }
+    }
+
 
   onSignOut() {
     this.connectedService.signOut();

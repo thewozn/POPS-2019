@@ -1,39 +1,38 @@
-import { Component, OnInit, ChangeDetectionStrategy, ViewChild, TemplateRef, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  ViewChild,
+  TemplateRef
+} from '@angular/core';
 import { startOfDay, subDays, addDays, isSameDay, isSameMonth } from 'date-fns';
 import { ViewEncapsulation } from '@angular/core';
-import { Subject, Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { CalendarEvent, CalendarEventTimesChangedEvent, CalendarView } from 'angular-calendar';
+import {
+  CalendarEvent,
+  CalendarEventTimesChangedEvent,
+  CalendarView
+} from 'angular-calendar';
 import * as $ from 'jquery';
 
 import { ConnectedService } from '../../services/connected.service';
+import { BalanceService } from '../../services/balance.service';
 import { VacationRequestService } from '../../services/vacation-request.service';
 import { VacationsService } from '../../services/vacations.service';
 import { ParsingService } from '../../services/parsing.service';
-import { User } from '../../models/user.model';
-import { VacationRequest} from '../../models/vacation-request.model';
-import { Vacations } from '../../models/vacations.model';
 
+
+import { VacationRequest } from '../../models/vacation-request.model';
+import { Vacations } from '../../models/vacations.model';
+import { Balance } from '../../models/balance.model';
 // Couleur de la nouvelle demande
 const colors: any = {
   red: {
     primary: '#c63325',
     secondary: '#c63325'
-  },
-  colleagues_color: {          // Waiting
-    primary: '#157ab5',
-    secondary: '#FAE3E3'
-  },
-  self_color: {
-    primary: '#13468c',
-    secondary: '#D1E8FF'
-  },
-  waiting_color: {
-    primary: '#081d3a',
-    secondary: '#FDF1BA'
   }
 };
-
 
 @Component({
   selector: 'app-demander',
@@ -42,25 +41,19 @@ const colors: any = {
   styleUrls: ['./demander.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-
-export class DemanderComponent implements OnInit, OnDestroy {
+export class DemanderComponent implements OnInit {
   private vacationRequest: VacationRequest[];
-  vacationRequestSubscription: Subscription;
-  connecteduser: User;
-
   private vacations: Vacations[];
-  private vacationsSubscription;
+  private balance: Balance[];
 
+  private dataSource = [];
   @ViewChild('modalContent')
   modalContent: TemplateRef<any>;
   start_period: string;
   end_period: string;
   validated: boolean;
 
-  displayedColumns = ['ROWS', 'ANNEE PASSEE', 'ANNEE EN COURS', 'A VENIR'];
-  dataSource = [{header: 'Solde', past: 1 , current: 4, upcoming: 25},
-                {header: 'Posés', past: 29, current: 1, upcoming: 0},
-                {header: 'Total', past: 30, current: 5, upcoming: 25}];
+  displayedColumns = ['type', 'solde', 'poses'];
 
   view: CalendarView = CalendarView.Month;
 
@@ -94,25 +87,26 @@ export class DemanderComponent implements OnInit, OnDestroy {
   user_event = {
     did: null,
     status: null,
-    name: null,         // Nom utilisateur
-    surname: null,      // Prénom utilisateur
-    service: null,      // Service de l'utilisateur
+    name: null, // Nom utilisateur
+    surname: null, // Prénom utilisateur
+    service: null, // Service de l'utilisateur
     validated: false, // Booléen indiquant si le congé est à valider ou déjà validé
-    type: null,         // Type de congé
+    type: null, // Type de congé
     date: new Date(), // Date de la demande
-    linked_event: this.new_event  // Evenement lié à la demande
+    linked_event: this.new_event // Evenement lié à la demande
   };
 
   events: CalendarEvent[] = []; // Liste des évènements à afficher sur le calendrier
-  activeDayIsOpen = false;      // Détermine l'ouverture de la modale
+  activeDayIsOpen = false; // Détermine l'ouverture de la modale
 
-
-  constructor(private connectedService: ConnectedService,
+  constructor(
+    private connectedService: ConnectedService,
     private vacationRequestService: VacationRequestService,
     private vacationsService: VacationsService,
-    private modal: NgbModal, private parsingService: ParsingService) {
-  }
-
+    private modal: NgbModal,
+    private parsingService: ParsingService,
+    private balanceService: BalanceService
+  ) {}
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     /**
@@ -131,8 +125,11 @@ export class DemanderComponent implements OnInit, OnDestroy {
     }
   }
 
-
-  eventTimesChanged({event, newStart, newEnd}: CalendarEventTimesChangedEvent): void {
+  eventTimesChanged({
+    event,
+    newStart,
+    newEnd
+  }: CalendarEventTimesChangedEvent): void {
     /**
      * Gère le changement de date
      */
@@ -141,11 +138,9 @@ export class DemanderComponent implements OnInit, OnDestroy {
     this.refresh.next();
   }
 
-
   saveEvent(state: boolean): void {
-
     // On vérifie que l'utilisateur a bien saisi les champs requis
-    if ((this.user_event.type !== 'Type de congé') && (this.validated === false)) {
+    if (this.user_event.type !== 'Type de congé' && this.validated === false) {
       // Initialise l'heure de départ en congés
       if (this.start_period === 'Matin') {
         this.new_event.start.setHours(8, 0, 0, 0);
@@ -164,7 +159,8 @@ export class DemanderComponent implements OnInit, OnDestroy {
       const end: boolean = this.end_period === 'Matin' ? false : true;
 
       const status = state ? 'En cours de validation 1' : 'Brouillon';
-      const newVR: VacationRequest = new VacationRequest(null,
+      const newVR: VacationRequest = new VacationRequest(
+        null,
         end,
         this.new_event.end.toISOString(),
         new Date().toISOString(),
@@ -172,11 +168,18 @@ export class DemanderComponent implements OnInit, OnDestroy {
         this.new_event.start.toISOString(),
         status,
         new Date().toISOString(),
-        this.connecteduser.uid,
-        this.user_event.type);
+        this.connectedService.getConnectedUser().uid,
+        this.user_event.type
+      );
 
-      this.vacationRequestService.addVacationRequestServer(newVR);
-
+      this.vacationRequestService.addVacationRequestServer(newVR).then(
+        (response) => {
+          this.loadData();
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
       // Mise à jour de la demande utilisateur (pas nécessaire, mais au cas où):
       this.user_event.linked_event = this.new_event;
 
@@ -185,34 +188,13 @@ export class DemanderComponent implements OnInit, OnDestroy {
 
       // Désactivation du bouton
       // this.validated = true;
-      // $('select[id="type_selector"]').attr('disabled', 'disabled');
+      // $('select[id='type_selector']').attr('disabled', 'disabled');
     }
   }
 
   ngOnInit() {
-    this.connecteduser = this.connectedService.getConnectedUser();
 
-    this.vacationsService.getVacationsByConUserUidFromServer();
-    this.vacationsSubscription = this.vacationsService.vacationsSubject.subscribe(
-      (vacations: Vacations[]) => {
-        this.vacations = vacations;
-      }
-    );
-
-    this.vacationRequestService.getSelectedVacationRequestListByConUserSidFromServer();
-    this.vacationRequestSubscription = this.vacationRequestService.vacationRequestSubject.subscribe(
-      (vacationrequests: VacationRequest[]) => {
-        this.vacationRequest = vacationrequests;
-        this.events = [];
-
-        for (const item of this.parsingService.parseData(this.vacationRequest, true)) {
-          this.events.push(item.linked_event);
-        }
-
-        this.refresh.next();
-      }
-    );
-
+    this.loadData();
     // Initialisation des champs du component
     this.start_period = 'Matin';
     this.end_period = 'Matin';
@@ -230,12 +212,65 @@ export class DemanderComponent implements OnInit, OnDestroy {
         beforeStart: true,
         afterEnd: true
       },
-      draggable: true,
+      draggable: true
     };
   }
 
-  ngOnDestroy() {
-    this.vacationRequestSubscription.unsubscribe();
-    this.vacationsSubscription.unsubscribe();
+  loadData() {
+    this.vacationsService.getVacationsByConUserUidFromServer().then(
+      (response) => {
+        this.vacations = response;
+      },
+      (error) => {
+        console.log('Erreur ! : ' + error.message);
+      }
+    );
+
+    this.vacationRequestService.getSelectedVacationRequestListByConUserSidFromServer().then(
+      (vrs) => {
+        this.vacationRequest = vrs;
+        this.events = [];
+
+        for (const item of this.parsingService.parseData(
+          this.vacationRequest,
+          true
+        )) {
+          this.events.push(item.linked_event);
+        }
+
+        this.refresh.next();
+
+        this.balanceService.getBalanceByUidFromServer().then(
+          (balances) => {
+
+            this.balance = balances;
+            for (const b of this.balance) {
+              let t = 0;
+              for (const vr of this.vacationRequest) {
+                if (
+                  this.vacationsService.getVacationsById(this.vacations, vr.vid).name === b.name
+                ) {
+                  t +=
+                    (new Date(vr.endDate).getTime() -
+                      new Date(vr.startDate).getTime()) /
+                    (1000 * 3600 * 24);
+                }
+              }
+
+              this.dataSource.push({
+                obj: b,
+                taken: t
+              });
+            }
+          },
+          (error) => {
+            console.log('Erreur ! : ' + error);
+          }
+        );
+      },
+      (error) => {
+        console.log('Erreur ! :' + error);
+      }
+    );
   }
 }

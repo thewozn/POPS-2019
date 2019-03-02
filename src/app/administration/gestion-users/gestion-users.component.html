@@ -199,7 +199,7 @@
 
   <ng-container matColumnDef="service">
     <th mat-header-cell *matHeaderCellDef> Service </th>
-    <td mat-cell *matCellDef="let element"> {{ this.serviceService.getServiceById(element.sid).name }} </td>
+    <td mat-cell *matCellDef="let element"> {{ this.serviceService.getServiceById(this.service, element.sid).name }} </td>
   </ng-container>
 
   <!--TODO : Ajouter la fonction au button -->

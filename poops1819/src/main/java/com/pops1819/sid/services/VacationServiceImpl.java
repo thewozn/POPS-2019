@@ -44,6 +44,4 @@ public class VacationServiceImpl implements VacationService {
 		return vacationRepository.findAll();
 	}
 
-
-
 }

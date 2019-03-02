@@ -19,7 +19,11 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { MatSelectModule} from '@angular/material/select';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatInputModule} from '@angular/material';
 
+import { AlertComponent } from './alert/alert.component';
+import { AlertService } from './services/alert.service';
 import { GlobalService } from './services/global.service';
 
 import { ConnectedService } from './services/connected.service';
@@ -80,6 +84,7 @@ registerLocaleData(localeFr);
     ProfilComponent,
     NavigationComponent,
     EditercongesComponent,
+    AlertComponent,
   ],
   imports: [
     FormsModule,
@@ -94,6 +99,9 @@ registerLocaleData(localeFr);
     MatNativeDateModule,
     AngularFontAwesomeModule,
     MatSelectModule,
+    MatAutocompleteModule,
+    MatSelectModule,
+    MatInputModule,
     ReactiveFormsModule,
     CalendarModule.forRoot({
       provide: DateAdapter,
@@ -115,7 +123,8 @@ registerLocaleData(localeFr);
     BalanceService,
     MatDatepickerModule,
     ReactiveFormsModule,
-    GlobalService
+    GlobalService,
+    AlertService,
   ],
   bootstrap: [AppComponent],
   exports: [DemanderComponent]

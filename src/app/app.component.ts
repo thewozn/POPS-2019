@@ -16,8 +16,6 @@ export class AppComponent implements OnInit {
   notifications: any;
 
   authStatus: boolean;
-  connecteduser: User;
-  connecteduserSubscription: Subscription;
   constructor(private connectedService: ConnectedService, private router: Router) {
   }
 

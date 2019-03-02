@@ -2,11 +2,10 @@ import {
   Component,
   OnInit,
   ViewChild,
-  TemplateRef,
-  OnDestroy
+  TemplateRef
 } from '@angular/core';
 import { isSameDay, isSameMonth } from 'date-fns';
-import { Subject, Subscription } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
   CalendarEvent,
@@ -32,20 +31,12 @@ import { Vacations } from '../../models/vacations.model';
   templateUrl: './validation.component.html',
   styleUrls: ['./validation.component.scss']
 })
-export class ValidationComponent implements OnInit, OnDestroy {
+export class ValidationComponent implements OnInit {
   private vacationRequest: VacationRequest[];
-  vacationRequestSubscription: Subscription;
-  private connecteduser: User;
 
   private user: User[];
-  private userSubscription: Subscription;
   private service: Service[];
-  private serviceSubscription: Subscription;
   private vacations: Vacations[];
-  private vacationsSubscription: Subscription;
-
-  emptyarray = [];
-
   displayedColumns = [
     'NOM',
     'FICHE',
@@ -89,7 +80,8 @@ export class ValidationComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private vacationsService: VacationsService,
     private parsingService: ParsingService
-  ) {}
+  ) {
+  }
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
@@ -132,12 +124,6 @@ export class ValidationComponent implements OnInit, OnDestroy {
     filter3: any,
     filter4: any
   ): void {
-    /**
-     * Filtre les évènements selon 3 filtres:
-     * - Etat
-     * - Mois
-     * - Année
-     */
     const eventsList = [];
 
     for (const event of this.users_events) {
@@ -186,10 +172,24 @@ export class ValidationComponent implements OnInit, OnDestroy {
       if (action === 'Valider') {
         this.vacationRequestService.approveVacationRequestServer(
           user_event.did
+        ).then(
+          (response) => {
+            this.loadData();
+          },
+          (error) => {
+            console.log('Erreur ! : ' + error.message);
+          }
         );
         check = true;
       } else {
-        this.vacationRequestService.refuseVacationRequestServer(user_event.did);
+        this.vacationRequestService.refuseVacationRequestServer(user_event.did).then(
+          (response) => {
+            this.loadData();
+          },
+          (error) => {
+            console.log('Erreur ! : ' + error.message);
+          }
+        );
         check = true;
       }
 
@@ -206,56 +206,38 @@ export class ValidationComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.connecteduser = this.connectedService.getConnectedUser();
+    this.loadData();
+  }
 
-    this.userService.getUsersFromServer();
-    this.userSubscription = this.userService.userSubject.subscribe(
-      (users: User[]) => {
-        this.user = users;
+  loadData() {
+    Promise.all([this.userService.getUsersFromServer(),
+    this.serviceService.getServicesFromServer(),
+    this.vacationsService.getVacationsListFromServer()]).then(
+      values => {
+        this.user = values[0];
+        this.service = values[1];
+        this.vacations = values[2];
       }
     );
 
-    this.serviceService.getServicesFromServer();
-    this.serviceSubscription = this.serviceService.serviceSubject.subscribe(
-      (services: Service[]) => {
-        this.service = services;
-      }
-    );
-
-    this.vacationsService.getVacationsListFromServer();
-    this.vacationsSubscription = this.vacationsService.vacationsSubject.subscribe(
-      (vacations: Vacations[]) => {
-        this.vacations = vacations;
-      }
-    );
-
-    this.vacationRequestService.getVacationRequestsListFromServer();
-    this.vacationRequestSubscription = this.vacationRequestService.vacationRequestSubject.subscribe(
-      (vacationrequests: VacationRequest[]) => {
-        this.vacationRequest = vacationrequests;
-        this.events = [];
+    this.vacationRequestService.getVacationRequestsListFromServer().then(
+      (response) => {
+        this.vacationRequest = response;
+        this.users_events = [];
         for (const item of this.parsingService.filterData(this.vacationRequest, false)) {
-          if (!(item.name === this.connecteduser.firstName) &&
-            !(item.surname === this.connecteduser.lastName)) {
+          if (!(item.name === this.connectedService.getConnectedUser().firstName) &&
+            !(item.surname === this.connectedService.getConnectedUser().lastName)) {
             this.events.push(item.linked_event);
             this.users_events.push(item);
           }
         }
 
-        for (let _i = 0; _i < 30 - this.events.length; _i++) {
-          this.emptyarray.push(_i);
-        }
-
         this.dataSource = new MatTableDataSource(this.users_events);
         this.refresh.next();
+      },
+      (error) => {
+        console.log('Erreur ! : ' + error);
       }
     );
-  }
-
-  ngOnDestroy() {
-    // this.vacationRequestSubscription.unsubscribe();
-    this.userSubscription.unsubscribe();
-    this.serviceSubscription.unsubscribe();
-    this.vacationsSubscription.unsubscribe();
   }
 }

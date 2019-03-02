@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Subject } from 'rxjs';
 
 import { GlobalService } from '../services/global.service';
+import { ConnectedService } from '../services/connected.service';
 import { User } from '../models/user.model';
 
 
@@ -10,21 +10,11 @@ import { User } from '../models/user.model';
   providedIn: 'root'
 })
 export class UserService {
+  constructor(private httpclient: HttpClient, private globalService: GlobalService, private connectedService: ConnectedService) {}
 
 
-  userSubject = new Subject<User[]>();
-  private user: User[] = [];
-
-  constructor(private httpclient: HttpClient, private globalService: GlobalService) {}
-
-  emitUsersSubject() {
-    if (this.user != null) {
-      this.userSubject.next(this.user.slice());
-    }
-  }
-
-  getUserById(id: number) {
-    const u = this.user.find(
+  getUserById(user: User[], id: number) {
+    const u = user.find(
       (res) => {
         return res.uid === id;
       }
@@ -32,42 +22,27 @@ export class UserService {
     return u;
   }
 
-  getUsersFromServer() {
-    this.httpclient.get<User[]>(this.globalService.getbaseUrl() + '/getUserList').subscribe(
-      (response) => {
-        this.user = response;
-        this.emitUsersSubject();
-      },
-      (error) => {
-        console.log('Erreur ! : ' + error);
-      }
-    );
+  async getUserByIdFromServer(id: number) {
+    return await this.httpclient.get<User[]>(this.globalService.getbaseUrl() + '/getUser/' + id).toPromise();
   }
 
-  addUserServer(user: User) {
-    this.httpclient.post<User>(this.globalService.getbaseUrl() + '/createUser', JSON.stringify(user),
-    this.globalService.gethttpOptions()).subscribe(
-      (response) => {
-        console.log(response);
-        this.getUsersFromServer();
-      },
-      (error) => {
-        console.log('Erreur ! : ' + error.message);
-      }
-    );
+  async getUsersFromServer() {
+    return await this.httpclient.get<User[]>(this.globalService.getbaseUrl() + '/getUserList').toPromise();
   }
 
-  modifUserServer(user: User) {
-    this.httpclient.patch<User>(this.globalService.getbaseUrl() + '/updateUser', JSON.stringify(user),
-    this.globalService.gethttpOptions()).subscribe(
-      (response) => {
-        console.log(response);
-        this.getUsersFromServer();
-      },
-      (error) => {
-        console.log('Erreur ! : ' + error.message);
-      }
-    );
+  async getUsersByConUserSidFromServer() {
+    return await this.httpclient.get<User[]>(this.globalService.getbaseUrl() + '/getUserListByService/' +
+    this.connectedService.getConnectedUser().sid).toPromise();
+  }
+
+   async addUserServer(user: User) {
+    return await this.httpclient.post<User>(this.globalService.getbaseUrl() + '/createUser', JSON.stringify(user),
+    this.globalService.gethttpOptions()).toPromise();
+  }
+
+   async modifUserServer(user: User) {
+    return await this.httpclient.patch<User>(this.globalService.getbaseUrl() + '/updateUser', JSON.stringify(user),
+    this.globalService.gethttpOptions()).toPromise();
   }
 }
 

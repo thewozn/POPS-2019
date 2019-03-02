@@ -1,7 +1,6 @@
-import { Component, OnInit, ChangeDetectionStrategy, ViewChild, TemplateRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { startOfDay, subDays, addDays, isSameDay, isSameMonth } from 'date-fns';
-import { ViewEncapsulation } from '@angular/core';
-import { Subject, Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarEvent, CalendarEventTimesChangedEvent, CalendarView } from 'angular-calendar';
 import * as $ from 'jquery';
@@ -11,11 +10,12 @@ import { ConnectedService } from '../../services/connected.service';
 import { VacationRequestService } from '../../services/vacation-request.service';
 import { VacationsService } from '../../services/vacations.service';
 import { ParsingService } from '../../services/parsing.service';
+import { BalanceService } from '../../services/balance.service';
 
 
-import { User } from '../../models/user.model';
 import { VacationRequest} from '../../models/vacation-request.model';
 import { Vacations } from '../../models/vacations.model';
+import { Balance } from '../../models/balance.model';
 const colors: any = {
   red: {
     primary: '#c63325',
@@ -28,16 +28,10 @@ const colors: any = {
   templateUrl: './editerconges.component.html',
   styleUrls: ['./editerconges.component.scss']
 })
-export class EditercongesComponent implements OnInit, OnDestroy {
-
-  private OwnVacationRequest: VacationRequest;
+export class EditercongesComponent implements OnInit {
   private vacationRequest: VacationRequest[];
-  vacationRequestSubscription: Subscription;
-  connecteduser: User;
-  
-
   private vacations: Vacations[];
-  private vacationsSubscription;
+  private balance: Balance[];
 
   @ViewChild('modalContent')
   modalContent: TemplateRef<any>;
@@ -45,10 +39,8 @@ export class EditercongesComponent implements OnInit, OnDestroy {
   end_period: string;
   validated: boolean;
 
-  displayedColumns = ['ROWS', 'ANNEE PASSEE', 'ANNEE EN COURS', 'A VENIR'];
-  dataSource = [{header: 'Solde', past: 1 , current: 4, upcoming: 25},
-                {header: 'Posés', past: 29, current: 1, upcoming: 0},
-                {header: 'Total', past: 30, current: 5, upcoming: 25}];
+  displayedColumns = ['type', 'solde', 'poses'];
+  private dataSource = [];
 
   view: CalendarView = CalendarView.Month;
 
@@ -98,7 +90,8 @@ export class EditercongesComponent implements OnInit, OnDestroy {
   constructor(private connectedService: ConnectedService,
     private vacationRequestService: VacationRequestService,
     private vacationsService: VacationsService,
-    private modal: NgbModal, private parsingService: ParsingService, private route: ActivatedRoute) {
+    private modal: NgbModal, private parsingService: ParsingService,
+    private route: ActivatedRoute, private balanceService: BalanceService) {
   }
 
 
@@ -142,7 +135,7 @@ export class EditercongesComponent implements OnInit, OnDestroy {
         this.new_event.start.setHours(13, 0, 0, 0);
       }
 
-      // Inititialise l'heure de retour de 
+      // Inititialise l'heure de retour de
       if (this.end_period === 'Matin') {
         this.new_event.end.setHours(8, 0, 0, 0);
       } else {
@@ -161,10 +154,17 @@ export class EditercongesComponent implements OnInit, OnDestroy {
         this.new_event.start.toISOString(),
         status,
         new Date().toISOString(),
-        this.connecteduser.uid,
+        this.connectedService.getConnectedUser().uid,
         this.user_event.type);
 
-      this.vacationRequestService.addVacationRequestServer(newVR);
+      this.vacationRequestService.addVacationRequestServer(newVR).then(
+        (response) => {
+          this.loadData();
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
 
       // Mise à jour de la demande utilisateur (pas nécessaire, mais au cas où):
       this.user_event.linked_event = this.new_event;
@@ -179,45 +179,17 @@ export class EditercongesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // TODO: Recuperer la vacationRequest via le DID passée par la route
-    // vrRonan: VacationRequest = this.vacationRequest.getVacationRequestByDid(did)
-    // console.log(vrRonan)
-
-    const did = this.route.snapshot.params['did'];
-    this.OwnVacationRequest = this.vacationRequestService.getVacationRequestByDid(+did);
-    
-    this.connecteduser = this.connectedService.getConnectedUser();
-
-    this.vacationsService.getVacationsByConUserUidFromServer();
-    this.vacationsSubscription = this.vacationsService.vacationsSubject.subscribe(
-      (vacations: Vacations[]) => {
-        this.vacations = vacations;
-      }
-    );
-
-    this.vacationRequestService.getSelectedVacationRequestListByConUserSidFromServer();
-    this.vacationRequestSubscription = this.vacationRequestService.vacationRequestSubject.subscribe(
-      (vacationrequests: VacationRequest[]) => {
-        this.vacationRequest = vacationrequests;
-        this.events = [];
-
-        for (const item of this.parsingService.parseData(this.vacationRequest, true)) {
-          this.events.push(item.linked_event);
-        }
-
-        this.refresh.next();
-      }
-    );
+    this.loadData();
 
     // Initialisation des champs du component
     this.start_period = 'Matin';
     this.end_period = 'Matin';
     this.validated = false;
-      
-    let vacR: VacationRequest[] = [];
-    vacR[0] = this.OwnVacationRequest;
 
-    this.user_event = this.parsingService.parseData(vacR, false)[0];
+    // let vacR: VacationRequest[] = [];
+    // vacR[0] = this.OwnVacationRequest;
+
+    // this.user_event = this.parsingService.parseData(vacR, false)[0];
 
     // this.user_event = {
     //   did: this.OwnVacationRequest.did,        // did de la demande
@@ -246,9 +218,62 @@ export class EditercongesComponent implements OnInit, OnDestroy {
     // };
   }
 
-  ngOnDestroy() {
-    this.vacationRequestSubscription.unsubscribe();
-    this.vacationsSubscription.unsubscribe();
+  loadData() {
+    this.vacationsService.getVacationsByConUserUidFromServer().then(
+      (response) => {
+        this.vacations = response;
+      },
+      (error) => {
+        console.log('Erreur ! : ' + error.message);
+      }
+    );
+
+    this.vacationRequestService.getSelectedVacationRequestListByConUserSidFromServer().then(
+      (vrs) => {
+        this.vacationRequest = vrs;
+        this.events = [];
+
+        for (const item of this.parsingService.parseData(
+          this.vacationRequest,
+          true
+        )) {
+          this.events.push(item.linked_event);
+        }
+
+        this.refresh.next();
+
+        this.balanceService.getBalanceByUidFromServer().then(
+          (balances) => {
+
+            this.balance = balances;
+            for (const b of this.balance) {
+              let t = 0;
+              for (const vr of this.vacationRequest) {
+                if (
+                  this.vacationsService.getVacationsById(this.vacations, vr.vid).name === b.name
+                ) {
+                  t +=
+                    (new Date(vr.endDate).getTime() -
+                      new Date(vr.startDate).getTime()) /
+                    (1000 * 3600 * 24);
+                }
+              }
+
+              this.dataSource.push({
+                obj: b,
+                taken: t
+              });
+            }
+          },
+          (error) => {
+            console.log('Erreur ! : ' + error);
+          }
+        );
+      },
+      (error) => {
+        console.log('Erreur ! :' + error);
+      }
+    );
   }
 
 }

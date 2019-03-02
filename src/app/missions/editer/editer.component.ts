@@ -4,6 +4,7 @@ import {Employee} from '../creer/creer.component';
 import {Router} from '@angular/router';
 import {ConnectedService} from '../../services/connected.service';
 import {MissionService} from '../../services/mission.service';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-editer',
@@ -78,7 +79,7 @@ export class EditerComponent implements OnInit {
     }
   }
 
-  constructor(private router: Router, private connectedService: ConnectedService, private missionService: MissionService) { }
+  constructor(private router: Router, private connectedService: ConnectedService, private missionService: MissionService ) { }
 
 
   ngOnInit() {

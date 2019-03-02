@@ -121,4 +121,8 @@ public class VacationRequestRestController {
 		return new ResponseEntity<List<VacationRequest>>(vacationRequestServiceImpl.getVacationRequestAll(),HttpStatus.OK);
 	}
 	
+	@RequestMapping(value = "/getVacationRequestByDid/{did}", method = RequestMethod.GET)
+	public ResponseEntity<VacationRequest> getVacationRequestByDID(@PathVariable Long did) {
+		return new ResponseEntity<VacationRequest>(vacationRequestServiceImpl.getVacationRequestByDID(did), HttpStatus.OK);
+	}
 }

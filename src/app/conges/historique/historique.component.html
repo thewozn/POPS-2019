@@ -16,13 +16,14 @@
     </div>
   </div>
   <div class="modal-footer" *ngIf="this.modalData?.status === 'Brouillon'">
-    <button type="button" class="btn btn-outline-secondary" (click)="close()">EDITER LA DEMANDE</button>
+<button type="button" class="btn btn-outline-secondary" (click)="editRequest(this.modalData?.did)">EDITER</button>
+    <button type="button" class="btn btn-outline-secondary" (click)="removeRequest(this.modalData?.did)">SUPPRIMER</button>
   </div>
-  <div class = "modal-footer" *ngIf="this.modalData?.status !== 'Brouillon' && this.modalData?.status !=='Refusée'">
-    <button type="button" class="btn btn-outline-secondary" (click)="close()">ANNULER LA DEMANDE</button>
+<div class="modal-footer" *ngIf="this.modalData?.status === 'En cours de validation 1' || this.modalData?.status === 'En cours de validation 2'">
+    <button type="button" class="btn btn-outline-secondary" (click)="cancelRequest(modalData?.did)">ANNULER LA DEMANDE</button>
   </div>
-  
-  
+
+
 
 </ng-template>
 
@@ -59,8 +60,9 @@
       <option value="-1" selected>Etat</option>
       <option value="0">Brouillon</option>
       <option value="1">En cours de validation 1</option>
-      <option value="2">En cours de validation 1</option>
-      <option>Validée</option>
+      <option value="2">En cours de validation 2</option>
+      <option value="3">Validée</option>
+      <option value="4">Refusée</option>
     </select>
 
     <button class="validate-button" (click)="newFilteredEvents(selectedYear.value, selectedMonth.value, selectedState.value)">Trier</button>

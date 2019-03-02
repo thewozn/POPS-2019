@@ -13,6 +13,7 @@ import { User } from '../models/user.model';
 export class VacationsService {
   vacationsSubject = new Subject<Vacations[]>();
   private vacations: Vacations[] = [];
+
   constructor(private connectedService: ConnectedService, private httpclient: HttpClient, private globalService: GlobalService) {
   }
 
@@ -22,8 +23,8 @@ export class VacationsService {
     }
   }
 
-  getVacationsById(id: number) {
-    const v = this.vacations.find(
+  getVacationsById(data: Vacations[], id: number) {
+    const v = data.find(
       (res) => {
         return res.vid === id;
       }
@@ -31,29 +32,16 @@ export class VacationsService {
     return v;
   }
 
-  getVacationsListFromServer() {
-    this.httpclient.get<Vacations[]>(this.globalService.getbaseUrl() + '/getVacationListAll').subscribe(
-      (response) => {
-        this.vacations = response;
-        this.emitVacationsSubject();
-      },
-      (error) => {
-        console.log('Erreur ! : ' + error.message);
-      }
-    );
+  async getVacationsByIdFromServer(id: number) {
+    return await this.httpclient.get<Vacations>(this.globalService.getbaseUrl() + '/getVacationByVid/' + id).toPromise();
   }
 
+  async getVacationsListFromServer() {
+   return await  this.httpclient.get<Vacations[]>(this.globalService.getbaseUrl() + '/getVacationListAll').toPromise();
+  }
 
-  getVacationsByConUserUidFromServer() {
-    this.httpclient.get<Vacations[]>(this.globalService.getbaseUrl() + '/getVacationListByUID/' +
-    this.connectedService.getConnectedUser().uid).subscribe(
-      (response) => {
-        this.vacations = response;
-        this.emitVacationsSubject();
-      },
-      (error) => {
-        console.log('Erreur ! : ' + error.message);
-      }
-    );
+  async getVacationsByConUserUidFromServer() {
+    return await this.httpclient.get<Vacations[]>(this.globalService.getbaseUrl() + '/getVacationListByUID/' +
+    this.connectedService.getConnectedUser().uid).toPromise();
   }
 }

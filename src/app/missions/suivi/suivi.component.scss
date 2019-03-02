@@ -24,3 +24,36 @@ table {
 th.mat-sort-header-sorted {
   color: black;
 }
+
+.consult-button {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../../conges/specific-assets/list.png");
+  background-size: contain;
+  outline: none;
+}
+
+.consult-button:hover {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../../conges/specific-assets/list_action.png");
+  background-size: contain;
+  outline: none;
+}
+
+.consult-button:active {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../../conges/specific-assets/list_hover.png");
+  background-size: contain;
+  outline: none;
+}

@@ -1,6 +1,5 @@
-import { Injectable, DirectiveDecorator } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Subject } from 'rxjs';
 
 import { GlobalService } from '../services/global.service';
 import { ConnectedService } from './connected.service';
@@ -9,116 +8,55 @@ import { VacationRequest } from '../models/vacation-request.model';
 
 @Injectable()
 export class VacationRequestService {
-  vacationRequestSubject = new Subject<VacationRequest[]>();
-  private vacationRequest: VacationRequest[] = [];
 
   constructor(private connectedService: ConnectedService, private httpclient: HttpClient, private globalService: GlobalService) {
   }
 
-  emitVacationRequestsSubject() {
-    if (this.vacationRequest != null) {
-      this.vacationRequestSubject.next(this.vacationRequest.slice());
-    }
+  async getVacationRequestByDidFromServer(id: number) {
+    return await this.httpclient.get<VacationRequest>(this.globalService.getbaseUrl() + '/getVacationRequestByDid/' + id).toPromise();
   }
 
-  getVacationRequestByDid(id: number) {
-    const vr = this.vacationRequest.find(
-      (res) => {
-        return res.vid === id;
-      }
-    );
-    return vr;
+  async getVacationRequestsListFromServer() {
+    return await this.httpclient.get<VacationRequest[]>(this.globalService.getbaseUrl() + '/getVacationRequestList').toPromise();
   }
 
-  getVacationRequestsListFromServer() {
-    this.httpclient.get<VacationRequest[]>(this.globalService.getbaseUrl() + '/getVacationRequestList').subscribe(
-      (response) => {
-        this.vacationRequest = response;
-        this.emitVacationRequestsSubject();
-      },
-      (error) => {
-        console.log('Erreur ! : ' + error);
-      }
-    );
+  async getVacationRequestsByConUserUidFromServer() {
+    return await this.httpclient.get<VacationRequest[]>(this.globalService.getbaseUrl() + '/getVacationRequestListByUID/' +
+      this.connectedService.getConnectedUser().uid).toPromise();
   }
 
-  getVacationRequestsByConUserUidFromServer() {
-    this.httpclient.get<VacationRequest[]>(this.globalService.getbaseUrl() + '/getVacationRequestListByUID/' +
-      this.connectedService.getConnectedUser().uid).subscribe(
-      (response) => {
-        this.vacationRequest = response;
-        this.emitVacationRequestsSubject();
-      },
-      (error) => {
-        console.log('Erreur ! : ' + error);
-      }
-    );
+  async getSelectedVacationRequestListByConUserSidFromServer() {
+    return await this.httpclient.get<VacationRequest[]>(this.globalService.getbaseUrl() + '/getSelectedVacationRequestListBySID/' +
+      this.connectedService.getConnectedUser().sid).toPromise();
   }
 
-  getSelectedVacationRequestListByConUserSidFromServer() {
-    this.httpclient.get<VacationRequest[]>(this.globalService.getbaseUrl() + '/getSelectedVacationRequestListBySID/' +
-      this.connectedService.getConnectedUser().sid).subscribe(
-      (response) => {
-        this.vacationRequest = response;
-        this.emitVacationRequestsSubject();
-      },
-      (error) => {
-        console.log('Erreur ! :' + error);
-      }
-    );
+   async addVacationRequestServer(vacationRequest: VacationRequest) {
+     return await this.httpclient.post<VacationRequest>(this.globalService.getbaseUrl() + '/createVacationRequest',
+     JSON.stringify(vacationRequest),
+      this.globalService.gethttpOptions()).toPromise();
   }
 
-  addVacationRequestServer(vacationRequest: VacationRequest) {
-    this.httpclient.post<VacationRequest>(this.globalService.getbaseUrl() + '/createVacationRequest', JSON.stringify(vacationRequest),
-      this.globalService.gethttpOptions()).subscribe(
-        (response) => {
-          this.getSelectedVacationRequestListByConUserSidFromServer();
-        },
-        (error) => {
-          console.log('Erreur ! : ' + error.message);
-        }
-      );
-  }
-
-  refuseVacationRequestServer(did: number) {
-    this.httpclient.patch<VacationRequest>(this.globalService.getbaseUrl() +
+   async refuseVacationRequestServer(did: number) {
+   return await this.httpclient.patch<VacationRequest>(this.globalService.getbaseUrl() +
      '/refuseVacationRequest/' + did + '/' + this.connectedService.getConnectedUser().uid,
-      this.globalService.gethttpOptions()).subscribe(
-        (response) => {
-          console.log(response);
-        },
-        (error) => {
-          console.log('Erreur ! : ' + error.message);
-        }
-      );
+      this.globalService.gethttpOptions()).toPromise();
   }
 
-  approveVacationRequestServer(did: number) {
-    this.httpclient.patch<VacationRequest>(this.globalService.getbaseUrl() +
+   async approveVacationRequestServer(did: number) {
+     return await this.httpclient.patch<VacationRequest>(this.globalService.getbaseUrl() +
       '/approveVacationRequest/' + did + '/' + this.connectedService.getConnectedUser().uid,
-      this.globalService.gethttpOptions()).subscribe(
-        (response) => {
-          console.log(response);
-        },
-        (error) => {
-          console.log('Erreur ! : ' + error.message);
-        }
-      );
+      this.globalService.gethttpOptions()).toPromise();
   }
 
-  cancelVacationRequestServer(did: number) {
-    this.httpclient.patch<VacationRequest>(this.globalService.getbaseUrl() +
+   async cancelVacationRequestServer(did: number) {
+   return await this.httpclient.patch<VacationRequest>(this.globalService.getbaseUrl() +
       '/cancelVacationRequest/' + did + '/' + this.connectedService.getConnectedUser().uid,
-      this.globalService.gethttpOptions()).subscribe(
-        (response) => {
-          console.log(response);
-          this.getVacationRequestsListFromServer();
-        },
-        (error) => {
-          console.log('Erreur ! : ' + error.message);
-        }
-      );
+      this.globalService.gethttpOptions()).toPromise();
   }
 
-
+   async removeVacationRequestServer(did: number) {
+     return await this.httpclient.delete<VacationRequest>(this.globalService.getbaseUrl() +
+      '/removeVacationRequest/' + did + '/' + this.connectedService.getConnectedUser().uid,
+      this.globalService.gethttpOptions()).toPromise();
+  }
 }

@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import {ConnectedService} from '../services/connected.service';
+import { ConnectedService } from '../services/connected.service';
 import { ServiceService } from '../services/service.service';
 
+import { Service } from '../models/service.model';
 import { User } from '../models/user.model';
 @Component({
   selector: 'app-congesr',
@@ -14,19 +15,25 @@ export class CongesComponent implements OnInit {
   navLinks: any[] = [];
   activeLinkIndex = -1;
 
-  connecteduser: User;
+
+  private service: Service[];
   constructor(private connectedService: ConnectedService, private serviceService: ServiceService, private router: Router) {
-    this.serviceService.getServicesFromServer();
   }
 
   ngOnInit() {
-    this.connecteduser = this.connectedService.getConnectedUser();
+    this.serviceService.getServicesFromServer().then(
+      (response) => {
+        this.service = this.service;
+        this.generateNavLinks();
 
-    this.generateNavLinks();
+        this.router.events.subscribe((res) => {
+          this.activeLinkIndex = this.navLinks.indexOf(this.navLinks.find(tab => tab.link === '.' + this.router.url));
+        });
+      },
+      (error) => {
 
-    this.router.events.subscribe((res) => {
-      this.activeLinkIndex = this.navLinks.indexOf(this.navLinks.find(tab => tab.link === '.' + this.router.url));
-    });
+      }
+    );
   }
 
   generateNavLinks() {
@@ -43,9 +50,9 @@ export class CongesComponent implements OnInit {
       }
     );
 
-    if (this.connecteduser.status === 'HeadOfService' ||
-      this.serviceService.getServiceById(this.connecteduser.sid).name === 'HumanResource' ||
-      this.serviceService.getServiceById(this.connecteduser.sid).name === 'Management') {
+    if (this.connectedService.getConnectedUser().status === 'HeadOfService' ||
+      this.connectedService.getConnectedUserService().name === 'HumanResource' ||
+      this.connectedService.getConnectedUserService().name === 'Management') {
       this.navLinks.push(
         {
           label: 'Accepter',

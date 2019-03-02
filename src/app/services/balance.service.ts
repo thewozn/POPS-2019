@@ -13,27 +13,18 @@ import { User } from '../models/user.model';
 export class BalanceService {
   balanceSubject = new Subject<Balance[]>();
   private balance: Balance[] = [];
-  private connecteduser: User;
 
   constructor(private connectedService: ConnectedService, private httpclient: HttpClient, private globalService: GlobalService) {
-    this.connecteduser = this.connectedService.getConnectedUser();
   }
 
-  emitVacationsSubject() {
+  emitBalanceSubject() {
     if (this.balance != null) {
       this.balanceSubject.next(this.balance.slice());
     }
   }
 
-  getVacationsByUidFromServer() {
-    this.httpclient.get<Balance[]>(this.globalService.getbaseUrl() + '/getBalanceListByUid/' + this.connecteduser.uid).subscribe(
-      (response) => {
-        this.balance = response;
-        this.emitVacationsSubject();
-      },
-      (error) => {
-        console.log('Erreur ! : ' + error);
-      }
-    );
+  async getBalanceByUidFromServer() {
+    return this.httpclient.get<Balance[]>(this.globalService.getbaseUrl() + '/getBalanceRestControllerListByUID/' +
+    this.connectedService.getConnectedUser().uid).toPromise();
   }
 }
