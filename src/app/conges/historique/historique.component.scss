@@ -292,6 +292,39 @@ table {
   outline: none;
 }
 
+.refuse-button {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../specific-assets/refuse.png");
+  background-size: contain;
+  outline: none;
+}
+
+.refuse-button:hover {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../specific-assets/refuse_hover.png");
+  background-size: contain;
+  outline: none;
+}
+
+.refuse-button:active {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../specific-assets/refuse_action.png");
+  background-size: contain;
+  outline: none;
+}
+
 .add-button {
   background-color: transparent;
   color: black;

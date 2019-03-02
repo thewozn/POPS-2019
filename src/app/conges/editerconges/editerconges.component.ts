@@ -5,6 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarEvent, CalendarEventTimesChangedEvent, CalendarView } from 'angular-calendar';
 import * as $ from 'jquery';
 import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { ConnectedService } from '../../services/connected.service';
 import { VacationRequestService } from '../../services/vacation-request.service';
@@ -88,7 +89,9 @@ draggable: false
     private vacationRequestService: VacationRequestService,
     private vacationsService: VacationsService,
     private modal: NgbModal, private parsingService: ParsingService,
-    private route: ActivatedRoute, private balanceService: BalanceService) {
+    private route: ActivatedRoute,
+    private balanceService: BalanceService,
+    private router: Router) {
   }
 
 
@@ -155,6 +158,7 @@ draggable: false
       this.vacationRequestService.updateVacationRequest(newVR).then(
         (response) => {
           this.loadData();
+          this.modal.open(this.modalContent, { size: 'sm' });
         },
         (error) => {
           console.log(error);
@@ -252,4 +256,8 @@ draggable: false
     );
   }
 
+  finishEdit() {
+    this.modal.dismissAll();
+    this.router.navigate(['conges/historique']);
+  }
 }

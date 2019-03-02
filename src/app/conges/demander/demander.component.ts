@@ -15,6 +15,7 @@ import {
   CalendarView
 } from 'angular-calendar';
 import * as $ from 'jquery';
+import { Router } from '@angular/router';
 
 import { ConnectedService } from '../../services/connected.service';
 import { BalanceService } from '../../services/balance.service';
@@ -105,7 +106,8 @@ export class DemanderComponent implements OnInit {
     private vacationsService: VacationsService,
     private modal: NgbModal,
     private parsingService: ParsingService,
-    private balanceService: BalanceService
+    private balanceService: BalanceService,
+    private router: Router,
   ) {}
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
@@ -175,6 +177,7 @@ export class DemanderComponent implements OnInit {
       this.vacationRequestService.addVacationRequestServer(newVR).then(
         (response) => {
           this.loadData();
+          this.modal.open(this.modalContent, { size: 'sm' });
         },
         (error) => {
           console.log(error);
@@ -278,5 +281,10 @@ export class DemanderComponent implements OnInit {
         console.log('Erreur ! :' + error);
       }
     );
+  }
+
+  finishEdit() {
+    this.modal.dismissAll();
+    this.router.navigate(['conges/historique']);
   }
 }

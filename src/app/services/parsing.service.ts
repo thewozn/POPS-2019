@@ -12,24 +12,24 @@ import { Vacations } from '../models/vacations.model';
 
 const colors: any = {
   valide: {
-    primary: '#157ab5',
-    secondary: '#FAE3E3'
+    primary: 'green',
+    secondary: 'green'
   },
   attente: {
-    primary: '#081d3a',
-    secondary: '#FDF1BA'
+    primary: 'yellow',
+    secondary: 'yellow'
   },
   self_color_valide: {
-    primary: '#c63325',
-    secondary: '#c63325'
+    primary: 'green',
+    secondary: 'green'
   },
   self_color_attente: {
-    primary: '#c63325',
-    secondary: '#c63325'
+    primary: 'yellow',
+    secondary: 'yellow'
   },
   brouillon: {
-    primary: '#c63325',
-    secondary: '#c63325'
+    primary: 'grey',
+    secondary: 'grey'
   },
 };
 

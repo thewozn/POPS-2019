@@ -32,6 +32,13 @@ import { Vacations } from '../../models/vacations.model';
   styleUrls: ['./validation.component.scss']
 })
 export class ValidationComponent implements OnInit {
+  colors = {
+    'Validée': 'green',
+    'Refusée': 'red',
+    'En cours de validation 1': 'orange',
+    'En cours de validation 2': 'yellow',
+  };
+
   private vacationRequest: VacationRequest[];
 
   private user: User[];
@@ -39,7 +46,6 @@ export class ValidationComponent implements OnInit {
   private vacations: Vacations[];
   displayedColumns = [
     'NOM',
-    'FICHE',
     'SERVICE',
     'TYPE',
     'DEPART',

@@ -18,6 +18,15 @@ import { VacationRequest } from '../../models/vacation-request.model';
   styleUrls: ['./historique.component.scss']
 })
 export class HistoriqueComponent implements OnInit {
+  colors = {
+    'Brouillon': 'grey',
+    'Annulée': 'white',
+    'Validée': 'green',
+    'Refusée': 'red',
+    'En cours de validation 1': 'orange',
+    'En cours de validation 2': 'yellow',
+  };
+
   private vacationRequest: VacationRequest[];
 
   @ViewChild('modalContent')
@@ -27,16 +36,14 @@ export class HistoriqueComponent implements OnInit {
 
   CalendarView = CalendarView;
 
-  displayedColumns = ['DATE', 'TYPE', 'DEPART', 'DMA', 'RETOUR', 'RMA', 'STATUT', 'ACTION'];
+  displayedColumns = ['DATE', 'TYPE', 'DEPART', 'DMA', 'RETOUR', 'RMA', 'STATUT', 'ANNULER', 'EDITER', 'SUPPRIMER'];
   dataSource = new MatTableDataSource();
 
   viewDate: Date = new Date();
   locale = 'fr';
   modalData: {
-    title: string;
+    action: string;
     did: number;
-    status: string;
-    event: CalendarEvent;
   };
 
   refresh: Subject<any> = new Subject();
@@ -73,7 +80,9 @@ export class HistoriqueComponent implements OnInit {
 
   genData() {
     for (const item of this.parsingService.parseData(this.vacationRequest, false)) {
-      this.events.push(item.linked_event);
+      if (item.status !== 'Annulée' && item.status !== 'Refusée') {
+        this.events.push(item.linked_event);
+      }
       this.users_events.push(item);
     }
 
@@ -97,12 +106,14 @@ export class HistoriqueComponent implements OnInit {
   }
 
 
-  handleEvent(title: string, did: number, status: string, event: CalendarEvent): void {
-    /**
-     * Affiche la fenêtre modale
-     */
-    this.modalData = { title, did, status, event };
-    this.modal.open(this.modalContent, { size: 'lg' });
+  handleEvent(did: number,  action: string): void {
+    console.log(action);
+    if (action === 'edit') {
+      this.editRequest(did);
+    } else {
+      this.modalData = { action, did };
+      this.modal.open(this.modalContent, { size: 'sm' });
+    }
   }
 
 
@@ -181,5 +192,11 @@ export class HistoriqueComponent implements OnInit {
     this.modal.dismissAll();
   }
 
-
+  modalValid(did: number, action: string) {
+    if (action === 'cancel') {
+      this.cancelRequest(did);
+    } else {
+      this.removeRequest(did);
+    }
+  }
 }
