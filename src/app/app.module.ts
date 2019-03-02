@@ -7,7 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlatpickrModule } from 'angularx-flatpickr';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
-import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { registerLocaleData } from '@angular/common';
@@ -22,8 +22,6 @@ import { MatSelectModule} from '@angular/material/select';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatInputModule} from '@angular/material';
 
-import { AlertComponent } from './alert/alert.component';
-import { AlertService } from './services/alert.service';
 import { GlobalService } from './services/global.service';
 
 import { ConnectedService } from './services/connected.service';
@@ -84,7 +82,6 @@ registerLocaleData(localeFr);
     ProfilComponent,
     NavigationComponent,
     EditercongesComponent,
-    AlertComponent,
   ],
   imports: [
     FormsModule,
@@ -103,6 +100,7 @@ registerLocaleData(localeFr);
     MatSelectModule,
     MatInputModule,
     ReactiveFormsModule,
+    NgbModule,
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory
@@ -124,7 +122,6 @@ registerLocaleData(localeFr);
     MatDatepickerModule,
     ReactiveFormsModule,
     GlobalService,
-    AlertService,
   ],
   bootstrap: [AppComponent],
   exports: [DemanderComponent]

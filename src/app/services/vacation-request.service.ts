@@ -36,6 +36,12 @@ export class VacationRequestService {
       this.globalService.gethttpOptions()).toPromise();
   }
 
+  async updateVacationRequest(vacationRequest: VacationRequest) {
+    return await this.httpclient.patch<VacationRequest>(this.globalService.getbaseUrl() + '/updateVacationRequest',
+      JSON.stringify(vacationRequest),
+      this.globalService.gethttpOptions()).toPromise();
+  }
+
    async refuseVacationRequestServer(did: number) {
    return await this.httpclient.patch<VacationRequest>(this.globalService.getbaseUrl() +
      '/refuseVacationRequest/' + did + '/' + this.connectedService.getConnectedUser().uid,
@@ -59,4 +65,6 @@ export class VacationRequestService {
       '/removeVacationRequest/' + did + '/' + this.connectedService.getConnectedUser().uid,
       this.globalService.gethttpOptions()).toPromise();
   }
+
+
 }

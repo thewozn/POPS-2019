@@ -45,15 +45,15 @@ export class DemanderComponent implements OnInit {
   private vacationRequest: VacationRequest[];
   private vacations: Vacations[];
   private balance: Balance[];
-
   private dataSource = [];
+  private minDate: string;
   @ViewChild('modalContent')
   modalContent: TemplateRef<any>;
   start_period: string;
   end_period: string;
   validated: boolean;
 
-  displayedColumns = ['type', 'solde'];
+  displayedColumns = ['type', 'solde', 'poses'];
 
   view: CalendarView = CalendarView.Month;
 
@@ -195,6 +195,10 @@ export class DemanderComponent implements OnInit {
   ngOnInit() {
 
     this.loadData();
+
+    const today = new Date();
+    today.setDate(today.getDate() + 7);
+
     // Initialisation des champs du component
     this.start_period = 'Matin';
     this.end_period = 'Matin';
@@ -202,8 +206,8 @@ export class DemanderComponent implements OnInit {
 
     // Initialisation du nouvel event
     this.new_event = {
-      start: startOfDay(new Date()),
-      end: addDays(new Date(), 1),
+      start: startOfDay(today),
+      end: addDays(today, 1),
       title: 'Type de congé',
       color: colors.red,
       actions: null,
@@ -220,6 +224,7 @@ export class DemanderComponent implements OnInit {
     this.vacationsService.getVacationsByConUserUidFromServer().then(
       (response) => {
         this.vacations = response;
+        this.user_event.type = this.vacations[0].name;
       },
       (error) => {
         console.log('Erreur ! : ' + error.message);
@@ -263,8 +268,6 @@ export class DemanderComponent implements OnInit {
                 taken: t
               });
             }
-
-            console.log(this.dataSource);
           },
           (error) => {
             console.log('Erreur ! : ' + error);

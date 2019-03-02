@@ -1,22 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
+import { Subject } from 'rxjs';
 
 import { ConnectedService } from '../services/connected.service';
-import { AlertService } from '../services/alert.service';
-
 @Component({
   selector: 'app-connexion',
   templateUrl: './connexion.component.html',
   styleUrls: ['./connexion.component.scss']
 })
 export class ConnexionComponent implements OnInit {
+  private _error = new Subject<string>();
+  private errorMessage: string;
   constructor(
     private connectedService: ConnectedService,
-    private router: Router, private alertService: AlertService
+    private router: Router
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this._error.subscribe((message) => this.errorMessage = message);
+  }
 
   onSignIn(form: NgForm) {
     this.connectedService
@@ -25,7 +28,7 @@ export class ConnexionComponent implements OnInit {
         this.router.navigate(['conges/historique']);
       },
       (reject) => {
-        this.alertService.error('Email ou Mot de passe erronés');
+        this._error.next('Email ou Mot de passe incorrect');
       },
       );
   }

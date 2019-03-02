@@ -32,6 +32,7 @@ export class EditercongesComponent implements OnInit {
   private vacationRequest: VacationRequest[];
   private vacations: Vacations[];
   private balance: Balance[];
+  private vacR: VacationRequest[] = [];
 
   @ViewChild('modalContent')
   modalContent: TemplateRef<any>;
@@ -55,32 +56,28 @@ export class EditercongesComponent implements OnInit {
 
   refresh: Subject<any> = new Subject();
 
-  // Evènement par défaut (initialisé dans le ngOnInit() )
-  new_event: CalendarEvent = {
-    start: subDays(startOfDay(new Date()), 1),
-    end: addDays(new Date(), 1),
-    title: 'Empty event',
-    color: colors.red,
-    actions: null,
-    allDay: true,
-    resizable: {
-      beforeStart: false,
-      afterEnd: false
-    },
-    draggable: false
-  };
-
-  // Evènement envoyé par le component, contient un event accompagné de headers
-  user_event = {
+  private user_event = {
     did: null,
     status: null,
-    name: null,         // Nom utilisateur
-    surname: null,      // Prénom utilisateur
-    service: null,      // Service de l'utilisateur
+    name: null, // Nom utilisateur
+    surname: null, // Prénom utilisateur
+    service: null, // Service de l'utilisateur
     validated: false, // Booléen indiquant si le congé est à valider ou déjà validé
-    type: null,         // Type de congé
+    type: null, // Type de congé
     date: new Date(), // Date de la demande
-    linked_event: this.new_event  // Evenement lié à la demande
+    linked_event: {
+      start: subDays(startOfDay(new Date()), 1),
+  end: addDays(new Date(), 1),
+    title: 'Empty event',
+      color: colors.red,
+        actions: null,
+          allDay: true,
+            resizable: {
+  beforeStart: false,
+    afterEnd: false
+},
+draggable: false
+  }, // Evenement lié à la demande
   };
 
   events: CalendarEvent[] = []; // Liste des évènements à afficher sur le calendrier
@@ -127,37 +124,35 @@ export class EditercongesComponent implements OnInit {
 
     // On vérifie que l'utilisateur a bien saisi les champs requis
     if ((this.user_event.type !== 'Type de congé') && (this.validated === false)) {
-      console.log(this.user_event.type);
       // Initialise l'heure de départ en congés
       if (this.start_period === 'Matin') {
-        this.new_event.start.setHours(8, 0, 0, 0);
+        this.user_event.linked_event.start.setHours(8, 0, 0, 0);
       } else {
-        this.new_event.start.setHours(13, 0, 0, 0);
+        this.user_event.linked_event.start.setHours(13, 0, 0, 0);
       }
 
       // Inititialise l'heure de retour de
       if (this.end_period === 'Matin') {
-        this.new_event.end.setHours(8, 0, 0, 0);
+        this.user_event.linked_event.end.setHours(8, 0, 0, 0);
       } else {
-        this.new_event.end.setHours(13, 0, 0, 0);
+        this.user_event.linked_event.end.setHours(13, 0, 0, 0);
       }
 
       const start: boolean = this.start_period === 'Matin' ? false : true;
       const end: boolean = this.end_period === 'Matin' ? false : true;
-      console.log(new Date().toISOString());
       const status = state ? 'En cours de validation 1' : 'Brouillon';
-      const newVR: VacationRequest = new VacationRequest(null,
+      const newVR: VacationRequest = new VacationRequest(this.vacR[0].did,
         end,
-        this.new_event.end.toISOString(),
+        this.user_event.linked_event.end.toISOString(),
         new Date().toISOString(),
         start,
-        this.new_event.start.toISOString(),
+        this.user_event.linked_event.start.toISOString(),
         status,
         new Date().toISOString(),
         this.connectedService.getConnectedUser().uid,
         this.user_event.type);
 
-      this.vacationRequestService.addVacationRequestServer(newVR).then(
+      this.vacationRequestService.updateVacationRequest(newVR).then(
         (response) => {
           this.loadData();
         },
@@ -165,9 +160,6 @@ export class EditercongesComponent implements OnInit {
           console.log(error);
         }
       );
-
-      // Mise à jour de la demande utilisateur (pas nécessaire, mais au cas où):
-      this.user_event.linked_event = this.new_event;
 
       // Rafraîchit le calendrier pour permettre l'affichage du congé demandé
       this.refresh.next();
@@ -181,41 +173,25 @@ export class EditercongesComponent implements OnInit {
   ngOnInit() {
     this.loadData();
 
+    this.vacationRequestService.getVacationRequestByDidFromServer(+this.route.snapshot.params['did']).then(
+      (response) => {
+       this.vacR[0] = response;
+
+        this.user_event = this.parsingService.parseData(this.vacR, false)[0];
+
+        this.user_event.type = this.user_event.type.name;
+        this.start_period = this.vacR[0].start ? 'Après-midi' : 'Matin';
+        this.end_period = this.vacR[0].end ? 'Après-midi' : 'Matin';
+        this.refresh.next();
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+
     // Initialisation des champs du component
-    this.start_period = 'Matin';
-    this.end_period = 'Matin';
+
     this.validated = false;
-
-    // let vacR: VacationRequest[] = [];
-    // vacR[0] = this.OwnVacationRequest;
-
-    // this.user_event = this.parsingService.parseData(vacR, false)[0];
-
-    // this.user_event = {
-    //   did: this.OwnVacationRequest.did,        // did de la demande
-    //   status: this.OwnVacationRequest.status,    // status de la demande
-    //   name: this.userService.getUserById(this.OwnVacationRequest.uid),         // Nom utilisateur
-    //   surname: this.user,      // Prénom utilisateur
-    //   service: this.OwnVacationRequest.service,      // Service de l'utilisateur
-    //   validated: this.OwnVacationRequest.validated, // Booléen indiquant si le congé est à valider ou déjà validé
-    //   type: this.OwnVacationRequest.type,         // Type de congé
-    //   date: new Date(), // Date de la demande
-    //   linked_event: this.new_event  // Evenement lié à la demande
-    // };
-    // // Initialisation du nouvel event
-    // this.new_event = {
-    //   start: startOfDay(new Date()),
-    //   end: addDays(new Date(), 1),
-    //   title: 'Type de congé',
-    //   color: colors.red,
-    //   actions: null,
-    //   allDay: true,
-    //   resizable: {
-    //     beforeStart: true,
-    //     afterEnd: true
-    //   },
-    //   draggable: true,
-    // };
   }
 
   loadData() {
