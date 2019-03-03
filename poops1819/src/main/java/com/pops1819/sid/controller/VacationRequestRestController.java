@@ -125,4 +125,5 @@ public class VacationRequestRestController {
 	public ResponseEntity<VacationRequest> getVacationRequestByDID(@PathVariable Long did) {
 		return new ResponseEntity<VacationRequest>(vacationRequestServiceImpl.getVacationRequestByDID(did), HttpStatus.OK);
 	}
+	
 }

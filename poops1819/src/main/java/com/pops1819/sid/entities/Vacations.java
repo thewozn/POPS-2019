@@ -81,7 +81,7 @@ public class Vacations
 	public void setMaxDays(Double maxDays) {
 		this.maxDays = maxDays;
 	}
-	
+
 	@JsonIgnore
 	public List<HolidayRequest> getHolidayRequest() {
 		return holidayRequest;

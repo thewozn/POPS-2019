@@ -19,4 +19,5 @@ public interface VacationRequestService
 	public List<VacationRequest> getVacationRequestAll();
 	public List<VacationRequest> getSelectedVacationRequestListBySID(Long sid);
 	public VacationRequest getVacationRequestByDID(Long did);
+
 }

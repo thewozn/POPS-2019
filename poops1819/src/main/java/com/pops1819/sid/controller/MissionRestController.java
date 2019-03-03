@@ -93,6 +93,12 @@ public class MissionRestController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
+	@RequestMapping(value = "/getMissionByOverSID/{sid}", method = RequestMethod.GET)
+	public ResponseEntity<List<MissionRequest>> getMissionByOverSID(@PathVariable Long sid) {
+		return new ResponseEntity<List<MissionRequest>>(missionServiceImpl.getMissionByOverSID(sid),HttpStatus.OK);
+	}
+
+	
 	
 
 }

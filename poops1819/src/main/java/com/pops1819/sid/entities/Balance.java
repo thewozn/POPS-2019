@@ -78,5 +78,13 @@ public class Balance {
 		this.user = user;
 	}
 
+	@Override
+	public String toString() {
+		return "Balance [bid=" + bid + ", remainingBalance=" + remainingBalance + ", vacations=" + vacations + ", user="
+				+ user + "]";
+	}
+	
+	
+
 
 }

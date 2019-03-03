@@ -7,9 +7,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.guava.GuavaCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import com.pops1819.sid.entities.Balance;
 import com.pops1819.sid.entities.User;
@@ -26,13 +29,21 @@ import com.pops1819.sid.repository.IVacationRepository;
 @SpringBootApplication
 @EntityScan("com.pops1819.sid.entities")
 @EnableJpaRepositories("com.pops1819.sid.repository")
-@ComponentScan(basePackages = {"com.pops1819.sid"}) 
+@ComponentScan(basePackages = {"com.pops1819.sid"})
+@EnableScheduling
 public class Poops1819Application {
 
 	public static void main(String[] args) {
 		SpringApplication.run(Poops1819Application.class, args);
 	}
 	
+//	@Bean
+//	public CacheManager cacheManager() {
+//		GuavaCacheManager cacheManager = new GuavaCacheManager("test");
+//		return cacheManager;
+//
+//	}
+//	
 	@Bean
 	CommandLineRunner start(IVacationRepository vacationRepository, IUserRepository userRepository, IServiceRepository serviceRepository, IBalanceRepository balanceRepository)
 	{

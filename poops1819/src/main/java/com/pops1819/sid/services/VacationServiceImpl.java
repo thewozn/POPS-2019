@@ -37,8 +37,7 @@ public class VacationServiceImpl implements VacationService {
 				.add(new Vacations(v.getVacations().getVid(), v.getVacations().getName(), v.getRemainingBalance())));
 		return vacationRepository.findAll();
 	}
-
-	//NEW
+	
 	@Override
 	public List<Vacations> getVacationListAll() {
 		return vacationRepository.findAll();

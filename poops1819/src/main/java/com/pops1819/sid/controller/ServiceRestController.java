@@ -50,6 +50,7 @@ public class ServiceRestController {
 	
 	@RequestMapping(value="/getServiceBySID/{sid}", method=RequestMethod.GET)
 	public ResponseEntity<ServiceRequest> getServiceBySID(@PathVariable Long sid) {
+		System.out.println("getServiceBySID");
 		ServiceRequest serviceRequest = serviceImpl.getServiceBySID(sid);
 		if(serviceRequest ==null)
 			throw new EntityNotFoundException("getServiceBySID/{sid} Issue - PLESE CHECK the sid");
@@ -65,7 +66,6 @@ public class ServiceRestController {
 		if(serviceRequest.getHeadOfService() != uid)
 			return new ResponseEntity<Void>(HttpStatus.NOT_MODIFIED);
 		return new ResponseEntity<Void>(HttpStatus.OK);
-		
 	}
 
 }

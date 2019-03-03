@@ -1,32 +1,14 @@
-package com.pops1819.sid.entities;
+package com.pops1819.sid.model;
 
 import java.sql.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-
-@Entity
-public class ExpenseReportLine
+public class ExpenseReportLineRequest
 {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "LNDFID", unique = true, nullable = false, precision = 10)
 	private Long lndfid;
-	
-	@ManyToOne
-	@JoinColumn(name = "NDFID")
-	private ExpenseReport expenseReport;
-	
-	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "MID")
-	private Mission mission;
+
+	private Long did;
+
+	private String missionTitle;
 	
 	private Date publishingDate;
 	private boolean advance;
@@ -36,17 +18,15 @@ public class ExpenseReportLine
 	private String state;
 	private String refusalReason;
 	
-	public ExpenseReportLine() {
+	public ExpenseReportLineRequest() {
 		super();
 	}
-
-	public ExpenseReportLine(Long lndfid, ExpenseReport expenseReport, Mission mission,
-			Date publishingDate, boolean advance, String typeLine, double amount, String textDetails, String state,
-			String refusalReason) {
+	public ExpenseReportLineRequest(Long lndfid, Long did, String missionTitle, Date publishingDate, boolean advance,
+			String typeLine, double amount, String textDetails, String state, String refusalReason) {
 		super();
 		this.lndfid = lndfid;
-		this.expenseReport = expenseReport;
-		this.mission = mission;
+		this.did = did;
+		this.missionTitle = missionTitle;
 		this.publishingDate = publishingDate;
 		this.advance = advance;
 		this.typeLine = typeLine;
@@ -55,86 +35,68 @@ public class ExpenseReportLine
 		this.state = state;
 		this.refusalReason = refusalReason;
 	}
-
 	public Long getLndfid() {
 		return lndfid;
 	}
-
 	public void setLndfid(Long lndfid) {
 		this.lndfid = lndfid;
 	}
-
-	public ExpenseReport getExpenseReport() {
-		return expenseReport;
+	public Long getDid() {
+		return did;
 	}
-
-	public void setExpenseReport(ExpenseReport expenseReport) {
-		this.expenseReport = expenseReport;
+	public void setDid(Long did) {
+		this.did = did;
 	}
-
-	public Mission getMission() {
-		return mission;
+	public String getMissionTitle() {
+		return missionTitle;
 	}
-
-	public void setMission(Mission mission) {
-		this.mission = mission;
+	public void setMissionTitle(String missionTitle) {
+		this.missionTitle = missionTitle;
 	}
-
 	public Date getPublishingDate() {
 		return publishingDate;
 	}
-
 	public void setPublishingDate(Date publishingDate) {
 		this.publishingDate = publishingDate;
 	}
-
 	public boolean isAdvance() {
 		return advance;
 	}
-
 	public void setAdvance(boolean advance) {
 		this.advance = advance;
 	}
-
 	public String getTypeLine() {
 		return typeLine;
 	}
-
 	public void setTypeLine(String typeLine) {
 		this.typeLine = typeLine;
 	}
-
 	public double getAmount() {
 		return amount;
 	}
-
 	public void setAmount(double amount) {
 		this.amount = amount;
 	}
-
 	public String getTextDetails() {
 		return textDetails;
 	}
-
 	public void setTextDetails(String textDetails) {
 		this.textDetails = textDetails;
 	}
-
 	public String getState() {
 		return state;
 	}
-
 	public void setState(String state) {
 		this.state = state;
 	}
-
 	public String getRefusalReason() {
 		return refusalReason;
 	}
-
 	public void setRefusalReason(String refusalReason) {
 		this.refusalReason = refusalReason;
 	}
+	
+	
 	
 	
 	

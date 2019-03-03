@@ -45,7 +45,7 @@ public class User implements Serializable
 	
 	@JsonIgnore
 	@OneToMany(mappedBy="user", fetch=FetchType.LAZY)
-	private List<ExpenseReportRequest> expenseReportRequests = new ArrayList<>();
+	private List<ExpenseReport> expenseReports = new ArrayList<>();
  
 	@JsonIgnore
 	@OneToMany(mappedBy="user", fetch=FetchType.LAZY)
@@ -88,7 +88,7 @@ public class User implements Serializable
     private boolean alive = true;
 
 	public User(Long uid, Service myService, List<Balance> balances, Service service, List<Mission> missions,
-			List<ExpenseReportRequest> expenseReportRequests, List<HolidayRequest> holidayRequests, String status,
+			List<ExpenseReport> expenseReports, List<HolidayRequest> holidayRequests, String status,
 			String lastName, String firstName, Date dateN, String email, String address, String cp, String city,
 			String country, String password, String picturePath, boolean alive) {
 		super();
@@ -97,7 +97,7 @@ public class User implements Serializable
 		this.balances = balances;
 		this.service = service;
 		this.missions = missions;
-		this.expenseReportRequests = expenseReportRequests;
+		this.expenseReports = expenseReports;
 		this.holidayRequests = holidayRequests;
 		this.status = status;
 		this.lastName = lastName;
@@ -134,7 +134,7 @@ public class User implements Serializable
 	
     
 	public User(Long uid, Service myService, List<Balance> balances, Service service, List<Mission> missions,
-			List<Mission> missionsRequest, List<ExpenseReportRequest> expenseReportRequests,
+			List<Mission> missionsRequest, List<ExpenseReport> expenseReports,
 			List<HolidayRequest> holidayRequests, String status, String lastName, String firstName, Date dateN,
 			String email, String address, String cp, String city, String country, String password, String picturePath,
 			boolean alive) {
@@ -145,7 +145,7 @@ public class User implements Serializable
 		this.service = service;
 		this.missions = missions;
 		this.missionsRequest = missionsRequest;
-		this.expenseReportRequests = expenseReportRequests;
+		this.expenseReports = expenseReports;
 		this.holidayRequests = holidayRequests;
 		this.status = status;
 		this.lastName = lastName;
@@ -311,13 +311,13 @@ public class User implements Serializable
 	}
 
 
-	public List<ExpenseReportRequest> getExpenseReportRequests() {
-		return expenseReportRequests;
+	public List<ExpenseReport> getExpenseReports() {
+		return expenseReports;
 	}
 
 
-	public void setExpenseReportRequests(List<ExpenseReportRequest> expenseReportRequests) {
-		this.expenseReportRequests = expenseReportRequests;
+	public void setExpenseReports(List<ExpenseReport> expenseReports) {
+		this.expenseReports = expenseReports;
 	}
 
 
@@ -351,14 +351,14 @@ public class User implements Serializable
 	}
 
 
+
+
 	@Override
 	public String toString() {
-		return "User [uid=" + uid + ", myService=" + myService + ", balances=" + balances + ", service="
-				+ service + ", missions=" + missions + ", expenseReportRequests=" + expenseReportRequests
-				+ ", holidayRequests=" + holidayRequests + ", status=" + status + ", lastName=" + lastName
-				+ ", firstName=" + firstName + ", dateN=" + dateN + ", email=" + email + ", address=" + address
-				+ ", cp=" + cp + ", city=" + city + ", country=" + country + ", password=" + password + ", picturePath="
-				+ picturePath + ", alive=" + alive + "]";
+		return "User [uid=" + uid + ", status=" + status + ", lastName=" + lastName + ", firstName=" + firstName
+				+ ", dateN=" + dateN + ", email=" + email + ", address=" + address + ", cp=" + cp + ", city=" + city
+				+ ", country=" + country + ", password=" + password + ", picturePath=" + picturePath + ", alive="
+				+ alive + "]";
 	}
 
 

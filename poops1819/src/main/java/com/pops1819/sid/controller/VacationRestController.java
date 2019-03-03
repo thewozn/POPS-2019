@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pops1819.sid.entities.Vacations;
-import com.pops1819.sid.exception.InvalidRequestException;
-import com.pops1819.sid.model.VacationRequest;
 import com.pops1819.sid.services.VacationServiceImpl;
 
 @RestController
@@ -27,17 +25,14 @@ public class VacationRestController {
 		return vacationServiceImpl.addVacation(name, maxDays);
 	}
 
-	@RequestMapping(value = "/getVacationListByUID/{uid}", method = RequestMethod.GET)
-	public List<Vacations> getVacationListByUID
-	(@PathVariable Long uid) {
+	@RequestMapping(value = "/getVacationList/{uid}", method = RequestMethod.GET)
+	public List<Vacations> getVacationList(@PathVariable Long uid) {
 		return vacationServiceImpl.getVacationListByUID(uid);
 	}
 	
-	//NEW
 	@RequestMapping(value = "/getVacationListAll", method = RequestMethod.GET)
 	public ResponseEntity<List<Vacations>> getVacationListAll() {
 		return new ResponseEntity<List<Vacations>>(vacationServiceImpl.getVacationListAll(), HttpStatus.OK);
 	}
-	
 
 }

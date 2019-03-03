@@ -471,14 +471,7 @@ public class VacationRequestServiceImpl implements VacationRequestService {
 		
 		return returnValue;
 	}
-	
-	@Override
-	public VacationRequest getVacationRequestByDID(Long did) {
-		if(!holidayRequestRepository.existsById(did)) {
-			return null;
-		}
-		return mapper.getVacationRequest(holidayRequestRepository.findByDid(did));
-	}
+
 	
 	private boolean isTheRequestValid(Date start, Date end, VacationRequest vacationRequest ,Double remainingBalance) {
 		//Ajouter demande de congés doit se faire 7 jours avant au minimum
@@ -525,6 +518,9 @@ public class VacationRequestServiceImpl implements VacationRequestService {
 		return true;
 	}
 	
+	
+	
+	
 
 	// a deplacer dans la classe holiday request
 	private double getNumberOfDaysTaken(HolidayRequest holidayRequest) {
@@ -543,6 +539,13 @@ public class VacationRequestServiceImpl implements VacationRequestService {
 		return mapper.getVacationRequestList(holidayRequestRepository.findAll());
 	}
 
+	@Override
+	public VacationRequest getVacationRequestByDID(Long did) {
+		if(!holidayRequestRepository.existsById(did)) {
+			return null;
+		}
+		return mapper.getVacationRequest(holidayRequestRepository.findByDid(did));
+	}
 
 
 	

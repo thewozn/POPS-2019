@@ -1,6 +1,9 @@
 package com.pops1819.sid.services;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -172,6 +175,21 @@ public class MissionServiceImpl implements IMissionService
 		userRepository.save(user);
 		missionRepository.save(mission);		
 		return true;
+	}
+
+	//TODO
+	@Override
+	public List<MissionRequest> getMissionByOverSID(Long sid) {
+		com.pops1819.sid.entities.Service service = serviceRepository.findBySid(sid);
+		if(service == null)
+			return null;
+		
+		HashSet<Mission> returnValue = new HashSet<>();
+
+		List<User> users = service.getUsers();
+		
+		users.forEach(u-> returnValue.addAll(u.getMissionsRequest()));
+		return mapper.getMissionRequestList(returnValue.stream().collect(Collectors.toList()));	
 	}
 	
 	

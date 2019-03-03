@@ -8,11 +8,15 @@ import org.mapstruct.Mappings;
 import org.springframework.stereotype.Component;
 
 import com.pops1819.sid.entities.Balance;
+import com.pops1819.sid.entities.ExpenseReport;
+import com.pops1819.sid.entities.ExpenseReportLine;
 import com.pops1819.sid.entities.HolidayRequest;
 import com.pops1819.sid.entities.Mission;
 import com.pops1819.sid.entities.Service;
 import com.pops1819.sid.entities.User;
 import com.pops1819.sid.model.BalanceRequest;
+import com.pops1819.sid.model.ExpenseReportLineRequest;
+import com.pops1819.sid.model.ExpenseReportRequest;
 import com.pops1819.sid.model.MissionRequest;
 import com.pops1819.sid.model.ServiceRequest;
 import com.pops1819.sid.model.UserRequest;
@@ -137,5 +141,23 @@ public interface ControllerMapper {
 	Balance getBalance(BalanceRequest balanceRequest);
 	List<Balance> getBalanceList(List<BalanceRequest> balanceRequestList);
 	
+	
+	@Mappings({ @Mapping(source = "expenseReport.did", target = "did"),
+		@Mapping(source = "expenseReport.user.uid", target = "uid")})
+	ExpenseReportRequest getExpenseReportRequest(ExpenseReport expenseReport);
+	List<ExpenseReportRequest> getExpenseReportRequestList(List<ExpenseReport> expenseReportList);
+	
+	ExpenseReport getExpenseReport(ExpenseReportRequest expenseReportRequest);
+	List<ExpenseReport> getExpenseReportList(List<ExpenseReportRequest> expenseReportRequestList);
+	
+	
+	@Mappings({ @Mapping(source = "expenseReportLine.lndfid", target = "lndfid"),
+		@Mapping(source = "expenseReportLine.expenseReport.did", target = "did"),
+		@Mapping(source = "expenseReportLine.mission.title", target = "missionTitle")})
+	ExpenseReportLineRequest getExpenseReportLineRequest(ExpenseReportLine expenseReportLine);
+	List<ExpenseReportLineRequest> getExpenseReportLineRequestList(List<ExpenseReportLine> expenseReportLineList);
 
+	ExpenseReportLine getExpenseReportLine(ExpenseReportLineRequest expenseReportLineRequest);
+	List<ExpenseReportLine> getExpenseReportLineList(List<ExpenseReportLineRequest> expenseReportLineRequestList);
 }
+
