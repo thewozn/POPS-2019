@@ -57,6 +57,8 @@ export class ValidationComponent implements OnInit {
   ];
   dataSource = new MatTableDataSource();
 
+  private selectedType = '-1';
+  private selectedService = '-1';
   @ViewChild('modalContent')
   modalContent: TemplateRef<any>;
 
@@ -103,11 +105,7 @@ export class ValidationComponent implements OnInit {
     }
   }
 
-  eventTimesChanged({
-    event,
-    newStart,
-    newEnd
-  }: CalendarEventTimesChangedEvent): void {
+  eventTimesChanged({event, newStart, newEnd}: CalendarEventTimesChangedEvent): void {
     event.start = newStart;
     event.end = newEnd;
     this.handleEvent('Dropped or resized', event);
@@ -124,46 +122,21 @@ export class ValidationComponent implements OnInit {
     this.modal.open(this.modalRefuse, { size: 'lg' });
   }
 
-  newFilteredEvents(
-    filter1: any,
-    filter2: any,
-    filter3: any,
-    filter4: any
-  ): void {
+  newFilteredEvents(filter1: any, filter2: any, filter3: any): void {
     const eventsList = [];
+    const states = {'1': 'En cours de validation 1', '2': 'En cours de validation 2', '3': 'Validée', '4': 'Refusée'};
 
     for (const event of this.users_events) {
-      if (
-        filter1 === '-1' ||
-        String(event.linked_event.start.getFullYear()) === filter1
-      ) {
-        if (
-          filter2 === '-1' ||
-          String(event.linked_event.start.getMonth()) === filter2
-        ) {
-          if (filter3 === '') {
-            if (filter4 === '') {
-              eventsList.push(event);
-            }
-          }
-
-          if (event.service === filter3) {
-            if (filter4 !== '') {
-              if (event.type === filter4) {
+      if (filter1 === '-1' || String(event.linked_event.start.getFullYear()) === filter1) {
+        if (filter2 === '-1' || String(event.linked_event.start.getMonth()) === filter2) {
+          if (this.selectedService === '-1' || String(event.service.sid) === String(this.selectedService)) {
+            if (this.selectedType === '-1' || String(event.type.vid) === String(this.selectedType)) {
+              if (filter3 === '-1') {
                 eventsList.push(event);
               }
-            } else {
-              eventsList.push(event);
-            }
-          }
-
-          if (event.type === filter4) {
-            if (filter3 !== '') {
-              if (event.service === filter3) {
+              if (event.status.indexOf(states[filter3]) > -1) {
                 eventsList.push(event);
               }
-            } else {
-              eventsList.push(event);
             }
           }
         }

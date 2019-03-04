@@ -187,7 +187,7 @@ draggable: false
         this.user_event.type = this.user_event.type.name;
         this.start_period = this.vacR[0].start ? 'Après-midi' : 'Matin';
         this.end_period = this.vacR[0].end ? 'Après-midi' : 'Matin';
-        // this.refresh.next();
+        this.refresh.next();
       },
       (error) => {
         console.log(error);
@@ -214,10 +214,7 @@ draggable: false
         this.vacationRequest = vrs;
         this.events = [];
 
-        for (const item of this.parsingService.parseData(
-          this.vacationRequest,
-          true
-        )) {
+        for (const item of this.parsingService.parseData(this.vacationRequest, true)) {
           this.events.push(item.linked_event);
         }
 
@@ -246,7 +243,6 @@ draggable: false
                 taken: t
               });
             }
-
 
             this.dataSource = new MatTableDataSource(arrayData);
             this.refresh.next();

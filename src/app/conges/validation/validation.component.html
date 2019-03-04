@@ -71,18 +71,27 @@
       <option value="11">Décembre</option>
     </select>
 
-
-    <div *ngIf="this.connectedService.getConnectedUserService().name==='HumanResource'">
-      <select #selectedService class="form-control" [(ngModel)]="sid" name="sid" id='selector_state' class="soflow"
-        style="display: inline-block;">
-        <option *ngFor="let el of service" [value]="el.sid">{{el.name}}</option>
-      </select>
-    </div>
-    <select #selectedType class="form-control" [(ngModel)]="vid" name="vid" id='selector_type' class="soflow" style="display: inline-block;">
-      <option *ngFor="let el of vacations" [value]="el.sid">{{el.name}}</option>
+    <select #selectedState id='selector_state' class="soflow" style="display: inline-block;">
+      <option value="-1" selected>Etat</option>
+      <option value="1">En cours de validation 1</option>
+      <option value="2">En cours de validation 2</option>
+      <option value="3">Validée</option>
+      <option value="4">Refusée</option>
     </select>
 
-    <button class="validate-button" (click)="newFilteredEvents(selectedYear.value, selectedMonth.value, selectedService.value, selecteType.value)">Trier</button>
+    <div *ngIf="this.connectedService.getConnectedUserService().name==='HumanResource'">
+      <select class="form-control" [(ngModel)]="selectedService" name="sid" id='selector_state' class="soflow" style="display: inline-block;">
+        <option value="-1" selected>Service</option>
+        <option *ngFor="let el of service" [value]="el.sid">{{ el.name }}</option>
+      </select>
+    </div>
+
+    <select class="form-control" [(ngModel)]="selectedType" name="vid" id='selector_type' class="soflow" style="display: inline-block;">
+      <option value="-1" selected>Type</option>
+      <option *ngFor="let el of vacations" [value]="el.vid">{{ el.name }}</option>
+    </select>
+
+    <button class="validate-button" (click)="newFilteredEvents(selectedYear.value, selectedMonth.value, selectedState.value)">Trier</button>
 
   </div>
   <div class="example-container mat-elevation-z8" style="height:200px;">
@@ -91,51 +100,51 @@
       <!-- Position Column -->
       <ng-container matColumnDef="NOM">
         <th mat-header-cell *matHeaderCellDef> NOM </th>
-<td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': colors[(element |
+        <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': colors[(element |
           tabcomponent)[6]]}">
-  {{(element | tabcomponent)[7]}} </td>
+          {{(element | tabcomponent)[7]}} </td>
       </ng-container>
 
       <ng-container matColumnDef="SERVICE">
         <th mat-header-cell *matHeaderCellDef> SERVICE </th>
-<td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': colors[(element |
+        <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': colors[(element |
           tabcomponent)[6]]}">
-  {{(element | tabcomponent)[8]}}</td>
+          {{(element | tabcomponent)[8]}}</td>
       </ng-container>
 
       <ng-container matColumnDef="TYPE">
         <th mat-header-cell *matHeaderCellDef> TYPE </th>
-<td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': colors[(element |
+        <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': colors[(element |
           tabcomponent)[6]]}">
-  {{(element | tabcomponent)[9]}}</td>
+          {{(element | tabcomponent)[9]}}</td>
       </ng-container>
 
       <ng-container matColumnDef="DEPART">
         <th mat-header-cell *matHeaderCellDef> DU </th>
-<td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': colors[(element |
+        <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': colors[(element |
           tabcomponent)[6]]}">
-  {{(element | tabcomponent)[2]}}</td>
+          {{(element | tabcomponent)[2]}}</td>
       </ng-container>
 
       <ng-container matColumnDef="DMA">
         <th mat-header-cell *matHeaderCellDef>M/A</th>
-<td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': colors[(element |
+        <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': colors[(element |
           tabcomponent)[6]]}">
-  {{(element | tabcomponent)[3]}}</td>
+          {{(element | tabcomponent)[3]}}</td>
       </ng-container>
 
       <ng-container matColumnDef="RETOUR">
         <th mat-header-cell *matHeaderCellDef> AU </th>
-<td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': colors[(element |
+        <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': colors[(element |
           tabcomponent)[6]]}">
-  {{(element | tabcomponent)[4]}}</td>
+          {{(element | tabcomponent)[4]}}</td>
       </ng-container>
 
       <ng-container matColumnDef="RMA">
         <th mat-header-cell *matHeaderCellDef>M/A</th>
-<td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': colors[(element |
+        <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': colors[(element |
           tabcomponent)[6]]}">
-  {{(element | tabcomponent)[5]}}</td>
+          {{(element | tabcomponent)[5]}}</td>
       </ng-container>
 
       <ng-container matColumnDef="VALIDER">

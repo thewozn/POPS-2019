@@ -11,11 +11,13 @@ import { Mission } from './../../models/mission.model';
 import { User } from './../../models/user.model';
 import { Service } from './../../models/service.model';
 
+// NEW
 import { MatTableDataSource, MatInputModule } from '@angular/material';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { Observable } from 'rxjs';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { map, startWith } from 'rxjs/operators';
+//
 
 
 @Component({
@@ -89,6 +91,7 @@ export class SuiviComponent implements OnInit {
           this.mission = values[0];
           this.user = values[1];
           this.displayedMission = values[0];
+
           for (const u of this.user) {
             this.collaborateurListService.push(u.lastName);
           }
@@ -107,18 +110,15 @@ export class SuiviComponent implements OnInit {
       );
     }
   }
-
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
     return this.options.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
 
   }
 
-  newFilteredEvents(
-  ): void {
+  newFilteredEvents(): void {
     const eventsList = [];
 
-    if (this.nameInput !== '' || this.statutInput !== '' || this.dateInput !== '' || this.collaborateurInput !== '') {
       this.displayedMission = [];
       for (const m of this.mission) {
         const checkdate = m.startDate.substr(0, 4) + '-' + m.startDate.substr(5, 2) + '-' + m.startDate.substr(8, 2);
@@ -126,13 +126,15 @@ export class SuiviComponent implements OnInit {
         && (this.dateInput === '' || checkdate === this.dateInput )) {
           for (const u of m.users) {
             if ((this.collaborateurInput === '' || this.collaborateurInput === u.lastName)) {
-                 if (!(this.displayedMission.some((item) => (item.mid === m.mid)))) {
+                 if (!(this.displayedMission.some( (item) => (item.mid === m.mid)))) {
                    this.displayedMission.push(m);
                  }
             }
           }
         }
       }
-    }
+
+
+
   }
 }

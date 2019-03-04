@@ -32,8 +32,8 @@ export class CreerComponent implements OnInit {
   dataSource: MatTableDataSource<User>;
   dataSource_selected: MatTableDataSource<User>;
 
-  collaborateurInput: string = "";
-  
+  collaborateurInput = '';
+
   user: User[];
   // private userDisplayed : User[];
   service: Service[] = [];
@@ -92,27 +92,31 @@ export class CreerComponent implements OnInit {
 
 
   validate(title: string, missionStart: string, missionEnd: string, description: string): void {
+    if (title.length < 32 && missionStart !== '') {
 
- 
+      status = 'Validée';
+      for (const dS of this.dataSource_selected.data) {
+        if (dS.sid !== this.connectedService.getConnectedUser().sid) {
+          status = 'En cours';
+        }
+      }
 
-    if (title.length > 5 && title.length < 32 && missionStart !== "" && missionEnd !== "") {
-      // console.log(missionStart);
         const newMission: Mission = new Mission(null,
-          description, //description 
-          missionStart, //start
-          missionEnd, //end
-          "En cours", //status
-          title, //title
-          this.connectedService.getConnectedUser().sid,  //sid
-          null,  //users
-          null, //usersSub
+          description, // description
+          missionEnd, // end
+          missionStart, // start
+          status, // status
+          title, // title
+          this.connectedService.getConnectedUser().sid,  // sid
+          null,  // users
+          null, // usersSub
           );
 
           this.missionService.addMissionFromServer(newMission).then(
             (response) => {
 
               console.log(newMission.mid);
-              for(const dS of this.dataSource_selected.data){
+              for (const dS of this.dataSource_selected.data) {
                 this.missionService.affectUserToMissionFromServer(response.mid, dS.uid);
               }
               this.loadData();
@@ -121,15 +125,15 @@ export class CreerComponent implements OnInit {
             (error) => {
               console.log(error);
             }
-          )
-    
+          );
+
     }
-    
+
   }
 
-  endCreate(){
+  endCreate() {
     this.modal.dismissAll();
-    this.router.navigate(['mission/suivi'])
+    this.router.navigate(['mission/suivi']);
   }
 
   ngOnInit() {
@@ -166,17 +170,17 @@ export class CreerComponent implements OnInit {
     ): void {
       const eventsList = [];
 
-      if(this.collaborateurInput !== ""){
+      if (this.collaborateurInput !== '') {
         this.dataSource = new MatTableDataSource<User>();
-        for (const u of this.user){
-          if((this.collaborateurInput ==="") || (this.collaborateurInput ===u.lastName + ' ' + u.firstName + ' | ' + 
-          this.serviceService.getServiceById(this.service, u.sid).name)){
+        for (const u of this.user) {
+          if ((this.collaborateurInput === '') || (this.collaborateurInput === u.lastName + ' ' + u.firstName + ' | ' +
+          this.serviceService.getServiceById(this.service, u.sid).name)) {
           this.dataSource.data.push(u);
           }
         }
       }
-      
-      
+
+
   }
 
   private _filter(value: string): string[] {

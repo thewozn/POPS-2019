@@ -54,7 +54,6 @@ export class HistoriqueComponent implements OnInit {
   constructor(private modal: NgbModal, private connectedService: ConnectedService,
     private vacationRequestService: VacationRequestService,
     private parsingService: ParsingService, private router: Router) {
-
   }
 
 
@@ -68,7 +67,6 @@ export class HistoriqueComponent implements OnInit {
         this.vacationRequest = response;
         this.users_events = [];
 
-        console.log(this.vacationRequest);
         this.genData();
 
         this.refresh.next();
@@ -136,7 +134,8 @@ export class HistoriqueComponent implements OnInit {
 
   newFilteredEvents(filter1: any, filter2: any, filter3: any): void {
     const eventsList = [];
-    const states = {'0': 'Brouillon', '1': 'En cours de validation 1', '2': 'En cours de validation 2', '3': 'Validée', '4': 'Refusée'};
+    const states = {'0': 'Brouillon', '1': 'En cours de validation 1',
+    '2': 'En cours de validation 2', '3': 'Validée', '4': 'Refusée', '5': 'Annulée'};
 
     for (const event of this.users_events) {
       if (filter1 === '-1' || String(event.linked_event.start.getFullYear()) === filter1) {
@@ -153,19 +152,11 @@ export class HistoriqueComponent implements OnInit {
     this.dataSource = new MatTableDataSource(eventsList);
   }
 
-
-  popEvent(event: CalendarEvent): void {
-    /**
-     * Supprime l'évènement event
-     * TODO: MET A JOUR LA BDD
-     */
-    return;
-  }
-
   cancelRequest(did: number) {
     this.vacationRequestService.cancelVacationRequestServer(did).then(
         (response) => {
         this.loadData();
+        this.refresh.next();
         this.modal.dismissAll();
         },
         (error) => {
@@ -178,6 +169,7 @@ export class HistoriqueComponent implements OnInit {
     this.vacationRequestService.removeVacationRequestServer(did).then(
       (response) => {
         this.loadData();
+        this.refresh.next();
         this.modal.dismissAll();
       },
       (error) => {
