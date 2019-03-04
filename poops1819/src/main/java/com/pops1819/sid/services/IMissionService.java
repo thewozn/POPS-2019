@@ -7,7 +7,7 @@ import com.pops1819.sid.model.MissionRequest;
 
 public interface IMissionService
 {
-	public boolean createMission(MissionRequest missionRequest);
+	public MissionRequest createMission(MissionRequest missionRequest);
 	public MissionRequest updateMission(MissionRequest missionRequest);
 	public List<MissionRequest> getMissionBySID(Long sid);
 	public List<MissionRequest> getMissionByOverSID(Long sid);

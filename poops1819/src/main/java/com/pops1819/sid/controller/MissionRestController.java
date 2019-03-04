@@ -25,11 +25,12 @@ public class MissionRestController {
 	private MissionServiceImpl missionServiceImpl;
 
 	@RequestMapping(value = "/createMission", method = RequestMethod.POST)
-	public ResponseEntity<Void> createMission(@RequestBody MissionRequest missionRequest) {
+	public ResponseEntity<MissionRequest> createMission(@RequestBody MissionRequest missionRequest) {
 		System.out.println(missionRequest.toString());
-		if (!missionServiceImpl.createMission(missionRequest))
+		MissionRequest newM = missionServiceImpl.createMission(missionRequest);
+		if (newM == null)
 			throw new EntityNotCreatedException("");
-		return new ResponseEntity<>(HttpStatus.OK);
+		return new ResponseEntity<>(newM, HttpStatus.OK);
 	}
 
 	

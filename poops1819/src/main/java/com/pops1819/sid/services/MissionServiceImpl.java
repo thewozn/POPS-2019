@@ -33,15 +33,15 @@ public class MissionServiceImpl implements IMissionService
 	private ControllerMapper mapper;
 
 	@Override
-	public boolean createMission(MissionRequest missionRequest) {
+	public MissionRequest createMission(MissionRequest missionRequest) {
 		Mission newMission = mapper.getMission(missionRequest);
 		com.pops1819.sid.entities.Service service = serviceRepository.findBySid(missionRequest.getSid());
 		
 		if(service == null  || newMission == null)
-			return false;
+			return null;
 		newMission.setService(service);
-		missionRepository.save(newMission);
-		return true;
+		return mapper.getMissionRequest(missionRepository.save(newMission));
+		
 	}
 
 	@Override
