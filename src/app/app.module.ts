@@ -21,6 +21,8 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { MatSelectModule} from '@angular/material/select';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatInputModule} from '@angular/material';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { FileDropModule } from 'ngx-file-drop';
 
 import { GlobalService } from './services/global.service';
 
@@ -35,6 +37,10 @@ import { ServiceService } from './services/service.service';
 import { VacationsService } from './services/vacations.service';
 
 import { NavigationComponent } from './navigation/navigation.component';
+import { SuiviReportComponent } from './notesfrais/suivi-report/suivi-report.component';
+import { ValiderReportComponent } from './notesfrais/valider-report/valider-report.component';
+import { MynoteComponent } from './notesfrais/mynote/mynote.component';
+import { SnackbarNoteComponentComponent } from './notesfrais/snackbar-note-component/snackbar-note-component.component';
 
 import { ConnexionComponent } from './connexion/connexion.component';
 
@@ -43,6 +49,7 @@ import { DemanderComponent } from './conges/demander/demander.component';
 import { ValidationComponent } from './conges/validation/validation.component';
 import { HistoriqueComponent } from './conges/historique/historique.component';
 import { TabcomponentPipe } from './conges/tabcomponent.pipe';
+import { EditercongesComponent } from './conges/editerconges/editerconges.component';
 
 import { NotesfraisComponent } from './notesfrais/notesfrais.component';
 
@@ -57,7 +64,11 @@ import { GestionServicesComponent } from './administration/gestion-services/gest
 import { ProfilComponent } from './profil/profil.component';
 
 import { NotfoundComponent } from './notfound/notfound.component';
-import { EditercongesComponent } from './conges/editerconges/editerconges.component';
+
+import { AnnuaireComponent } from './annuaire/annuaire.component';
+import { AnnEmploeComponent } from './annuaire/ann-emploe/ann-emploe.component';
+
+
 
 registerLocaleData(localeFr);
 
@@ -82,6 +93,12 @@ registerLocaleData(localeFr);
     ProfilComponent,
     NavigationComponent,
     EditercongesComponent,
+    AnnuaireComponent,
+    AnnEmploeComponent,
+    MynoteComponent,
+    SnackbarNoteComponentComponent,
+    SuiviReportComponent,
+    ValiderReportComponent,
   ],
   imports: [
     FormsModule,
@@ -106,7 +123,12 @@ registerLocaleData(localeFr);
       useFactory: adapterFactory
     }),
     NgbModalModule,
-    FlatpickrModule.forRoot()
+    FlatpickrModule.forRoot(),
+    FileDropModule,
+    MatSnackBarModule,
+  ],
+  entryComponents: [
+    SnackbarNoteComponentComponent
   ],
   providers: [
     ConnectedService,
@@ -124,6 +146,6 @@ registerLocaleData(localeFr);
     GlobalService,
   ],
   bootstrap: [AppComponent],
-  exports: [DemanderComponent]
+  exports: [DemanderComponent, SnackbarNoteComponentComponent]
 })
 export class AppModule {}

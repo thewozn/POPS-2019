@@ -6,6 +6,7 @@ import { CalendarEvent, CalendarEventTimesChangedEvent, CalendarView } from 'ang
 import * as $ from 'jquery';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
+import { MatTableDataSource } from '@angular/material';
 
 import { ConnectedService } from '../../services/connected.service';
 import { VacationRequestService } from '../../services/vacation-request.service';
@@ -42,7 +43,7 @@ export class EditercongesComponent implements OnInit {
   validated: boolean;
 
   displayedColumns = ['type', 'solde', 'poses'];
-  private dataSource = [];
+  private dataSource: MatTableDataSource<any>;
 
   view: CalendarView = CalendarView.Month;
 
@@ -186,7 +187,7 @@ draggable: false
         this.user_event.type = this.user_event.type.name;
         this.start_period = this.vacR[0].start ? 'Après-midi' : 'Matin';
         this.end_period = this.vacR[0].end ? 'Après-midi' : 'Matin';
-        this.refresh.next();
+        // this.refresh.next();
       },
       (error) => {
         console.log(error);
@@ -224,8 +225,9 @@ draggable: false
 
         this.balanceService.getBalanceByUidFromServer().then(
           (balances) => {
-
             this.balance = balances;
+
+            const arrayData = [];
             for (const b of this.balance) {
               let t = 0;
               for (const vr of this.vacationRequest) {
@@ -239,11 +241,15 @@ draggable: false
                 }
               }
 
-              this.dataSource.push({
+              arrayData.push({
                 obj: b,
                 taken: t
               });
             }
+
+
+            this.dataSource = new MatTableDataSource(arrayData);
+            this.refresh.next();
           },
           (error) => {
             console.log('Erreur ! : ' + error);

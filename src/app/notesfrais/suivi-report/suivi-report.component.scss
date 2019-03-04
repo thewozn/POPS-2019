@@ -1,0 +1,331 @@
+/*###Tablet(medium)###*/
+@media screen and (min-width: 1024px){
+  .top_div{
+    border: 1px solid lightgray;
+    width: 96%;
+    margin: 20px 2% 20px;
+    background: whitesmoke;
+  }
+
+  .top_div:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+input[type=text] {
+  width: 96%;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  margin: 10px 10px 0px;
+  background-color: white;
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  padding: 5px 20px 5px 40px;
+  -webkit-transition: width 0.4s ease-in-out;
+  transition: width 0.4s ease-in-out;
+}
+
+
+.style-textarea {
+  width: 100%;
+  height: 135px;
+  border: 2px solid #ccc;
+  padding: 5px;
+  border-radius: 4px;
+  font-size: 16px;
+  margin: 10px 10px 10px;
+  background-color: white;
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  padding: 12px 20px 12px 40px;
+  -webkit-transition: width 0.4s ease-in-out;
+  transition: width 0.4s ease-in-out;
+  resize: none;
+}
+
+.labels_div {
+  margin: 0 10px 10px;
+  font-size: 20px;
+  text-align: left;
+}
+
+
+.column {
+  float: left;
+  width: 33%;
+  padding: 10px 10px 10px;
+}
+
+.example-container {
+  position: sticky;
+  height: 350px;
+  margin: 10px 10px 10px;
+  overflow: auto;
+  width: 96%;
+}
+
+table {
+  width: 100%;
+}
+
+.delete-button {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../specific-assets/delete.png");
+  background-size: contain;
+  outline: none;
+}
+
+.delete-button:hover {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../specific-assets/delete_hover.png");
+  background-size: contain;
+  outline: none;
+}
+
+.delete-button:active {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../specific-assets/delete_action.png");
+  background-size: contain;
+  outline: none;
+}
+
+.gallery-button {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../specific-assets/gallery.png");
+  background-size: contain;
+  outline: none;
+}
+
+.gallery-button:hover {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../specific-assets/gallery_hover.png");
+  background-size: contain;
+  outline: none;
+}
+
+.gallery-button:active {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../specific-assets/gallery_action.png");
+  background-size: contain;
+  outline: none;
+}
+
+.edit-button {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../specific-assets/edit.png");
+  background-size: contain;
+  outline: none;
+}
+
+.edit-button:hover {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../specific-assets/edit_hover.png");
+  background-size: contain;
+  outline: none;
+}
+
+.edit-button:active {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../specific-assets/edit_action.png");
+  background-size: contain;
+  outline: none;
+}
+
+.add-button {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../specific-assets/push.png");
+  background-size: contain;
+  outline: none;
+}
+
+.add-button:hover {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../specific-assets/push_hover.png");
+  background-size: contain;
+  outline: none;
+}
+
+.add-button:active {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../specific-assets/push_action.png");
+  background-size: contain;
+  outline: none;
+}
+
+.validate-button {
+  border-radius: 3px;
+  background-color: #008CBA;
+  color: white;
+  border: 2px solid #008CBA;
+  width: 96%;
+  padding: 10px 10px 10px;
+  cursor: pointer;
+}
+
+.validate-button:hover {
+  border-radius: 3px;
+  background-color: white;
+  color: black;
+}
+
+.abort-button {
+  border-radius: 3px;
+  background-color: #b72a2a;
+  color: white;
+  border: 2px solid #b72a2a;
+  width: 96%;
+  padding: 10px 10px 10px;
+  cursor: pointer;
+}
+
+.abort-button:hover {
+  border-radius: 3px;
+  background-color: white;
+  color: black;
+}
+
+.soflow, .soflow-color {
+  -webkit-appearance: button;
+  -webkit-border-radius: 2px;
+  -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+  -webkit-padding-end: 20px;
+  -webkit-padding-start: 2px;
+  -webkit-user-select: none;
+  background-image: url(http://i62.tinypic.com/15xvbd5.png), -webkit-linear-gradient(#FAFAFA, #F4F4F4 40%, #E5E5E5);
+  background-position: 97% center;
+  background-repeat: no-repeat;
+  border: 1px solid #AAA;
+  color: #555;
+  font-size: inherit;
+  margin: 10px 10px 0;
+  overflow: hidden;
+  padding: 5px 20px 5px 40px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 300px;
+  float: left;
+}
+
+.container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.container input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.highlight {
+  background:#F84072;
+  border: 2px red solid;
+}

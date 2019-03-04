@@ -21,7 +21,7 @@
   <div id="infos_missions" class="column">
     <div class="labels_div">Type</div>
     <div style="margin-top: 10px; padding: 0 0 20px;">
-      <select id='type_selector' class="soflow" [(ngModel)]="user_event.type" required>
+      <select id='type_selector' class="soflow" [(ngModel)]="user_event.type" (ngModelChange)="refresh.next()" required>
         <option *ngFor="let el of vacations" [value]="el.vid">{{ el.name }}</option>
       </select>
     </div>
@@ -29,16 +29,16 @@
     <div class="labels_div" style="margin-top: 20px; padding: 30px 0 0px;">Jours restants</div>
 
     <div class="example-container">
-      <table mat-table [dataSource]="dataSource">
+      <table mat-table [dataSource]="dataSource" (ngModelChange)="refresh.next()">
 
         <ng-container matColumnDef="type">
           <th mat-header-cell *matHeaderCellDef> Type </th>
-          <td mat-cell *matCellDef="let element"><b>{{ element.name }}</b></td>
+          <td mat-cell *matCellDef="let element"><b>{{ element.obj.name }}</b></td>
         </ng-container>
 
         <ng-container matColumnDef="solde">
           <th mat-header-cell *matHeaderCellDef> Solde</th>
-          <td mat-cell *matCellDef="let element"><b>{{ element.remainingBalance }}</b></td>
+          <td mat-cell *matCellDef="let element"><b>{{ element.obj.remainingBalance }}</b></td>
         </ng-container>
 
         <ng-container matColumnDef="poses">

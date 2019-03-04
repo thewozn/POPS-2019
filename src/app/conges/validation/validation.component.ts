@@ -33,10 +33,10 @@ import { Vacations } from '../../models/vacations.model';
 })
 export class ValidationComponent implements OnInit {
   colors = {
-    'Validée': 'green',
-    'Refusée': 'red',
-    'En cours de validation 1': 'orange',
-    'En cours de validation 2': 'yellow',
+    'Validée': '#B8FFA6',
+    'Refusée': '#FFBBBB',
+    'En cours de validation 1': '#FFDEBF',
+    'En cours de validation 2': '#F6FCAB',
   };
 
   private vacationRequest: VacationRequest[];

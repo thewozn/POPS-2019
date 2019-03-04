@@ -1,0 +1,87 @@
+<ng-template #modalContent let-close="close">
+  <div class="modal-header">
+    <h5 class="modal-title">Fiche de l'employé</h5>
+    <button type="button" class="close" (click)="close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div>
+      Ici on doit afficher la fiche profil de l'employé:
+      <pre>{{ modalData?.element | json }}</pre>
+    </div>
+  </div>
+</ng-template>
+
+
+<div style="padding: 10px 0px 20px; ">
+  <h3 style="margin-left: 20px; display: block;">RECHERCHER UN COLLABORATEUR</h3>
+</div>
+
+<div id="top_box_missions" class="top_div" style="">
+  <p style="float: left; padding: 10px 10px 0px;">
+    Retrouvez les informations concernant un ou des collaborateurs en quelques clics à l'aide de l'outil ci-dessous.
+    Pour ce faire, saisissez vos critères de recherche et validez-les en cliquant sur le bouton <b>rechercher</b>.
+    <br><br>
+    Cliquez ensuite sur l'icône <b>liste</b> pour consulter la fiche publique du collaborateur.
+  </p>
+  <div style="margin-top: 10px;">
+    <input #selectedCollaborator type="text" style="float: left; width: 23%; display: inline-block;" id="r_name" name="r_name" placeholder="Maria DUPONTEZ">
+
+    <select #selectedService id='selector_month' class="soflow" style="display: inline-block;">
+      <option value="" selected>Service</option>
+      <option *ngFor="let option of services" [value]="option">{{option}}</option>
+    </select>
+
+    <select #selectedFunction id='selector_state' class="soflow" style="display: inline-block;">
+      <option value="" selected>Fonction</option>
+      <option *ngFor="let option of functions" [value]="option">{{option}}</option>
+    </select>
+
+    <button class="validate-button" style=""
+            (click)="findEmployee(selectedCollaborator.value, selectedService.value, selectedFunction.value)">Rechercher</button>
+
+
+  </div>
+  <div class="example-container mat-elevation-z8" style="height:600px;">
+    <table mat-table [dataSource]="dataSource">
+
+      <!-- Position Column -->
+      <ng-container matColumnDef="NOM">
+        <th mat-header-cell *matHeaderCellDef> NOM </th>
+        <td mat-cell *matCellDef="let element"> {{element.NOM}} </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="PRENOM">
+        <th mat-header-cell *matHeaderCellDef> PRENOM </th>
+        <td mat-cell *matCellDef="let element"> {{element.PRENOM}} </td>
+      </ng-container>
+
+      <!-- Weight Column -->
+      <ng-container matColumnDef="SERVICE">
+        <th mat-header-cell *matHeaderCellDef> SERVICE </th>
+        <td mat-cell *matCellDef="let element"> {{element.SERVICE}} </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="FONCTION">
+        <th mat-header-cell *matHeaderCellDef> FONCTION </th>
+        <td mat-cell *matCellDef="let element"> {{element.FONCTION}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="ACTION">
+        <th mat-header-cell *matHeaderCellDef> CONSULTER </th>
+        <td mat-cell *matCellDef="let element">
+          <button class="consult-button"
+                  (click)="handleEvent(element)">
+          </button>
+
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+</div>

@@ -25,7 +25,13 @@ export class ConnexionComponent implements OnInit {
     this.connectedService
       .signIn(form.value['user_email'], form.value['user_pwd'])
       .then((resolve) => {
-        this.router.navigate(['conges/historique']);
+        if (!this.connectedService.getConnectedUser().alive) {
+          this._error.next('Compte inactif');
+          this.connectedService.signOut();
+        } else {
+          this.router.navigate(['annuaire/employe']);
+        }
+
       },
       (reject) => {
         this._error.next('Email ou Mot de passe incorrect');

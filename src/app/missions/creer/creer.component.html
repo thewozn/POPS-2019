@@ -1,8 +1,28 @@
+<!-- FENETRE MODALE -->
+<ng-template #modalContent let-close="close">
+  <div class="modal-header">
+    <h5 class="modal-title">Création</h5>
+    <button type="button" class="close" (click)="endCreate()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <h5 class="modal-title">Mission créée</h5>
+  </div>
+<div class="modal-footer" >
+    <button type="button" class="btn btn-success" (click)="endCreate()">OK</button>
+  </div>
+</ng-template>
+
+
+
+
 <div id="top_box_missions" class="top_div">
   <div id="infos_missions" class = "column">
     <div class="labels_div">Informations</div>
 
     <input #missionTitle type="text" id="m_name" name="m_name" placeholder="Intitulé de la mission (Requis)">
+
 
     <div class="labels_div">Dates</div>
     <input
@@ -22,6 +42,7 @@
       dateFormat="Y-m-d"
       altFormat="F j, Y"
       placeholder="Date de fin (Laisser vide pour indéfini)">
+
 
   </div>
 
@@ -54,13 +75,13 @@
         <!-- Weight Column -->
         <ng-container matColumnDef="SERVICE">
           <th mat-header-cell *matHeaderCellDef> SERVICE </th>
-          <td mat-cell *matCellDef="let element"> {{this.serviceService.getServiceById(element.sid).name}}</td>
+          <td mat-cell *matCellDef="let element"> {{this.serviceService.getServiceById(this.service, element.sid).name}}</td>
         </ng-container>
 
         <ng-container matColumnDef="ACTION">
           <th mat-header-cell *matHeaderCellDef> ACTION </th>
           <td mat-cell *matCellDef="let element">
-            <button class="delete-button"
+            <button class="refuse-button"
                     (click)="popEmployee(element)">
               <!--<img border="0" alt="PolyManager" src="./assets/delete.png" width="30" height="30">-->
             </button>
@@ -86,31 +107,24 @@
   </div>
   <div class = "column">
     <div class="labels_div">Rechercher</div>
-    <div style = "border: 1px solid lightgray; padding: 10px 10px 10px;">
+    <div style = "border: 1px solid #d3d3d3; padding: 10px 10px 10px;">
+
 
       <form class="example-form">
-        <mat-form-field class="example-full-width">
-          <input type="text" placeholder="Collaborateur" aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto">
+        <!-- <mat-form-field class="example-full-width"> -->
+          <input type="text" placeholder="Collaborateur" aria-label="Number" matInput [formControl]="myControl" [(ngModel)]="collaborateurInput" [matAutocomplete]="auto">
           <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
             <mat-option *ngFor="let option of filteredOptions | async" [value]="option">{{option}}</mat-option>
-            <!-- <mat-option *ngFor="let option of filteredOptions2 | async" [value]="option">{{option}}</mat-option> -->
           </mat-autocomplete>
-        </mat-form-field>
+        <!-- </mat-form-field> -->
       </form>
 
-      <div style="height: 60px;">
-        <select #selectedService id='selector_year' class="soflow" style="margin: 0 10px 0; width: 95%">
-          <option value="" selected>Service</option>
-          <option *ngFor="let option of service" [value]="option">{{this.serviceService.getServiceById(this.service, option.sid).name}}</option>
-        </select>
 
-
-      </div>
       <button class="validate-button" style="margin: 0 2% 0;"
-      (click)="findEmployee(selectedCollaborator.value, selectedService.value, selectedFunction.value)">Rechercher</button>
+      (click) ="newFilteredEvents()">Rechercher</button>
 
       <div class="example-container mat-elevation-z8" style="height:200px;">
-        <table mat-table [dataSource]="user">
+        <table mat-table [dataSource]="dataSource">
 
           <!-- Position Column -->
           <ng-container matColumnDef="NOM">

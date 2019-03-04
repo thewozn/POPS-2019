@@ -1,0 +1,360 @@
+/*###Tablet(medium)###*/
+@media screen and (min-width: 1024px){
+  .top_div{
+    border: 1px solid lightgray;
+    width: 96%;
+    margin: 20px 2% 20px;
+    background: whitesmoke;
+  }
+
+  .top_div:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+input[type=text] {
+  width: 96%;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  margin: 10px 10px 0px;
+  background-color: white;
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  padding: 5px 20px 5px 40px;
+  -webkit-transition: width 0.4s ease-in-out;
+  transition: width 0.4s ease-in-out;
+}
+
+
+.style-textarea {
+  width: 100%;
+  height: 135px;
+  border: 2px solid #ccc;
+  padding: 5px;
+  border-radius: 4px;
+  font-size: 16px;
+  margin: 10px 10px 10px;
+  background-color: white;
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  padding: 12px 20px 12px 40px;
+  -webkit-transition: width 0.4s ease-in-out;
+  transition: width 0.4s ease-in-out;
+  resize: none;
+}
+
+.labels_div {
+  margin: 0 10px 10px;
+  font-size: 20px;
+  text-align: left;
+}
+
+
+.column {
+  float: left;
+  width: 33%;
+  padding: 10px 10px 10px;
+}
+
+.example-container {
+  position: sticky;
+  height: 350px;
+  margin: 10px 10px 10px;
+  overflow: auto;
+  width: 96%;
+}
+
+table {
+  width: 100%;
+}
+
+.delete-button {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../specific-assets/delete.png");
+  background-size: contain;
+  outline: none;
+}
+
+.delete-button:hover {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../specific-assets/delete_hover.png");
+  background-size: contain;
+  outline: none;
+}
+
+.delete-button:active {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../specific-assets/delete_action.png");
+  background-size: contain;
+  outline: none;
+}
+
+.gallery-button {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../specific-assets/gallery.png");
+  background-size: contain;
+  outline: none;
+}
+
+.gallery-button:hover {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../specific-assets/gallery_hover.png");
+  background-size: contain;
+  outline: none;
+}
+
+.gallery-button:active {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../specific-assets/gallery_action.png");
+  background-size: contain;
+  outline: none;
+}
+
+.edit-button {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../specific-assets/edit.png");
+  background-size: contain;
+  outline: none;
+}
+
+.edit-button:hover {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../specific-assets/edit_hover.png");
+  background-size: contain;
+  outline: none;
+}
+
+.edit-button:active {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../specific-assets/edit_action.png");
+  background-size: contain;
+  outline: none;
+}
+
+.add-button {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../specific-assets/push.png");
+  background-size: contain;
+  outline: none;
+}
+
+.add-button:hover {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../specific-assets/push_hover.png");
+  background-size: contain;
+  outline: none;
+}
+
+.add-button:active {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../specific-assets/push_action.png");
+  background-size: contain;
+  outline: none;
+}
+
+.accept-button {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../specific-assets/validate.png");
+  background-size: contain;
+  outline: none;
+}
+
+.accept-button:hover {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../specific-assets/validate_hover.png");
+  background-size: contain;
+  outline: none;
+}
+
+.accept-button:active {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../specific-assets/validate_action.png");
+  background-size: contain;
+  outline: none;
+}
+
+.refuse-button {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../specific-assets/refuse.png");
+  background-size: contain;
+  outline: none;
+}
+
+.refuse-button:hover {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../specific-assets/refuse_hover.png");
+  background-size: contain;
+  outline: none;
+}
+
+.refuse-button:active {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../specific-assets/refuse_action.png");
+  background-size: contain;
+  outline: none;
+}
+
+.validate-button {
+  border-radius: 3px;
+  background-color: #008CBA;
+  color: white;
+  border: 2px solid #008CBA;
+  width: 96%;
+  margin: 10px 10px 0;
+  overflow: hidden;
+  padding: 5px 20px 5px 40px;
+  cursor: pointer;
+}
+
+.validate-button:hover {
+  border-radius: 3px;
+  background-color: white;
+  color: black;
+}
+
+.abort-button {
+  border-radius: 3px;
+  background-color: #b72a2a;
+  color: white;
+  border: 2px solid #b72a2a;
+  width: 96%;
+  padding: 10px 10px 10px;
+  cursor: pointer;
+}
+
+.abort-button:hover {
+  border-radius: 3px;
+  background-color: white;
+  color: black;
+}
+
+.soflow, .soflow-color {
+  -webkit-appearance: button;
+  -webkit-border-radius: 2px;
+  -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+  -webkit-padding-end: 20px;
+  -webkit-padding-start: 2px;
+  -webkit-user-select: none;
+  background-image: url(http://i62.tinypic.com/15xvbd5.png), -webkit-linear-gradient(#FAFAFA, #F4F4F4 40%, #E5E5E5);
+  background-position: 97% center;
+  background-repeat: no-repeat;
+  border: 1px solid #AAA;
+  color: #555;
+  font-size: inherit;
+  margin: 10px 10px 0;
+  overflow: hidden;
+  padding: 5px 20px 5px 40px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 300px;
+  float: left;
+}
+
+.container {
+  position: relative;
+  width: 100%;
+}
+
+.container .btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  background-color: #555;
+  color: white;
+  font-size: 16px;
+  width: 100%;
+  height: 100%;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  text-align: center;
+  opacity: 0;
+}
+
+.container .btn:hover {
+  background-color: #F84072;
+  opacity: 0.8;
+}
+
+.highlight {
+  background:#F84072;
+  border: 2px red solid;
+}

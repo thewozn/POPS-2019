@@ -19,12 +19,12 @@ import { VacationRequest } from '../../models/vacation-request.model';
 })
 export class HistoriqueComponent implements OnInit {
   colors = {
-    'Brouillon': 'grey',
-    'Annulée': 'white',
-    'Validée': 'green',
-    'Refusée': 'red',
-    'En cours de validation 1': 'orange',
-    'En cours de validation 2': 'yellow',
+    'Brouillon': '#DBFCFF',
+    'Annulée': '#F0EFEE',
+    'Validée': '#B8FFA6',
+    'Refusée': '#FFBBBB',
+    'En cours de validation 1': '#FFDEBF',
+    'En cours de validation 2': '#F6FCAB',
   };
 
   private vacationRequest: VacationRequest[];
@@ -68,6 +68,7 @@ export class HistoriqueComponent implements OnInit {
         this.vacationRequest = response;
         this.users_events = [];
 
+        console.log(this.vacationRequest);
         this.genData();
 
         this.refresh.next();

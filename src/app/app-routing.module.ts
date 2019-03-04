@@ -22,6 +22,13 @@ import { EditerComponent } from './missions/editer/editer.component';
 import { ProfilComponent } from './profil/profil.component';
 import { NotfoundComponent } from './notfound/notfound.component';
 
+import { AnnuaireComponent } from './annuaire/annuaire.component';
+
+import { AnnEmploeComponent } from './annuaire/ann-emploe/ann-emploe.component';
+import { NotesfraisComponent } from './notesfrais/notesfrais.component';
+import { MynoteComponent } from './notesfrais/mynote/mynote.component';
+import { SuiviReportComponent } from './notesfrais/suivi-report/suivi-report.component';
+import { ValiderReportComponent } from './notesfrais/valider-report/valider-report.component';
 
 const routes: Routes = [
   { path: 'connexion', component: ConnexionComponent },
@@ -53,6 +60,22 @@ children: [
       { path: 'creer', canActivate: [AuthGuard], component: CreerComponent },
       { path: 'editer', canActivate: [AuthGuard], component: EditerComponent },
       { path: 'notfound', canActivate: [AuthGuard], component: NotfoundComponent },
+      { path: '**', redirectTo: 'notfound' }
+    ]
+  },
+  {
+    path: 'notesfrais', canActivate: [AuthGuard], component: NotesfraisComponent,
+    children: [
+      { path: 'mynote', canActivate: [AuthGuard], component: MynoteComponent },
+      { path: 'suivi', canActivate: [AuthGuard], component: SuiviReportComponent },
+      { path: 'valider', canActivate: [AuthGuard], component: ValiderReportComponent },
+      { path: '**', redirectTo: 'notfound' }
+    ]
+  },
+  {
+    path: 'annuaire', canActivate: [AuthGuard], component: AnnuaireComponent,
+    children: [
+      { path: 'employe', canActivate: [AuthGuard], component: AnnEmploeComponent },
       { path: '**', redirectTo: 'notfound' }
     ]
   },

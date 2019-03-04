@@ -3,18 +3,18 @@ import {
   OnInit,
   ChangeDetectionStrategy,
   ViewChild,
-  TemplateRef
+  TemplateRef, ViewEncapsulation
 } from '@angular/core';
 import { startOfDay, subDays, addDays, isSameDay, isSameMonth } from 'date-fns';
-import { ViewEncapsulation } from '@angular/core';
 import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MatTableDataSource } from '@angular/material';
+
 import {
   CalendarEvent,
   CalendarEventTimesChangedEvent,
   CalendarView
 } from 'angular-calendar';
-import * as $ from 'jquery';
 import { Router } from '@angular/router';
 
 import { ConnectedService } from '../../services/connected.service';
@@ -46,10 +46,11 @@ export class DemanderComponent implements OnInit {
   private vacationRequest: VacationRequest[];
   private vacations: Vacations[];
   private balance: Balance[];
-  private dataSource = [];
-  private minDate: string;
+  private dataSource: MatTableDataSource<any>;
+
   @ViewChild('modalContent')
   modalContent: TemplateRef<any>;
+
   start_period: string;
   end_period: string;
   validated: boolean;
@@ -127,11 +128,7 @@ export class DemanderComponent implements OnInit {
     }
   }
 
-  eventTimesChanged({
-    event,
-    newStart,
-    newEnd
-  }: CalendarEventTimesChangedEvent): void {
+  eventTimesChanged({event, newStart, newEnd}: CalendarEventTimesChangedEvent): void {
     /**
      * Gère le changement de date
      */
@@ -196,7 +193,6 @@ export class DemanderComponent implements OnInit {
   }
 
   ngOnInit() {
-
     this.loadData();
 
     const today = new Date();
@@ -250,8 +246,9 @@ export class DemanderComponent implements OnInit {
 
         this.balanceService.getBalanceByUidFromServer().then(
           (balances) => {
-
             this.balance = balances;
+
+            const arrayData = [];
             for (const b of this.balance) {
               let t = 0;
               for (const vr of this.vacationRequest) {
@@ -265,12 +262,14 @@ export class DemanderComponent implements OnInit {
                 }
               }
 
-
-              this.dataSource.push({
+              arrayData.push({
                 obj: b,
                 taken: t
               });
             }
+
+            this.dataSource = new MatTableDataSource(arrayData);
+            this.refresh.next();
           },
           (error) => {
             console.log('Erreur ! : ' + error);

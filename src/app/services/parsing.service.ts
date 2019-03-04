@@ -12,24 +12,40 @@ import { Vacations } from '../models/vacations.model';
 
 const colors: any = {
   valide: {
-    primary: 'green',
-    secondary: 'green'
+    primary: '#AFFE9B',
+    secondary: '#AFFE9B'
   },
-  attente: {
-    primary: 'yellow',
-    secondary: 'yellow'
+  ev2: {
+    primary: '#FAFF91',
+    secondary: '#FAFF91'
   },
-  self_color_valide: {
-    primary: 'green',
-    secondary: 'green'
+  ev1: {
+    primary: '#FFCC8A',
+    secondary: '#FFCC8A'
   },
-  self_color_attente: {
-    primary: 'yellow',
-    secondary: 'yellow'
+  self_valide: {
+    primary: '#B8FFA6',
+    secondary: '#B8FFA6'
   },
-  brouillon: {
-    primary: 'grey',
-    secondary: 'grey'
+  self_ev1: {
+    primary: '#FFDEBF',
+    secondary: '#FFDEBF'
+  },
+  self_ev2: {
+    primary: '#F6FCAB',
+    secondary: '#F6FCAB'
+  },
+  self_brouillon: {
+    primary: '#DBFCFF',
+    secondary: '#DBFCFF'
+  },
+  self_cancel: {
+    primary: '#F0EFEE',
+    secondary: '#F0EFEE'
+  },
+  self_refuse: {
+    primary: '#FFBBBB',
+    secondary: '#FFBBBB'
   },
 };
 
@@ -212,9 +228,11 @@ export class ParsingService {
     if (vacationRequest.status === 'Brouillon') {
       return colors.brouillon;
     } else if (vacationRequest.status === 'Validée') {
-      return vacationRequest.uid === this.connecteduser.uid ? colors.self_color_valide : colors.valide;
+      return vacationRequest.uid === this.connecteduser.uid ? colors.self_valide : colors.valide;
+    } else if (vacationRequest.status === 'En cours de validation 1') {
+      return vacationRequest.uid === this.connecteduser.uid ? colors.self_ev1 : colors.ev1;
     } else {
-      return vacationRequest.uid === this.connecteduser.uid ? colors.self_color_attente : colors.attente;
+      return vacationRequest.uid === this.connecteduser.uid ? colors.self_ev2 : colors.ev2;
     }
   }
 }

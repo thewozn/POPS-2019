@@ -65,6 +65,4 @@ export class VacationRequestService {
       '/removeVacationRequest/' + did + '/' + this.connectedService.getConnectedUser().uid,
       this.globalService.gethttpOptions()).toPromise();
   }
-
-
 }

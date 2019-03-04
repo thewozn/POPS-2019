@@ -41,7 +41,7 @@ export class VacationsService {
   }
 
   async getVacationsByConUserUidFromServer() {
-    return await this.httpclient.get<Vacations[]>(this.globalService.getbaseUrl() + '/getVacationListByUID/' +
+    return await this.httpclient.get<Vacations[]>(this.globalService.getbaseUrl() + '/getVacationList/' +
     this.connectedService.getConnectedUser().uid).toPromise();
   }
 }
