@@ -117,7 +117,8 @@ public interface ControllerMapper {
 	
 	@Mappings({ @Mapping(source = "mission.mid", target = "mid"),
 		@Mapping(source = "mission.service.sid", target = "sid"),
-		@Mapping(source = "mission.requestedUsers", target = "usersRequested")})
+		@Mapping(source = "mission.requestedUsers", target = "usersRequested"),
+		@Mapping(source = "mission.refusedUsers", target = "usersRefused")})
 	MissionRequest getMissionRequest(Mission mission);
 
 	List<MissionRequest> getMissionRequestList(List<Mission> missionList);
@@ -153,7 +154,7 @@ public interface ControllerMapper {
 	
 	@Mappings({ @Mapping(source = "expenseReportLine.lndfid", target = "lndfid"),
 		@Mapping(source = "expenseReportLine.expenseReport.did", target = "did"),
-		@Mapping(source = "expenseReportLine.mission.title", target = "missionTitle")})
+		@Mapping(source = "expenseReportLine.mission.mid", target = "mid")})
 	ExpenseReportLineRequest getExpenseReportLineRequest(ExpenseReportLine expenseReportLine);
 	List<ExpenseReportLineRequest> getExpenseReportLineRequestList(List<ExpenseReportLine> expenseReportLineList);
 

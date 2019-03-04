@@ -56,6 +56,17 @@ public class Mission implements Serializable{
             uniqueConstraints=@UniqueConstraint(columnNames={"MID","UID"}))
 	private List<User> requestedUsers  = new ArrayList<>();
 
+	@ManyToMany(cascade = {
+	        CascadeType.PERSIST,
+	        CascadeType.MERGE
+	    })
+	@JoinTable(name = "user_mission_refused",
+	        joinColumns = @JoinColumn(name = "MID"),
+	        inverseJoinColumns = @JoinColumn(name = "UID"),
+            uniqueConstraints=@UniqueConstraint(columnNames={"MID","UID"}))
+
+	private List<User> refusedUsers = new ArrayList<>();
+	
 	@ManyToOne
 	@JoinColumn(name = "SID")
 	private Service service;
@@ -88,22 +99,35 @@ public class Mission implements Serializable{
 		this.startDate = startDate;
 		this.endDate = endDate;
 	}
-	
-	
 
 	public Mission(Long mid, ExpenseReportLine expenseReportLine, List<User> users, List<User> requestedUsers,
-			Service service, String title, String status, String description, Date startDate, Date endDate) {
+			List<User> refusedUsers, Service service, String title, String status, String description, Date startDate,
+			Date endDate) {
 		super();
 		this.mid = mid;
 		this.expenseReportLine = expenseReportLine;
 		this.users = users;
 		this.requestedUsers = requestedUsers;
+		this.refusedUsers = refusedUsers;
 		this.service = service;
 		this.title = title;
 		this.status = status;
 		this.description = description;
 		this.startDate = startDate;
 		this.endDate = endDate;
+	}
+
+
+	public void addRefusedUser(User user)
+	{
+		refusedUsers.add(user);
+		user.getMissionsRefuse().add(this);
+	}
+	
+	public void removeRefusedUser(User user)
+	{
+		refusedUsers.remove(user);
+		user.getMissionsRefuse().remove(this);
 	}
 
 	public void addRequestUser(User user)
@@ -132,12 +156,22 @@ public class Mission implements Serializable{
 	
 	public void removeAllUsers()
 	{
-		for (User user : users) {
+		for(User user : users)
 			if(user.getMissions()!= null)
 				user.getMissions().remove(this);
-
-		}
+		
+		for(User user : refusedUsers)
+			if(user.getMissionsRefuse() != null)
+				user.getMissionsRefuse().remove(this);
+		
+		for(User user : requestedUsers)
+			if(user.getMissionsRequest() != null)
+				user.getMissionsRequest().remove(this);
+		
+		
 		users.clear();
+		refusedUsers.clear();
+		requestedUsers.clear();
 	}
 	
 	public Date getStartDate() {
@@ -227,6 +261,15 @@ public class Mission implements Serializable{
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public List<User> getRefusedUsers() {
+		return refusedUsers;
+	}
+
+
+	public void setRefusedUsers(List<User> refusedUsers) {
+		this.refusedUsers = refusedUsers;
 	}
 
 

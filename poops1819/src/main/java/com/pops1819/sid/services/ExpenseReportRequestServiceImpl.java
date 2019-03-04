@@ -9,6 +9,10 @@ import org.springframework.stereotype.Service;
 
 import com.pops1819.sid.entities.ExpenseReport;
 import com.pops1819.sid.entities.User;
+import com.pops1819.sid.mappers.ControllerMapper;
+import com.pops1819.sid.model.ExpenseReportLineRequest;
+import com.pops1819.sid.model.ExpenseReportRequest;
+import com.pops1819.sid.repository.IExpenseReportLineRepository;
 import com.pops1819.sid.repository.IExpenseReportRepository;
 import com.pops1819.sid.repository.IUserRepository;
 
@@ -18,6 +22,11 @@ public class ExpenseReportRequestServiceImpl implements IExpenseReportRequestSer
 	private IExpenseReportRepository expenseReportRepository;
 	@Autowired
 	private IUserRepository userRepository;
+	@Autowired
+	private IExpenseReportLineRepository expenseReportLineRepository;
+	
+	@Autowired
+	private ControllerMapper mapper;
 
 	@Override
 	public boolean createExpenseReportForUsers() {
@@ -30,12 +39,29 @@ public class ExpenseReportRequestServiceImpl implements IExpenseReportRequestSer
 		return true;
 	}
 
+	@Override
+	public ExpenseReportRequest getLatestExpenseReport(Long uid) {
+		User user = userRepository.findByUid(uid);
+		if(user == null)
+			return null;
+		ExpenseReport expenseReport = expenseReportRepository.findFirstByUserOrderByRequestDateDesc(user);
+		System.out.println(expenseReport.toString());
+		return mapper.getExpenseReportRequest(expenseReport);
+	}
+
+	@Override
+	public boolean addExpenseReportLineRepository(Long uid, ExpenseReportLineRequest expenseReportLineRequest) {
+		User user = userRepository.findByUid(uid);
+		if(user == null)
+			return false;
+		
+		
+		
+		return true;
+	}
 	
 
-//	@Override
-//	public ExpenseReportRequest addExpenseReportLine(ExpenseReportLineRequest expenseReportLineRequest) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
+	
+
 
 }

@@ -8,7 +8,7 @@ public class ExpenseReportLineRequest
 
 	private Long did;
 
-	private String missionTitle;
+	private Long mid;
 	
 	private Date publishingDate;
 	private boolean advance;
@@ -21,12 +21,13 @@ public class ExpenseReportLineRequest
 	public ExpenseReportLineRequest() {
 		super();
 	}
-	public ExpenseReportLineRequest(Long lndfid, Long did, String missionTitle, Date publishingDate, boolean advance,
+	
+	public ExpenseReportLineRequest(Long lndfid, Long did, Long mid, Date publishingDate, boolean advance,
 			String typeLine, double amount, String textDetails, String state, String refusalReason) {
 		super();
 		this.lndfid = lndfid;
 		this.did = did;
-		this.missionTitle = missionTitle;
+		this.mid = mid;
 		this.publishingDate = publishingDate;
 		this.advance = advance;
 		this.typeLine = typeLine;
@@ -35,6 +36,7 @@ public class ExpenseReportLineRequest
 		this.state = state;
 		this.refusalReason = refusalReason;
 	}
+	
 	public Long getLndfid() {
 		return lndfid;
 	}
@@ -47,12 +49,15 @@ public class ExpenseReportLineRequest
 	public void setDid(Long did) {
 		this.did = did;
 	}
-	public String getMissionTitle() {
-		return missionTitle;
+
+	public Long getMid() {
+		return mid;
 	}
-	public void setMissionTitle(String missionTitle) {
-		this.missionTitle = missionTitle;
+
+	public void setMid(Long mid) {
+		this.mid = mid;
 	}
+
 	public Date getPublishingDate() {
 		return publishingDate;
 	}

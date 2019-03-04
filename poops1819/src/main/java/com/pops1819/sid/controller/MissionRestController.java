@@ -72,9 +72,9 @@ public class MissionRestController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/deleteMission", method = RequestMethod.DELETE)
-	public ResponseEntity<Void> deleteMission(@RequestBody MissionRequest missionRequest) {
-		if(!missionServiceImpl.deleteMission(missionRequest))
+	@RequestMapping(value = "/deleteMission/{mid}", method = RequestMethod.DELETE)
+	public ResponseEntity<Void> deleteMission(@PathVariable Long mid) {
+		if(!missionServiceImpl.deleteMission(mid))
 			throw new NotUpdateEntityException("");
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}

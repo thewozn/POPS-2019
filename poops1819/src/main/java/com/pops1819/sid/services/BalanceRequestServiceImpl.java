@@ -23,8 +23,7 @@ public class BalanceRequestServiceImpl implements IBalanceRequestService{
 	public List<BalanceRequest> getBalanceRequestListByUID(Long uid) {
 		List<Balance> balanceList = balanceRepository.findByUid(uid);
 		if(balanceList == null)
-			return null;
-					
+			return null;				
 		return mapper.getBalanceRequestList(balanceList);
 	}
 

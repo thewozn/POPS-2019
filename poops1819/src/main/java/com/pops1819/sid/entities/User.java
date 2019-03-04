@@ -43,6 +43,9 @@ public class User implements Serializable
 	@ManyToMany(mappedBy = "requestedUsers")
     private List<Mission> missionsRequest = new ArrayList<>();
 	
+	@ManyToMany(mappedBy = "refusedUsers")
+    private List<Mission> missionsRefuse = new ArrayList<>();
+	
 	@JsonIgnore
 	@OneToMany(mappedBy="user", fetch=FetchType.LAZY)
 	private List<ExpenseReport> expenseReports = new ArrayList<>();
@@ -361,6 +364,15 @@ public class User implements Serializable
 				+ alive + "]";
 	}
 
+	public List<Mission> getMissionsRefuse() {
+		return missionsRefuse;
+	}
+
+	public void setMissionsRefuse(List<Mission> missionsRefuse) {
+		this.missionsRefuse = missionsRefuse;
+	}
+	
+	
 
 	@Override
 	public int hashCode() {

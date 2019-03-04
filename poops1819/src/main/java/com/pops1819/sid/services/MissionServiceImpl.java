@@ -1,6 +1,5 @@
 package com.pops1819.sid.services;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -124,8 +123,8 @@ public class MissionServiceImpl implements IMissionService
 
     @Transactional
 	@Override
-	public boolean deleteMission(MissionRequest missionRequest) {
-		Mission mission = missionRepository.findByMid(missionRequest.getMid());
+	public boolean deleteMission(Long mid) {
+		Mission mission = missionRepository.findByMid(mid);
 
 		if(mission == null)
 			return false;
@@ -171,6 +170,7 @@ public class MissionServiceImpl implements IMissionService
 			return false;
 		
 		mission.removeRequestUser(user);
+		mission.addRefusedUser(user);
 		
 		userRepository.save(user);
 		missionRepository.save(mission);		

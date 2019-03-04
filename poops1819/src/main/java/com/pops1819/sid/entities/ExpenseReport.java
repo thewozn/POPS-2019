@@ -126,6 +126,13 @@ public class ExpenseReport implements Serializable
 	public void setTraitmentDate(Date traitmentDate) {
 		this.traitmentDate = traitmentDate;
 	}
+
+
+	@Override
+	public String toString() {
+		return "ExpenseReport [did=" + did + ", requestDate=" + requestDate + ", traitmentDate=" + traitmentDate
+				+ ", status=" + status + "]";
+	}
 	
 	
 	

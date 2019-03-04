@@ -42,6 +42,9 @@ public class MissionRequest {
 	
 	@JsonProperty(required = true, value = "users")
 	private List<UserRequest> users = new ArrayList<UserRequest>();
+	
+	@JsonProperty(required = true, value = "usersRefused")
+	private List<UserRequest> usersRefused = new ArrayList<UserRequest>();
 
 	public MissionRequest(Long mid, @NotNull Long sid, @NotNull String title, @NotNull String status,
 			@NotNull String description, @NotNull Date startDate, @NotNull Date endDate) {
@@ -73,9 +76,10 @@ public class MissionRequest {
 	
 	
 
+
 	public MissionRequest(Long mid, @NotNull Long sid, @NotNull String title, @NotNull String status,
 			@NotNull String description, @NotNull Date startDate, @NotNull Date endDate,
-			List<UserRequest> usersRequested, List<UserRequest> users) {
+			List<UserRequest> usersRequested, List<UserRequest> users, List<UserRequest> usersRefused) {
 		super();
 		this.mid = mid;
 		this.sid = sid;
@@ -86,6 +90,7 @@ public class MissionRequest {
 		this.endDate = endDate;
 		this.usersRequested = usersRequested;
 		this.users = users;
+		this.usersRefused = usersRefused;
 	}
 
 	public Long getMid() {
@@ -158,6 +163,14 @@ public class MissionRequest {
 
 	public void setUsers(List<UserRequest> users) {
 		this.users = users;
+	}
+	
+	public List<UserRequest> getUsersRefused() {
+		return usersRefused;
+	}
+
+	public void setUsersRefused(List<UserRequest> usersRefused) {
+		this.usersRefused = usersRefused;
 	}
 
 	@Override
