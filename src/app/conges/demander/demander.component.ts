@@ -47,6 +47,8 @@ export class DemanderComponent implements OnInit {
   private vacations: Vacations[];
   private balance: Balance[];
   private dataSource: MatTableDataSource<any>;
+  private _error = new Subject<string>();
+  private errorMessage: string;
 
   @ViewChild('modalContent')
   modalContent: TemplateRef<any>;
@@ -67,7 +69,6 @@ export class DemanderComponent implements OnInit {
     action: string;
     event: CalendarEvent;
   };
-
   refresh: Subject<any> = new Subject();
 
   // Evènement par défaut (initialisé dans le ngOnInit() )
@@ -84,7 +85,6 @@ export class DemanderComponent implements OnInit {
     },
     draggable: false
   };
-
   // Evènement envoyé par le component, contient un event accompagné de headers
   user_event = {
     did: null,
@@ -97,7 +97,6 @@ export class DemanderComponent implements OnInit {
     date: new Date(), // Date de la demande
     linked_event: this.new_event // Evenement lié à la demande
   };
-
   events: CalendarEvent[] = []; // Liste des évènements à afficher sur le calendrier
   activeDayIsOpen = false; // Détermine l'ouverture de la modale
 
@@ -139,7 +138,9 @@ export class DemanderComponent implements OnInit {
 
   saveEvent(state: boolean): void {
     // On vérifie que l'utilisateur a bien saisi les champs requis
-    if (this.user_event.type !== 'Type de congé' && this.validated === false) {
+    console.log(this.user_event.type)
+    if (this.user_event.type !== '-1' && this.user_event.type !== undefined && !isNaN(Number(this.user_event.type))) {
+
       // Initialise l'heure de départ en congés
       if (this.start_period === 'Matin') {
         this.new_event.start.setHours(8, 0, 0, 0);
@@ -176,8 +177,10 @@ export class DemanderComponent implements OnInit {
           this.loadData();
           this.modal.open(this.modalContent, { size: 'sm' });
         },
-        (error) => {
-          console.log(error);
+        (reject) => {
+          console.log(this.errorMessage);
+          this._error.next('Une demande existe déjà sur cette intervalle de date');
+          console.log(reject);
         }
       );
       // Mise à jour de la demande utilisateur (pas nécessaire, mais au cas où):
@@ -189,12 +192,14 @@ export class DemanderComponent implements OnInit {
       // Désactivation du bouton
       // this.validated = true;
       // $('select[id='type_selector']').attr('disabled', 'disabled');
+    } else {
+      this._error.next('Veuillez saisir un type de congé');
     }
   }
 
   ngOnInit() {
     this.loadData();
-
+    this._error.subscribe((message) => this.errorMessage = message);
     const today = new Date();
     today.setDate(today.getDate() + 7);
 

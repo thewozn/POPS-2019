@@ -16,7 +16,7 @@
       <mat-form-field *ngIf="this.connectedService.getConnectedUser().status === 'HeadOfService'">
         <mat-select placeholder="Collaborateurs" [(ngModel)]="collaborateurInput">
           <mat-option value=""></mat-option>
-          <mat-option *ngFor="let u of user" [value]="u.lastName">{{u.lastName}}</mat-option>
+          <mat-option *ngFor="let u of user" [value]="u.lastName">{{ u.lastName }}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>

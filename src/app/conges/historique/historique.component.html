@@ -31,41 +31,59 @@
 
 <div id="top_box_missions" class="top_div">
   <div style="margin-top: 10px;">
-    <select #selectedYear id='selector_year' class="soflow" style="display: inline-block;">
-      <option value="-1" selected>Année</option>
-      <option>2019</option>
-      <option>2018</option>
-      <option>2017</option>
-    </select>
+    <div class="row" id="boxselect">
 
-    <select #selectedMonth id='selector_month' class="soflow" style="display: inline-block;">
-      <option value="-1" selected>Mois</option>
-      <option value="0">Janvier</option>
-      <option value="1">Fevrier</option>
-      <option value="2">Mars</option>
-      <option value="3">Avril</option>
-      <option value="4">Mai</option>
-      <option value="5">Juin</option>
-      <option value="6">Juillet</option>
-      <option value="7">Août</option>
-      <option value="8">Septembre</option>
-      <option value="9">Octobre</option>
-      <option value="10">Novembre</option>
-      <option value="11">Décembre</option>
-    </select>
+      <div class="col-md-2" class="optionselect">
+        <mat-form-field>
+          <mat-select #selectedYear id='selector_year' placeholder="Année" id='selector_state'>
+            <mat-option value="-1"></mat-option>
+            <mat-option value="2019">2019</mat-option>
+            <mat-option value="2018">2018</mat-option>
+            <mat-option value="2017">2017</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
 
-    <select #selectedState id='selector_state' class="soflow" style="display: inline-block;">
-      <option value="-1" selected>Etat</option>
-      <option value="5">Annulée</option>
-      <option value="0">Brouillon</option>
-      <option value="1">En cours de validation 1</option>
-      <option value="2">En cours de validation 2</option>
-      <option value="3">Validée</option>
-      <option value="4">Refusée</option>
-    </select>
+      <div class="col-md-2" class="optionselect">
+        <mat-form-field>
+          <mat-select #selectedMonth id='selector_month' placeholder="Mois" id='selector_state'>
+            <mat-option value="-1"></mat-option>
+            <mat-option value="0">Janvier</mat-option>
+            <mat-option value="1">Février</mat-option>
+            <mat-option value="2">Mars</mat-option>
+            <mat-option value="3">Avril</mat-option>
+            <mat-option value="4">Mai</mat-option>
+            <mat-option value="5">Juin</mat-option>
+            <mat-option value="6">Juillet</mat-option>
+            <mat-option value="7">Août</mat-option>
+            <mat-option value="8">Septembre</mat-option>
+            <mat-option value="9">Octobre</mat-option>
+            <mat-option value="10">Novembre</mat-option>
+            <mat-option value="11">Décembre</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
 
-    <button class="validate-button" (click)="newFilteredEvents(selectedYear.value, selectedMonth.value, selectedState.value)">Trier</button>
+      <div class="col-md-2" class="optionselect">
+        <mat-form-field>
+          <mat-select #selectedState placeholder="Etat" id='selector_state'>
+            <mat-option value="-1"></mat-option>
+            <mat-option value="5">Annulée</mat-option>
+            <mat-option value="0">Brouillon</mat-option>
+            <mat-option value="1">En cours de validation 1</mat-option>
+            <mat-option value="2">En cours de validation 2</mat-option>
+            <mat-option value="3">Validée</mat-option>
+            <mat-option value="4">Refusée</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
 
+
+      <div class="col-md-2" class="optionselect">
+        <button class="validate-button" (click)="newFilteredEvents(selectedYear.value, selectedMonth.value, selectedState.value)">Trier</button>
+      </div>
+
+    </div>
 
   </div>
   <div class="example-container mat-elevation-z8" style="height:200px;">

@@ -66,7 +66,7 @@ export class HistoriqueComponent implements OnInit {
       (response) => {
         this.vacationRequest = response;
         this.users_events = [];
-
+        this.events = [];
         this.genData();
 
         this.refresh.next();
@@ -138,9 +138,9 @@ export class HistoriqueComponent implements OnInit {
     '2': 'En cours de validation 2', '3': 'Validée', '4': 'Refusée', '5': 'Annulée'};
 
     for (const event of this.users_events) {
-      if (filter1 === '-1' || String(event.linked_event.start.getFullYear()) === filter1) {
-        if (filter2 === '-1' || String(event.linked_event.start.getMonth())  === filter2) {
-          if (filter3 === '-1') {
+      if (filter1 === '-1' || filter1 === undefined || String(event.linked_event.start.getFullYear()) === filter1) {
+        if (filter2 === '-1' || filter2 === undefined || String(event.linked_event.start.getMonth())  === filter2) {
+          if (filter3 === '-1' || filter3 === undefined) {
             eventsList.push(event);
           }
           if (event.status.indexOf(states[filter3]) > -1) {

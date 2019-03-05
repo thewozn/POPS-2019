@@ -127,11 +127,12 @@ export class ValidationComponent implements OnInit {
     const states = {'1': 'En cours de validation 1', '2': 'En cours de validation 2', '3': 'Validée', '4': 'Refusée'};
 
     for (const event of this.users_events) {
-      if (filter1 === '-1' || String(event.linked_event.start.getFullYear()) === filter1) {
-        if (filter2 === '-1' || String(event.linked_event.start.getMonth()) === filter2) {
-          if (this.selectedService === '-1' || String(event.service.sid) === String(this.selectedService)) {
-            if (this.selectedType === '-1' || String(event.type.vid) === String(this.selectedType)) {
-              if (filter3 === '-1') {
+      if (filter1 === '-1' || filter1 === undefined || String(event.linked_event.start.getFullYear()) === filter1) {
+        if (filter2 === '-1' || filter2 === undefined || String(event.linked_event.start.getMonth()) === filter2) {
+          if (this.selectedService === '-1' || this.selectedService === undefined
+          || String(event.service.sid) === String(this.selectedService)) {
+            if (this.selectedType === '-1' || this.selectedType  === undefined || String(event.type.vid) === String(this.selectedType)) {
+              if (filter3 === '-1' || filter3 === undefined) {
                 eventsList.push(event);
               }
               if (event.status.indexOf(states[filter3]) > -1) {
