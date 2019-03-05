@@ -1,4 +1,21 @@
-<!-- FENETRE MODALE -->
+<!-- FENETRE MODALE SUPPRESSION -->
+<ng-template #modalSuppression let-close="close">
+  <div class="modal-header">
+    <h5 class="modal-title">Suppression</h5>
+    <button type="button" class="close" (click)="close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <h5>Êtes-vous sûr de vouloir supprimer cette mission ? </h5>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success" (click)="removeMission()">OUI</button>
+    <button type="button" class="btn btn-danger" (click)="close()">NON</button>
+  </div>
+</ng-template>
+
+<!-- FENETRE MODALE MODIFICATION-->
 <ng-template #modalContent let-close="close">
   <div class="modal-header">
     <h5 class="modal-title">Edition</h5>
@@ -7,34 +24,37 @@
     </button>
   </div>
   <div class="modal-body">
-    <h5 class="modal-title">Modifications enregistrées</h5>
+    <h5>Modifications enregistrées</h5>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-success" (click)="endCreate()">OK</button>
   </div>
 </ng-template>
 
-
-
+<div style="padding: 10px 0px 0px; ">
+  <h3 style="margin-left: 20px; display: block;">EDITION</h3>
+</div>
 
 <div id="top_box_missions" class="top_div">
   <div id="infos_missions" class="column">
     <div class="labels_div">Informations</div>
 
-    <input #missionTitle type="text" id="m_name" name="m_name" placeholder="Intitulé de la mission (Requis)">
-
-
+    <input #missionTitle type="text" id="m_name" name="m_name" placeholder="Intitulé de la mission (Requis)"
+      [(ngModel)]="mission.title" [disabled]="isReadOnly">
     <div class="labels_div">Dates</div>
     <input #missionStart class="form-control" type="text" mwlFlatpickr dateFormat="Y-m-d" altFormat="F j, Y"
-      placeholder="Date de début (YYYY-MM-DD) (Requis)" required>
-    <input #missionEnd class="form-control" type="text" mwlFlatpickr dateFormat="Y-m-d" altFormat="F j, Y" placeholder="Date de fin (Laisser vide pour indéfini)">
+      placeholder="Date de début (YYYY-MM-DD) (Requis)" [(ngModel)]="mission.startDate" minDate="{{ minDate }}"
+      (ngModelChange)="updateEndDate()" [disabled]="isReadOnly" required>
+    <input #missionEnd class="form-control" type="text" mwlFlatpickr dateFormat="Y-m-d" altFormat="F j, Y" placeholder="Date de fin (Laisser vide pour indéfini)"
+      [(ngModel)]="mission.endDate" minDate="{{ minDateEnd }}" [disabled]="isReadOnly">
 
 
   </div>
 
   <div class="column">
     <div class="labels_div">Description (facultative)</div>
-    <textarea #missionDescription class="style-textarea" id="styled" name="message" placeholder="Ajouter une description (facultative)"></textarea>
+    <textarea #missionDescription class="style-textarea" id="styled" name="message" placeholder="Ajouter une description (facultative)"
+      [(ngModel)]="mission.description" [disabled]="isReadOnly"></textarea>
   </div>
 
 </div>
@@ -49,28 +69,53 @@
         <!-- Position Column -->
         <ng-container matColumnDef="NOM">
           <th mat-header-cell *matHeaderCellDef> NOM </th>
-          <td mat-cell *matCellDef="let element"> {{element.lastName}} </td>
+          <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': colors[element.uid]}">
+            {{element.lastName}} </td>
         </ng-container>
 
         <!-- Name Column -->
         <ng-container matColumnDef="PRENOM">
           <th mat-header-cell *matHeaderCellDef> PRENOM </th>
-          <td mat-cell *matCellDef="let element"> {{element.firstName}} </td>
+          <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': colors[element.uid]}">
+            {{element.firstName}}
+          </td>
         </ng-container>
 
         <!-- Weight Column -->
         <ng-container matColumnDef="SERVICE">
           <th mat-header-cell *matHeaderCellDef> SERVICE </th>
-          <td mat-cell *matCellDef="let element"> {{this.serviceService.getServiceById(this.service,
+          <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': colors[element.uid]}">
+            {{this.serviceService.getServiceById(this.service,
             element.sid).name}}</td>
         </ng-container>
 
         <ng-container matColumnDef="ACTION">
           <th mat-header-cell *matHeaderCellDef> ACTION </th>
           <td mat-cell *matCellDef="let element">
-            <button class="refuse-button" (click)="popEmployee(element)">
-              <!--<img border="0" alt="PolyManager" src="./assets/delete.png" width="30" height="30">-->
-            </button>
+            <div *ngIf="(this.connectedService.getConnectedUser().sid === this.mission.sid && colors[element.uid] !== '#FFBBBB')">
+              <button class="refuse-button" (click)="popEmployee(element)">
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="VALID">
+          <th mat-header-cell *matHeaderCellDef> VAL. </th>
+          <td mat-cell *matCellDef="let element">
+            <div *ngIf="((colors[element.uid] === '#F6FCAB' ||  colors[element.uid] === '#FFBBBB') && this.connectedService.getConnectedUser().sid === element.sid)">
+              <button class="accept-button" (click)="validateUser(element.uid)">
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="REFUS">
+          <th mat-header-cell *matHeaderCellDef> REF. </th>
+          <td mat-cell *matCellDef="let element">
+            <div *ngIf="((colors[element.uid] === '#F6FCAB' || colors[element.uid] === '#B8FFA6') && this.connectedService.getConnectedUser().sid === element.sid && !this.connectedService.getConnectedUser().sid === this.mission.sid)">
+              <button class="refuse-button" (click)="refuseUser(element.uid)">
+              </button>
+            </div>
 
           </td>
         </ng-container>
@@ -80,12 +125,14 @@
       </table>
     </div>
 
-    <div class="column">
-      <button class="validate-button" type="submit" value="Register" (click)="validate(missionTitle.value, missionStart.value, missionEnd.value, missionDescription.value)"
-        ng-disabled="register.$invalid">Valider la création</button>
-    </div>
-    <div class="column">
-      <button class="abort-button">Supprimer</button>
+    <div *ngIf="this.connectedService.getConnectedUser().sid === this.mission.sid">
+      <div class="column">
+        <button class="validate-button" type="submit" value="Register" (click)="validate(missionTitle.value, missionStart.value, missionEnd.value, missionDescription.value)"
+          ng-disabled="register.$invalid">Valider les modifications</button>
+      </div>
+      <div class="column">
+        <button class="abort-button" (click)="removeModal()">Supprimer</button>
+      </div>
     </div>
 
   </div>
@@ -113,19 +160,23 @@
           <!-- Position Column -->
           <ng-container matColumnDef="NOM">
             <th mat-header-cell *matHeaderCellDef> NOM </th>
-            <td mat-cell *matCellDef="let element"> {{element.firstName}} </td>
+            <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': colors[element.uid]}">
+              {{element.firstName}}
+            </td>
           </ng-container>
 
           <!-- Name Column -->
           <ng-container matColumnDef="PRENOM">
             <th mat-header-cell *matHeaderCellDef> PRENOM </th>
-            <td mat-cell *matCellDef="let element"> {{element.lastName}} </td>
+            <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': colors[element.uid]}">
+              {{element.lastName}} </td>
           </ng-container>
 
           <!-- Weight Column -->
           <ng-container matColumnDef="SERVICE">
             <th mat-header-cell *matHeaderCellDef> SERVICE </th>
-            <td mat-cell *matCellDef="let element"> {{this.serviceService.getServiceById(this.service,
+            <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': colors[element.uid]}">
+              {{this.serviceService.getServiceById(this.service,
               element.sid).name}} </td>
           </ng-container>
 
@@ -133,16 +184,18 @@
           <ng-container matColumnDef="ACTION">
             <th mat-header-cell *matHeaderCellDef> ACTION </th>
             <td mat-cell *matCellDef="let element">
-              <button class="add-button" (click)="pushEmployee(element)">
-              </button>
-
+              <div *ngIf="this.connectedService.getConnectedUser().sid === this.mission.sid">
+                <button class="add-button" (click)="pushEmployee(element)">
+                </button>
+              </div>
             </td>
           </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsAdd; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsAdd;"></tr>
         </table>
       </div>
     </div>
   </div>
 </div>
+<ngb-alert *ngIf="errorMessage" type="danger" (close)="errorMessage = null">{{ errorMessage }}</ngb-alert>

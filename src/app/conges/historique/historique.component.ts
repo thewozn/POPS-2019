@@ -117,10 +117,6 @@ export class HistoriqueComponent implements OnInit {
 
 
   filteredEvents(month: any): CalendarEvent[] {
-    /**
-     * Filtre les évènements selon le mois
-     */
-
     const eventsList = [];
 
     for (const event of this.users_events) {

@@ -36,6 +36,8 @@ export class EditercongesComponent implements OnInit {
   private balance: Balance[];
   private vacR: VacationRequest[] = [];
 
+  private _error = new Subject<string>();
+  private errorMessage: string;
   @ViewChild('modalContent')
   modalContent: TemplateRef<any>;
   start_period: string;
@@ -85,7 +87,8 @@ draggable: false
   events: CalendarEvent[] = []; // Liste des évènements à afficher sur le calendrier
   activeDayIsOpen = false;      // Détermine l'ouverture de la modale
 
-
+  minDate;
+  minDateEnd;
   constructor(private connectedService: ConnectedService,
     private vacationRequestService: VacationRequestService,
     private vacationsService: VacationsService,
@@ -115,19 +118,16 @@ draggable: false
 
 
   eventTimesChanged({event, newStart, newEnd}: CalendarEventTimesChangedEvent): void {
-    /**
-     * Gère le changement de date
-     */
     event.start = newStart;
     event.end = newEnd;
     this.refresh.next();
   }
 
-
   saveEvent(state: boolean): void {
 
-    // On vérifie que l'utilisateur a bien saisi les champs requis
-    if ((this.user_event.type !== 'Type de congé') && (this.validated === false)) {
+    if (this.user_event.type !== '-1' && this.user_event.type !== undefined && !isNaN(Number(this.user_event.type))) {
+
+      if (this.user_event.linked_event.end !== undefined && this.user_event.linked_event.end !== null) {
       // Initialise l'heure de départ en congés
       if (this.start_period === 'Matin') {
         this.user_event.linked_event.start.setHours(8, 0, 0, 0);
@@ -168,15 +168,21 @@ draggable: false
 
       // Rafraîchit le calendrier pour permettre l'affichage du congé demandé
       this.refresh.next();
-
-      // Désactivation du bouton
-      // this.validated = true;
-      // $('select[id="type_selector"]').attr('disabled', 'disabled');
+    } else {
+      this._error.next('Veuillez saisir la date de fin de votre demande');
+    }
+    } else {
+      this._error.next('Veuillez saisir un type de congé');
     }
   }
 
   ngOnInit() {
     this.loadData();
+    this._error.subscribe((message) => this.errorMessage = message);
+    const today = new Date();
+    today.setDate(today.getDate() + 7);
+    this.minDate = today.toISOString().substr(0, 10);
+    this.minDateEnd = today.toISOString().substr(0, 10);
 
     this.vacationRequestService.getVacationRequestByDidFromServer(+this.route.snapshot.params['did']).then(
       (response) => {
@@ -261,5 +267,11 @@ draggable: false
   finishEdit() {
     this.modal.dismissAll();
     this.router.navigate(['conges/historique']);
+  }
+
+  updateEndDate() {
+    const endDate = new Date();
+    endDate.setDate(this.user_event.linked_event.start.getDate());
+    this.minDateEnd = endDate.toISOString().substr(0, 10);
   }
 }

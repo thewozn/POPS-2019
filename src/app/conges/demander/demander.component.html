@@ -5,7 +5,7 @@
     </button>
   </div>
   <div class="modal-body">
-    <h5 class="modal-title">Demande Enregistrée</h5>
+    <h5>Demande Enregistrée</h5>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-success" (click)="finishEdit()">OK</button>
@@ -65,9 +65,9 @@
         </tr>
       </thead>
       <td style="padding:0 0 0;">
-        <input class="form-control" type="text" mwlFlatpickr [(ngModel)]="new_event.start" (ngModelChange)="refresh.next()"
+        <input class="form-control" type="text" mwlFlatpickr [(ngModel)]="new_event.start"
           [altInput]="true" [convertModelValue]="true" [enableTime]="true" dateFormat="Y-m-d" altFormat="F j, Y"
-          placeholder="Not set" minDate="2019-03-09">
+          placeholder="Not set" minDate="{{ minDate }}" (ngModelChange)="updateEndDate()">
       </td>
       <td style="padding:0 0 0;">
         <select class="soflow" id="depart" style="margin: 12px 3px 10px;" [(ngModel)]="start_period">
@@ -84,9 +84,9 @@
         </tr>
       </thead>
       <td style="padding:0 0 0;">
-        <input class="form-control" type="text" mwlFlatpickr [(ngModel)]="new_event.end" (ngModelChange)="refresh.next()"
+        <input class="form-control" type="text" mwlFlatpickr [(ngModel)]="new_event.end"
           [altInput]="true" [convertModelValue]="true" [enableTime]="true" dateFormat="Y-m-d" altFormat="F j, Y"
-          placeholder="Not set">
+          placeholder="Not set" minDate="{{ minDateEnd }}">
       </td>
       <td style="padding:0 0 0;">
         <select class="soflow" id="Retour" style="margin: 12px 3px 10px;" [(ngModel)]="end_period">

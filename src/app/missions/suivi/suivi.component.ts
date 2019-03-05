@@ -120,8 +120,6 @@ export class SuiviComponent implements OnInit {
     }
 
   newFilteredEvents(): void {
-    const eventsList = [];
-
     this.displayedMission = [];
     for (const m of this.mission) {
       const checkdate = m.startDate.substr(0, 4) + '-' + m.startDate.substr(5, 2) + '-' + m.startDate.substr(8, 2);

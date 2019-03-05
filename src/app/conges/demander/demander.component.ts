@@ -100,6 +100,8 @@ export class DemanderComponent implements OnInit {
   events: CalendarEvent[] = []; // Liste des évènements à afficher sur le calendrier
   activeDayIsOpen = false; // Détermine l'ouverture de la modale
 
+  minDate;
+  minDateEnd;
   constructor(
     private connectedService: ConnectedService,
     private vacationRequestService: VacationRequestService,
@@ -111,9 +113,6 @@ export class DemanderComponent implements OnInit {
   ) {}
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
-    /**
-     * Ouverture/fermeture de la modal
-     */
     if (isSameMonth(date, this.viewDate)) {
       this.viewDate = date;
       if (
@@ -138,8 +137,9 @@ export class DemanderComponent implements OnInit {
 
   saveEvent(state: boolean): void {
     // On vérifie que l'utilisateur a bien saisi les champs requis
-    console.log(this.user_event.type)
     if (this.user_event.type !== '-1' && this.user_event.type !== undefined && !isNaN(Number(this.user_event.type))) {
+
+      if (this.new_event.end !== undefined && this.new_event.end !== null) {
 
       // Initialise l'heure de départ en congés
       if (this.start_period === 'Matin') {
@@ -188,10 +188,9 @@ export class DemanderComponent implements OnInit {
 
       // Rafraîchit le calendrier pour permettre l'affichage du congé demandé
       this.refresh.next();
-
-      // Désactivation du bouton
-      // this.validated = true;
-      // $('select[id='type_selector']').attr('disabled', 'disabled');
+      } else {
+        this._error.next('Veuillez saisir la date de fin de votre demande');
+      }
     } else {
       this._error.next('Veuillez saisir un type de congé');
     }
@@ -202,6 +201,8 @@ export class DemanderComponent implements OnInit {
     this._error.subscribe((message) => this.errorMessage = message);
     const today = new Date();
     today.setDate(today.getDate() + 7);
+    this.minDate = today.toISOString().substr(0, 10);
+    this.minDateEnd = today.toISOString().substr(0, 10);
 
     // Initialisation des champs du component
     this.start_period = 'Matin';
@@ -222,6 +223,12 @@ export class DemanderComponent implements OnInit {
       },
       draggable: true
     };
+  }
+
+  updateEndDate() {
+    const endDate = new Date();
+    endDate.setDate(this.new_event.start.getDate());
+    this.minDateEnd = endDate.toISOString().substr(0, 10);
   }
 
   loadData() {
@@ -247,7 +254,7 @@ export class DemanderComponent implements OnInit {
           this.events.push(item.linked_event);
         }
 
-        this.refresh.next();
+
 
         this.balanceService.getBalanceByUidFromServer().then(
           (balances) => {

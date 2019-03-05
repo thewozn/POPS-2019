@@ -3,9 +3,10 @@
   <div id="conuser" style="height: 80px;">
     <div>
       <img src="../../assets/user.png" style="height: 40px; width: 40px; margin-left: 10px;">
-      <font color="white" style="font-size: 15px; margin-left: 10px">
+<a id="conges_href" routerLink="profil">
+  <font color="white" style="font-size: 15px; margin-left: 10px">
 {{ this.connectedService.getConnectedUser().lastName }} {{ this.connectedService.getConnectedUser().firstName }}
-      </font>
+      </font></a>
     </div>
   </div>
 

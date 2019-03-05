@@ -1,8 +1,14 @@
-import { Component, OnInit, ViewChild, TemplateRef, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  TemplateRef,
+  ViewEncapsulation
+} from '@angular/core';
 import { MatTableDataSource, MatInputModule } from '@angular/material';
 import { Router } from '@angular/router';
 import { map, startWith } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -13,18 +19,17 @@ import { UserService } from './../../services/user.service';
 import { ServiceService } from './../../services/service.service';
 
 import { User } from './../../models/user.model';
-import {Service} from './../../models/service.model';
-import {Mission} from './../../models/mission.model';
-
-
+import { Service } from './../../models/service.model';
+import { Mission } from './../../models/mission.model';
 
 @Component({
   selector: 'app-creer',
   templateUrl: './creer.component.html',
   styleUrls: ['./creer.component.scss']
-
 })
 export class CreerComponent implements OnInit {
+  private _error = new Subject<string>();
+  private errorMessage: string;
   displayedColumns = ['NOM', 'PRENOM', 'SERVICE', 'ACTION'];
 
   @ViewChild('modalContent')
@@ -37,20 +42,23 @@ export class CreerComponent implements OnInit {
 
   user: User[];
   service: Service[] = [];
-
-  // Tous les collaborateurs de tous les services
   collaborateurList: string[] = [];
   options: string[] = [];
   filteredOptions: Observable<string[]>;
-
+  colors = {};
   myControl = new FormControl();
+  startDate;
+  minDate;
+  minDateEnd;
 
   constructor(
     private serviceService: ServiceService,
     private userService: UserService,
     private router: Router,
     private connectedService: ConnectedService,
-    private missionService: MissionService, private modal: NgbModal) { }
+    private missionService: MissionService,
+    private modal: NgbModal
+  ) {}
 
   popEmployee(user: User): void {
     let index = this.dataSource_selected.data.indexOf(user, 0);
@@ -80,47 +88,59 @@ export class CreerComponent implements OnInit {
 
     this.dataSource.data = this.dataSource.data;
     this.dataSource_selected.data = this.dataSource_selected.data;
-
   }
 
   validate(title: string, missionStart: string, missionEnd: string, description: string): void {
-    if (title.length < 32 && missionStart !== '') {
+    if (title.length > 3) {
+      if (missionStart !== '') {
+        status = 'Validée';
 
-      status = 'Validée';
-      for (const dS of this.dataSource_selected.data) {
-        if (dS.sid !== this.connectedService.getConnectedUser().sid) {
-          status = 'En cours';
-        }
-      }
+        if (this.dataSource_selected.data.length > 0) {
 
-      const newMission: Mission = new Mission(null,
-        description, // description
-        missionEnd, // end
-        missionStart, // start
-        status, // status
-        title, // title
-        this.connectedService.getConnectedUser().sid,  // sid
-        null,  // users
-        null, // usersSub
-      );
 
-      this.missionService.addMissionFromServer(newMission).then(
-        (response) => {
-
-          console.log(newMission.mid);
-          for (const dS of this.dataSource_selected.data) {
-            this.missionService.affectUserToMissionFromServer(response.mid, dS.uid);
+        for (const dS of this.dataSource_selected.data) {
+          if (dS.sid !== this.connectedService.getConnectedUser().sid) {
+            status = 'En cours';
           }
-          this.loadData();
-          this.modal.open(this.modalContent, { size: 'sm' });
-        },
-        (error) => {
-          console.log(error);
         }
-      );
 
+        const newMission: Mission = new Mission(
+          null,
+          description, // description
+          missionEnd, // end
+          missionStart, // start
+          status, // status
+          title, // title
+          this.connectedService.getConnectedUser().sid, // sid
+          null, // users
+          null,
+          null // usersSub
+        );
+
+        this.missionService.addMissionFromServer(newMission).then(
+          response => {
+            for (const dS of this.dataSource_selected.data) {
+              this.missionService.affectUserToMissionFromServer(
+                response.mid,
+                dS.uid
+              );
+            }
+            this.loadData();
+            this.modal.open(this.modalContent, { size: 'sm' });
+          },
+          error => {
+            console.log(error);
+          }
+        );
+        } else {
+          this._error.next('Aucun collaborateur n\'est assigné à la mission');
+        }
+      } else {
+        this._error.next('Veuillez saisir la date de début de la mission');
+      }
+    } else {
+      this._error.next('Le titre de la mission doit être d\' au moins 3 caractères');
     }
-
   }
 
   endCreate() {
@@ -130,6 +150,13 @@ export class CreerComponent implements OnInit {
 
   ngOnInit() {
     this.loadData();
+    this._error.subscribe(message => (this.errorMessage = message));
+
+    const today = new Date();
+    today.setDate(today.getDate() + 7);
+    this.minDate = today.toISOString().substr(0, 10);
+    this.minDateEnd = today.toISOString().substr(0, 10);
+
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value))
@@ -140,43 +167,67 @@ export class CreerComponent implements OnInit {
   }
 
   loadData() {
-    Promise.all([this.userService.getUsersFromServer(),
-    this.serviceService.getServicesFromServer()]).then(
-      values => {
-        this.user = values[0];
-        this.dataSource.data = values[0];
-        this.service = values[1];
+    Promise.all([
+      this.userService.getUsersFromServer(),
+      this.serviceService.getServicesFromServer()
+    ]).then(values => {
+      this.user = values[0];
+      this.dataSource.data = values[0];
+      this.service = values[1];
 
+      for (const u of this.user) {
+        this.collaborateurList.push(u.lastName);
+        this.options.push(
+          u.lastName +
+            ' ' +
+            u.firstName +
+            ' | ' +
+            this.serviceService.getServiceById(this.service, u.sid).name
+        );
 
-        for (const u of this.user) {
-          this.collaborateurList.push(u.lastName);
-          this.options.push(u.lastName + ' ' + u.firstName + ' | ' + this.serviceService.getServiceById(this.service, u.sid).name);
+        if (u.sid === this.connectedService.getConnectedUser().sid) {
+          this.colors[u.uid] = '#B8FFA6';
+        } else {
+          this.colors[u.uid] = '#F6FCAB';
         }
       }
-    );
+    });
   }
 
   newFilteredEvents(): void {
-    const eventsList = [];
+    this.dataSource = new MatTableDataSource<User>();
 
     if (this.collaborateurInput !== '') {
-      this.dataSource = new MatTableDataSource<User>();
       for (const u of this.user) {
-        if ((this.collaborateurInput === '') || (this.collaborateurInput === u.lastName + ' ' + u.firstName + ' | ' +
-          this.serviceService.getServiceById(this.service, u.sid).name)) {
+        if (
+          this.collaborateurInput === '' ||
+          this.collaborateurInput ===
+            u.lastName +
+              ' ' +
+              u.firstName +
+              ' | ' +
+              this.serviceService.getServiceById(this.service, u.sid).name
+        ) {
           this.dataSource.data.push(u);
         }
       }
+    } else {
+      for (const u of this.user) {
+        this.dataSource.data.push(u);
+      }
     }
-
-
   }
 
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
-    return this.options.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
+    return this.options.filter(
+      option => option.toLowerCase().indexOf(filterValue) === 0
+    );
   }
 
+  updateEndDate() {
+    this.minDateEnd = this.startDate;
+  }
 }
 
 export interface Employee {

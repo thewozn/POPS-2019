@@ -9,7 +9,8 @@ export class Mission {
     public title: string,
     public sid: number,
     public users: User[],
-    public usersSub: User[]
+    public usersRequested: User[],
+    public usersRefused: User[],
   ) {
   }
 }

@@ -69,6 +69,7 @@ export class MissionService {
   async getMissionByMidFromServer(mid: number) {
     return await this.httpclient.get<Mission>(this.globalService.getbaseUrl() + '/getMissionByMid/' + mid).toPromise();
   }
+
   // Methode permettant de recuperer une mission pour un collaborateur autre que le Head Of Service
   // Ne renvoit que les missions de l'utilisateur en fonction de son uid
  async getMissionsByConUserUidFromServer() {
@@ -84,6 +85,26 @@ export class MissionService {
   async affectUserToMissionFromServer(mid: number, uid: number) {
     return await this.httpclient.post<Mission>(this.globalService.getbaseUrl() +
       '/affectUserToMission' + '/' + mid + '/' + uid,
+      this.globalService.gethttpOptions()).toPromise();
+  }
+
+  async updateMissionFromServer(mission: Mission) {
+    return await this.httpclient.patch<Mission>(this.globalService.getbaseUrl() + '/updateMission',
+    JSON.stringify(mission), this.globalService.gethttpOptions()).toPromise();
+  }
+
+  async removeMissionFromServer(mid: number) {
+    return await this.httpclient.delete<Mission>(this.globalService.getbaseUrl() + '/deleteMission/' + mid,
+    this.globalService.gethttpOptions()).toPromise();
+  }
+
+  async acceptUserRequestedForMissionFromServer(mid: number, uid: number) {
+    return await this.httpclient.patch<Mission>(this.globalService.getbaseUrl() + '/acceptUserRequestedForMission/' + mid + '/' + uid,
+    this.globalService.gethttpOptions()).toPromise();
+  }
+
+  async refuseUserRequestedForMissionFromServer(mid: number, uid: number) {
+    return await this.httpclient.patch<Mission>(this.globalService.getbaseUrl() + '/refuseUserRequestedForMission/' + mid + '/' + uid,
       this.globalService.gethttpOptions()).toPromise();
   }
 }

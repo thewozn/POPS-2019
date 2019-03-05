@@ -195,3 +195,69 @@ table {
   background:#F84072;
   border: 2px red solid;
 }
+
+.refuse-button {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../../conges/specific-assets/refuse.png");
+  background-size: contain;
+  outline: none;
+}
+
+.refuse-button:hover {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../../conges/specific-assets/refuse_hover.png");
+  background-size: contain;
+  outline: none;
+}
+
+.refuse-button:active {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../../conges/specific-assets/refuse_action.png");
+  background-size: contain;
+  outline: none;
+}
+
+.accept-button {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../../conges/specific-assets/validate.png");
+  background-size: contain;
+  outline: none;
+}
+
+.accept-button:hover {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../../conges/specific-assets/validate_hover.png");
+  background-size: contain;
+  outline: none;
+}
+
+.accept-button:active {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../../conges/specific-assets/validate_action.png");
+  background-size: contain;
+  outline: none;
+}
