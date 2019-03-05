@@ -56,7 +56,7 @@ export class SuiviComponent implements OnInit {
   statutControl = new FormControl('', [Validators.required]);
   selectFormControl = new FormControl('', Validators.required);
   myControl = new FormControl();
-
+  colors = {};
   nameInput = '';
   statutInput = '';
   collaborateurInput = '';
@@ -95,6 +95,18 @@ export class SuiviComponent implements OnInit {
           }
 
           for (const m of this.mission) {
+            let found = false;
+            for (const u of m.usersRequested) {
+              if (u.sid === this.connectedService.getConnectedUser().sid) {
+                found = true;
+              }
+            }
+
+            if (found) {
+              this.colors[m.mid] = '#F6FCAB';
+            } else {
+              this.colors[m.mid] = 'white';
+            }
             this.options.push(m.title);
           }
         }

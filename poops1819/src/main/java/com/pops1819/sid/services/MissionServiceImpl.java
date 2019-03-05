@@ -1,5 +1,6 @@
 package com.pops1819.sid.services;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -64,7 +65,31 @@ public class MissionServiceImpl implements IMissionService
 		com.pops1819.sid.entities.Service service = serviceRepository.findBySid(sid);
 		if(service == null)
 			return null;
-		return mapper.getMissionRequestList(missionRepository.findByService(service));
+		
+		List<Mission> lmission = missionRepository.findAll();
+		List<Mission> toreturn = new ArrayList<>();
+		for (Mission m : lmission) {
+			for (User u : m.getUsers()) {
+				if(u.getService().getSid() == sid && !(toreturn.contains(m))) {
+					toreturn.add(m);
+				}
+			}
+			
+			for (User u : m.getRefusedUsers()) {
+				if(u.getService().getSid() == sid && !(toreturn.contains(m))) {
+					toreturn.add(m);
+				}
+			}
+			
+			for (User u : m.getRequestedUsers()) {
+				if(u.getService().getSid() == sid && !(toreturn.contains(m))) {
+					toreturn.add(m);
+				}
+			}
+		}
+		
+		return mapper.getMissionRequestList(toreturn);
+		// return mapper.getMissionRequestList(missionRepository.findByService(service));
 		
 	}
 

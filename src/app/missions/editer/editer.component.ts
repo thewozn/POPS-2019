@@ -137,34 +137,40 @@ export class EditerComponent implements OnInit {
     this.dataSource.filter = filters;
   }
 
-  // TODO:
-  validate(title: string, missionStart: string, missionEnd: string, description: string): void {
-    if (title.length > 3) {
-      if (missionStart !== '') {
+  validate(): void {
+    if (this.mission.title.length > 3) {
+      if (this.mission.startDate !== '') {
         status = 'Validée';
 
         if (this.dataSource_selected.data.length > 0) {
 
       status = 'Validée';
       for (const dS of this.dataSource_selected.data) {
-        if (dS.sid !== this.connectedService.getConnectedUser().sid) {
+        const valid = this.mission.users.some((item) => (item.uid) === dS.uid);
+        const wait = this.mission.usersRequested.some((item) => (item.uid) === dS.uid);
+        const refused = this.mission.usersRefused.some((item) => (item.uid) === dS.uid);
+
+        if (dS.sid !== this.connectedService.getConnectedUser().sid && !valid && !wait && !refused) {
           status = 'En cours';
         }
       }
 
-      const newMission: Mission = new Mission(null,
-        description, // description
-        missionEnd, // end
-        missionStart, // start
-        status, // status
-        title, // title
-        this.connectedService.getConnectedUser().sid,  // sid
-        null,  // users
-        null,
-        null // usersSub
-      );
+      if (this.mission.usersRequested.length > 0 || this.mission.usersRefused.length > 0) {
+         status = 'En cours';
+      }
+      // const newMission: Mission = new Mission(null,
+      //   description, // description
+      //   missionEnd, // end
+      //   missionStart, // start
+      //   status, // status
+      //   title, // title
+      //   this.connectedService.getConnectedUser().sid,  // sid
+      //   null,  // users
+      //   null,
+      //   null // usersSub
+      // );
 
-      this.missionService.updateMissionFromServer(newMission).then(
+      this.missionService.updateMissionFromServer(this.mission).then(
         (response) => {
 
           for (const dS of this.dataSource_selected.data) {
@@ -278,17 +284,21 @@ export class EditerComponent implements OnInit {
     this.missionService.acceptUserRequestedForMissionFromServer(this.mission.mid, uid).then(
       (response) => {
         this.loadData();
+        this.validate();
       },
       (error) => {
         console.log(error);
       }
     );
+
+
   }
 
   refuseUser(uid: number) {
     this.missionService.refuseUserRequestedForMissionFromServer(this.mission.mid, uid).then(
       (response) => {
         this.loadData();
+        this.validate();
       },
       (error) => {
         console.log(error);

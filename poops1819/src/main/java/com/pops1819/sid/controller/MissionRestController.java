@@ -104,5 +104,4 @@ public class MissionRestController {
 	public ResponseEntity<MissionRequest> getMissionByMID(@PathVariable Long mid) {
 		return new ResponseEntity<MissionRequest> (missionServiceImpl.getMissionByMID(mid), HttpStatus.OK);
 	}
-
 }
