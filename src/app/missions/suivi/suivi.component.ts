@@ -11,13 +11,12 @@ import { Mission } from './../../models/mission.model';
 import { User } from './../../models/user.model';
 import { Service } from './../../models/service.model';
 
-// NEW
 import { MatTableDataSource, MatInputModule } from '@angular/material';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { Observable } from 'rxjs';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { map, startWith } from 'rxjs/operators';
-//
+import {Router} from '@angular/router';
 
 
 @Component({
@@ -37,8 +36,8 @@ export class SuiviComponent implements OnInit {
     private connectedService: ConnectedService,
     private missionService: MissionService,
     private serviceService: ServiceService,
-    private userService: UserService
-
+    private userService: UserService,
+    private router: Router
   ) {
 
   }
@@ -91,7 +90,6 @@ export class SuiviComponent implements OnInit {
           this.mission = values[0];
           this.user = values[1];
           this.displayedMission = values[0];
-
           for (const u of this.user) {
             this.collaborateurListService.push(u.lastName);
           }
@@ -110,31 +108,33 @@ export class SuiviComponent implements OnInit {
       );
     }
   }
+
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
     return this.options.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
 
   }
 
+  consultation(id: number) {
+    this.router.navigate(['mission/editer', { mid: id, isRead: this.connectedService.getConnectedUser().status !== 'HeadOfService'}]);
+    }
+
   newFilteredEvents(): void {
     const eventsList = [];
 
-      this.displayedMission = [];
-      for (const m of this.mission) {
-        const checkdate = m.startDate.substr(0, 4) + '-' + m.startDate.substr(5, 2) + '-' + m.startDate.substr(8, 2);
-        if ((this.nameInput === '' || m.title === this.nameInput) && (this.statutInput === '' || m.status === this.statutInput)
-        && (this.dateInput === '' || checkdate === this.dateInput )) {
-          for (const u of m.users) {
-            if ((this.collaborateurInput === '' || this.collaborateurInput === u.lastName)) {
-                 if (!(this.displayedMission.some( (item) => (item.mid === m.mid)))) {
-                   this.displayedMission.push(m);
-                 }
+    this.displayedMission = [];
+    for (const m of this.mission) {
+      const checkdate = m.startDate.substr(0, 4) + '-' + m.startDate.substr(5, 2) + '-' + m.startDate.substr(8, 2);
+      if ((this.nameInput === '' || m.title === this.nameInput) && (this.statutInput === '' || m.status === this.statutInput)
+        && (this.dateInput === '' || checkdate === this.dateInput)) {
+        for (const u of m.users) {
+          if ((this.collaborateurInput === '' || this.collaborateurInput === u.lastName)) {
+            if (!(this.displayedMission.some((item) => (item.mid === m.mid)))) {
+              this.displayedMission.push(m);
             }
           }
         }
       }
-
-
-
+    }
   }
 }

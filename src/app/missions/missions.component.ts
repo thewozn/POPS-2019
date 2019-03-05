@@ -21,11 +21,7 @@ export class MissionsComponent implements OnInit {
       label: 'Creer',
       link: './creer',
       index: 1
-    }, {
-      label: 'Editer',
-      link: './editer',
-      index: 2
-    },
+    }
   ]; }
 
   ngOnInit() {

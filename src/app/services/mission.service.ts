@@ -66,6 +66,9 @@ export class MissionService {
       this.connectedService.getConnectedUser().sid).toPromise();
   }
 
+  async getMissionByMidFromServer(mid: number) {
+    return await this.httpclient.get<Mission>(this.globalService.getbaseUrl() + '/getMissionByMid/' + mid).toPromise();
+  }
   // Methode permettant de recuperer une mission pour un collaborateur autre que le Head Of Service
   // Ne renvoit que les missions de l'utilisateur en fonction de son uid
  async getMissionsByConUserUidFromServer() {

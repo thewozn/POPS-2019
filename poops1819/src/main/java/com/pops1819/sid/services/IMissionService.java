@@ -17,4 +17,5 @@ public interface IMissionService
 	public boolean refuseUserRequestedForMission(Long uid, Long mid);
 	public boolean removeUserFromMission(Long mid, Long uid);
 	public boolean deleteMission(Long mid);
+	public MissionRequest getMissionByMID(Long mid);
 }

@@ -100,6 +100,9 @@ public class MissionRestController {
 	}
 
 	
-	
+	@RequestMapping(value = "/getMissionByMid/{mid}", method = RequestMethod.GET)
+	public ResponseEntity<MissionRequest> getMissionByMID(@PathVariable Long mid) {
+		return new ResponseEntity<MissionRequest> (missionServiceImpl.getMissionByMID(mid), HttpStatus.OK);
+	}
 
 }

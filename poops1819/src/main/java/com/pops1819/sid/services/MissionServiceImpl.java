@@ -192,5 +192,11 @@ public class MissionServiceImpl implements IMissionService
 		return mapper.getMissionRequestList(returnValue.stream().collect(Collectors.toList()));	
 	}
 	
-	
+	@Override
+	public MissionRequest getMissionByMID(Long mid) {		
+		if(!missionRepository.existsById(mid)) {
+			return null;
+		}
+		return mapper.getMissionRequest(missionRepository.findByMid(mid));
+	}
 }

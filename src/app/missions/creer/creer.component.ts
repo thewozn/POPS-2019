@@ -7,7 +7,7 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import {ConnectedService} from '../../services/connected.service';
+import { ConnectedService } from '../../services/connected.service';
 import { MissionService } from '../../services/mission.service';
 import { UserService } from './../../services/user.service';
 import { ServiceService } from './../../services/service.service';
@@ -29,21 +29,19 @@ export class CreerComponent implements OnInit {
 
   @ViewChild('modalContent')
   modalContent: TemplateRef<any>;
+
   dataSource: MatTableDataSource<User>;
   dataSource_selected: MatTableDataSource<User>;
 
   collaborateurInput = '';
 
   user: User[];
-  // private userDisplayed : User[];
   service: Service[] = [];
 
   // Tous les collaborateurs de tous les services
   collaborateurList: string[] = [];
   options: string[] = [];
   filteredOptions: Observable<string[]>;
-  private startDate = new Date();
-  private endDate = null;
 
   myControl = new FormControl();
 
@@ -53,8 +51,6 @@ export class CreerComponent implements OnInit {
     private router: Router,
     private connectedService: ConnectedService,
     private missionService: MissionService, private modal: NgbModal) { }
-
-
 
   popEmployee(user: User): void {
     let index = this.dataSource_selected.data.indexOf(user, 0);
@@ -69,8 +65,6 @@ export class CreerComponent implements OnInit {
 
     this.dataSource.data = this.dataSource.data;
     this.dataSource_selected.data = this.dataSource_selected.data;
-
-
   }
 
   pushEmployee(user: User): void {
@@ -89,8 +83,6 @@ export class CreerComponent implements OnInit {
 
   }
 
-
-
   validate(title: string, missionStart: string, missionEnd: string, description: string): void {
     if (title.length < 32 && missionStart !== '') {
 
@@ -101,31 +93,31 @@ export class CreerComponent implements OnInit {
         }
       }
 
-        const newMission: Mission = new Mission(null,
-          description, // description
-          missionEnd, // end
-          missionStart, // start
-          status, // status
-          title, // title
-          this.connectedService.getConnectedUser().sid,  // sid
-          null,  // users
-          null, // usersSub
-          );
+      const newMission: Mission = new Mission(null,
+        description, // description
+        missionEnd, // end
+        missionStart, // start
+        status, // status
+        title, // title
+        this.connectedService.getConnectedUser().sid,  // sid
+        null,  // users
+        null, // usersSub
+      );
 
-          this.missionService.addMissionFromServer(newMission).then(
-            (response) => {
+      this.missionService.addMissionFromServer(newMission).then(
+        (response) => {
 
-              console.log(newMission.mid);
-              for (const dS of this.dataSource_selected.data) {
-                this.missionService.affectUserToMissionFromServer(response.mid, dS.uid);
-              }
-              this.loadData();
-              this.modal.open(this.modalContent, {size: 'sm'});
-            },
-            (error) => {
-              console.log(error);
-            }
-          );
+          console.log(newMission.mid);
+          for (const dS of this.dataSource_selected.data) {
+            this.missionService.affectUserToMissionFromServer(response.mid, dS.uid);
+          }
+          this.loadData();
+          this.modal.open(this.modalContent, { size: 'sm' });
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
 
     }
 
@@ -145,9 +137,6 @@ export class CreerComponent implements OnInit {
 
     this.dataSource = new MatTableDataSource<User>();
     this.dataSource_selected = new MatTableDataSource();
-
-
-
   }
 
   loadData() {
@@ -166,19 +155,19 @@ export class CreerComponent implements OnInit {
       }
     );
   }
-  newFilteredEvents(
-    ): void {
-      const eventsList = [];
 
-      if (this.collaborateurInput !== '') {
-        this.dataSource = new MatTableDataSource<User>();
-        for (const u of this.user) {
-          if ((this.collaborateurInput === '') || (this.collaborateurInput === u.lastName + ' ' + u.firstName + ' | ' +
+  newFilteredEvents(): void {
+    const eventsList = [];
+
+    if (this.collaborateurInput !== '') {
+      this.dataSource = new MatTableDataSource<User>();
+      for (const u of this.user) {
+        if ((this.collaborateurInput === '') || (this.collaborateurInput === u.lastName + ' ' + u.firstName + ' | ' +
           this.serviceService.getServiceById(this.service, u.sid).name)) {
           this.dataSource.data.push(u);
-          }
         }
       }
+    }
 
 
   }
@@ -196,4 +185,3 @@ export interface Employee {
   SERVICE: string;
   FONCTION: string;
 }
-
