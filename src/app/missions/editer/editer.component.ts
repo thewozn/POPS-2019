@@ -1,4 +1,10 @@
-import { Component, OnInit, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+  ViewEncapsulation
+} from '@angular/core';
 import { MatTableDataSource, MatInputModule } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -7,8 +13,8 @@ import { Observable, Subject } from 'rxjs';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
-import {ConnectedService} from '../../services/connected.service';
-import {MissionService} from '../../services/mission.service';
+import { ConnectedService } from '../../services/connected.service';
+import { MissionService } from '../../services/mission.service';
 import { UserService } from './../../services/user.service';
 import { ServiceService } from './../../services/service.service';
 
@@ -51,32 +57,27 @@ export class EditerComponent implements OnInit {
   @ViewChild('modalSuppression')
   modalSuppression: TemplateRef<any>;
 
-  constructor(private route: ActivatedRoute,
+  constructor(
+    private route: ActivatedRoute,
     private connectedService: ConnectedService,
     private missionService: MissionService,
     private serviceService: ServiceService,
     private userService: UserService,
     private modal: NgbModal,
-    private router: Router) { }
+    private router: Router
+  ) {}
 
   ngOnInit() {
+    this.dataSource = new MatTableDataSource<User>();
+    this.dataSource_selected = new MatTableDataSource();
+
     this.loadData();
     this._error.subscribe(message => (this.errorMessage = message));
-
-    console.log(this.isReadOnly);
-
-    // const today = new Date();
-    // today.setDate(today.getDate() + 7);
-    // this.minDate = today.toISOString().substr(0, 10);
-    // this.minDateEnd = this.mission.startDate.substr(0, 10);
 
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value))
     );
-
-    this.dataSource = new MatTableDataSource<User>();
-    this.dataSource_selected = new MatTableDataSource();
   }
 
   popEmployee(user: User): void {
@@ -115,17 +116,24 @@ export class EditerComponent implements OnInit {
 
     if (this.collaborateurInput !== '') {
       for (const u of this.user) {
-        if (!this.dataSource_selected.data.some((item) => (item.uid) === u.uid)) {
-          if (this.collaborateurInput === '' || this.collaborateurInput === u.lastName + ' ' + u.firstName + ' | ' +
-            this.serviceService.getServiceById(this.service, u.sid).name) {
+        if (!this.dataSource_selected.data.some(item => item.uid === u.uid)) {
+          if (
+            this.collaborateurInput === '' ||
+            this.collaborateurInput ===
+              u.lastName +
+                ' ' +
+                u.firstName +
+                ' | ' +
+                this.serviceService.getServiceById(this.service, u.sid).name
+          ) {
             this.dataSource.data.push(u);
           }
         }
       }
     } else {
       for (const u of this.user) {
-        if (!this.dataSource_selected.data.some((item) => (item.uid) === u.uid)) {
-        this.dataSource.data.push(u);
+        if (!this.dataSource_selected.data.some(item => item.uid === u.uid)) {
+          this.dataSource.data.push(u);
         }
       }
     }
@@ -137,59 +145,90 @@ export class EditerComponent implements OnInit {
     this.dataSource.filter = filters;
   }
 
-  validate(): void {
+  validate(launch: boolean): void {
+    let checkLaunch = true;
     if (this.mission.title.length > 3) {
       if (this.mission.startDate !== '') {
-        status = 'Validée';
-
         if (this.dataSource_selected.data.length > 0) {
 
-      status = 'Validée';
-      for (const dS of this.dataSource_selected.data) {
-        const valid = this.mission.users.some((item) => (item.uid) === dS.uid);
-        const wait = this.mission.usersRequested.some((item) => (item.uid) === dS.uid);
-        const refused = this.mission.usersRefused.some((item) => (item.uid) === dS.uid);
+          if (launch === true) {
+            if (this.mission.status === 'En cours') {
+              this.mission.status = 'Terminée';
+            } else if (this.mission.status === 'En création') {
+              for (const dS of this.dataSource_selected.data) {
+                const valid = this.mission.users.some(item => item.uid === dS.uid);
+                const wait = this.mission.usersRequested.some(item => item.uid === dS.uid);
+                const refused = this.mission.usersRefused.some(item => item.uid === dS.uid);
 
-        if (dS.sid !== this.connectedService.getConnectedUser().sid && !valid && !wait && !refused) {
-          status = 'En cours';
-        }
-      }
+                if (dS.sid !== this.connectedService.getConnectedUser().sid && !valid && !wait && !refused) {
+                  checkLaunch = false;
+                }
+              }
 
-      if (this.mission.usersRequested.length > 0 || this.mission.usersRefused.length > 0) {
-         status = 'En cours';
-      }
-      // const newMission: Mission = new Mission(null,
-      //   description, // description
-      //   missionEnd, // end
-      //   missionStart, // start
-      //   status, // status
-      //   title, // title
-      //   this.connectedService.getConnectedUser().sid,  // sid
-      //   null,  // users
-      //   null,
-      //   null // usersSub
-      // );
+              if (this.mission.usersRequested.length > 0) {
+                for (const u of this.mission.usersRequested) {
+                  if (this.dataSource_selected.data.some(item => item.uid === u.uid)) {
+                    checkLaunch = false;
+                  }
+                }
+              }
 
-      this.missionService.updateMissionFromServer(this.mission).then(
-        (response) => {
-
-          for (const dS of this.dataSource_selected.data) {
-            const valid = this.mission.users.some((item) => (item.uid) === dS.uid);
-            const wait = this.mission.usersRequested.some((item) => (item.uid) === dS.uid);
-            const refused = this.mission.usersRefused.some((item) => (item.uid) === dS.uid);
-
-            if (!valid && !wait && !refused) {
-              this.missionService.affectUserToMissionFromServer(response.mid, dS.uid);
+              if (checkLaunch === true) {
+                this.mission.status = 'En cours';
+              }
             }
           }
 
-          this.loadData();
-          this.modal.open(this.modalContent, { size: 'sm' });
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+          if (checkLaunch === true) {
+          this.missionService.updateMissionFromServer(this.mission).then(
+            response => {
+              for (const dS of this.dataSource_selected.data) {
+                const valid = this.mission.users.some(item => item.uid === dS.uid);
+                const wait = this.mission.usersRequested.some(item => item.uid === dS.uid);
+                const refused = this.mission.usersRefused.some(item => item.uid === dS.uid);
+
+                if (!valid && !wait && !refused) {
+                  console.log(dS);
+                  this.missionService.affectUserToMissionFromServer(this.mission.mid, dS.uid).then(
+                    (affect) => {
+                      console.log(this.mission);
+                      this.loadData();
+                    },
+                    (error) => {
+                      console.log(error);
+                    }
+                  );
+                }
+              }
+
+              for (const u of this.dataSource.data) {
+                const valid = this.mission.users.some(item => item.uid === u.uid);
+                const wait = this.mission.usersRequested.some(item => item.uid === u.uid);
+
+                if (valid === true || wait === true) {
+                  this.missionService.removeUserFromMissionFromServer(this.mission.mid, u.uid).then(
+                    (remove) => {
+                      console.log(this.mission);
+                      this.loadData();
+                    },
+                    (error) => {
+                      console.log(error);
+                    }
+                  );
+                }
+              }
+
+              this.loadData();
+              this.modal.open(this.modalContent, { size: 'sm' });
+            },
+            error => {
+              console.log(error);
+            }
+          );
+          } else {
+            this._error.next('Impossible de démarrer la mission.' +
+            'En attente de la confirmation de la participation de certains des collaborateurs');
+          }
         } else {
           this._error.next('Aucun collaborateur n\'est assigné à la mission');
         }
@@ -199,23 +238,34 @@ export class EditerComponent implements OnInit {
     } else {
       this._error.next('Le titre de la mission doit être d\' au moins 3 caractères');
     }
-
   }
 
   async loadData() {
-    await Promise.all([this.userService.getUsersFromServer(),
-    this.serviceService.getServicesFromServer()]).then(
-      values => {
-        this.user = values[0];
-        this.service = values[1];
-        this.missionService.getMissionByMidFromServer(+this.route.snapshot.params['mid']).then(
-          (response) => {
+    await Promise.all([
+      this.userService.getUsersFromServer(),
+      this.serviceService.getServicesFromServer()
+    ]).then(values => {
+      this.user = values[0];
+      this.service = values[1];
+      this.missionService
+        .getMissionByMidFromServer(+this.route.snapshot.params['mid'])
+        .then(
+          response => {
             this.mission = response;
 
+            const today = new Date();
+            today.setDate(today.getDate());
+            this.minDate = today.toISOString().substr(0, 10);
+            this.minDateEnd = this.mission.startDate.substr(0, 10);
+
             for (const u of this.user) {
-              const valid = this.mission.users.some((item) => (item.uid) === u.uid);
-              const wait = this.mission.usersRequested.some((item) => (item.uid) === u.uid);
-              const refused = this.mission.usersRefused.some((item) => (item.uid) === u.uid);
+              const valid = this.mission.users.some(item => item.uid === u.uid);
+              const wait = this.mission.usersRequested.some(
+                item => item.uid === u.uid
+              );
+              const refused = this.mission.usersRefused.some(
+                item => item.uid === u.uid
+              );
               if (valid || wait || refused) {
                 this.dataSource_selected.data.push(u);
 
@@ -238,16 +288,21 @@ export class EditerComponent implements OnInit {
                 }
                 this.dataSource.data.push(u);
                 this.collaborateurList.push(u.lastName);
-                this.options.push(u.lastName + ' ' + u.firstName + ' | ' + this.serviceService.getServiceById(this.service, u.sid).name);
+                this.options.push(
+                  u.lastName +
+                    ' ' +
+                    u.firstName +
+                    ' | ' +
+                    this.serviceService.getServiceById(this.service, u.sid).name
+                );
               }
             }
           },
-          (error) => {
+          error => {
             console.log(error);
           }
         );
-      }
-    );
+    });
   }
 
   endCreate() {
@@ -260,15 +315,29 @@ export class EditerComponent implements OnInit {
   }
 
   removeMission() {
-    this.missionService.removeMissionFromServer(this.mission.mid).then(
-      (response) => {
-        this.modal.dismissAll();
-        this.router.navigate(['mission/suivi']);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+    if (this.mission.status === 'En création') {
+      this.missionService.removeMissionFromServer(this.mission.mid).then(
+        response => {
+          this.modal.dismissAll();
+          this.router.navigate(['mission/suivi']);
+        },
+        error => {
+          console.log(error);
+        }
+      );
+    } else {
+      this.mission.status = 'Annulée';
+
+      this.missionService.updateMissionFromServer(this.mission).then(
+        response => {
+          this.modal.dismissAll();
+          this.router.navigate(['mission/suivi']);
+        },
+        error => {
+          console.log(error);
+        }
+      );
+    }
   }
 
   updateEndDate() {
@@ -277,34 +346,34 @@ export class EditerComponent implements OnInit {
 
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
-    return this.options.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
+    return this.options.filter(
+      option => option.toLowerCase().indexOf(filterValue) === 0
+    );
   }
 
   validateUser(uid: number) {
-    this.missionService.acceptUserRequestedForMissionFromServer(this.mission.mid, uid).then(
-      (response) => {
-        this.loadData();
-        this.validate();
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-
-
+    this.missionService
+      .acceptUserRequestedForMissionFromServer(this.mission.mid, uid)
+      .then(
+        response => {
+          this.loadData();
+        },
+        error => {
+          console.log(error);
+        }
+      );
   }
 
   refuseUser(uid: number) {
-    this.missionService.refuseUserRequestedForMissionFromServer(this.mission.mid, uid).then(
-      (response) => {
-        this.loadData();
-        this.validate();
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+    this.missionService
+      .refuseUserRequestedForMissionFromServer(this.mission.mid, uid)
+      .then(
+        response => {
+          this.loadData();
+        },
+        error => {
+          console.log(error);
+        }
+      );
   }
 }
-
-

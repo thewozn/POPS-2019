@@ -5,38 +5,40 @@ import java.sql.Date;
 public class ExpenseReportLineRequest
 {
 	private Long lndfid;
-
 	private Long did;
-
 	private Long mid;
-	
 	private Date publishingDate;
 	private boolean advance;
-	private String typeLine;
 	private double amount;
-	private String textDetails;
 	private String state;
 	private String refusalReason;
+	private String typeOfExpense;
+	private String reasonOfRefund;
+	private Date dateOfOperation;
+	private String additionalDetail;
 	
 	public ExpenseReportLineRequest() {
 		super();
 	}
 	
 	public ExpenseReportLineRequest(Long lndfid, Long did, Long mid, Date publishingDate, boolean advance,
-			String typeLine, double amount, String textDetails, String state, String refusalReason) {
+			double amount, String state, String refusalReason, String typeOfExpense, String reasonOfRefund,
+			Date dateOfOperation, String additionalDetail) {
 		super();
 		this.lndfid = lndfid;
 		this.did = did;
 		this.mid = mid;
 		this.publishingDate = publishingDate;
 		this.advance = advance;
-		this.typeLine = typeLine;
 		this.amount = amount;
-		this.textDetails = textDetails;
 		this.state = state;
 		this.refusalReason = refusalReason;
+		this.typeOfExpense = typeOfExpense;
+		this.reasonOfRefund = reasonOfRefund;
+		this.dateOfOperation = dateOfOperation;
+		this.additionalDetail = additionalDetail;
 	}
-	
+
 	public Long getLndfid() {
 		return lndfid;
 	}
@@ -70,24 +72,14 @@ public class ExpenseReportLineRequest
 	public void setAdvance(boolean advance) {
 		this.advance = advance;
 	}
-	public String getTypeLine() {
-		return typeLine;
-	}
-	public void setTypeLine(String typeLine) {
-		this.typeLine = typeLine;
-	}
+
 	public double getAmount() {
 		return amount;
 	}
 	public void setAmount(double amount) {
 		this.amount = amount;
 	}
-	public String getTextDetails() {
-		return textDetails;
-	}
-	public void setTextDetails(String textDetails) {
-		this.textDetails = textDetails;
-	}
+
 	public String getState() {
 		return state;
 	}
@@ -100,8 +92,40 @@ public class ExpenseReportLineRequest
 	public void setRefusalReason(String refusalReason) {
 		this.refusalReason = refusalReason;
 	}
-	
-	
+
+	public String getTypeOfExpense() {
+		return typeOfExpense;
+	}
+
+	public void setTypeOfExpense(String typeOfExpense) {
+		this.typeOfExpense = typeOfExpense;
+	}
+
+	public String getReasonOfRefund() {
+		return reasonOfRefund;
+	}
+
+	public void setReasonOfRefund(String reasonOfRefund) {
+		this.reasonOfRefund = reasonOfRefund;
+	}
+
+	public Date getDateOfOperation() {
+		return dateOfOperation;
+	}
+
+	public void setDateOfOperation(Date dateOfOperation) {
+		this.dateOfOperation = dateOfOperation;
+	}
+
+	public String getAdditionalDetail() {
+		return additionalDetail;
+	}
+
+	public void setAdditionalDetail(String additionalDetail) {
+		this.additionalDetail = additionalDetail;
+	}
+
+
 	
 	
 	

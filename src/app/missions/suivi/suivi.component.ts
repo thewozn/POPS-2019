@@ -62,8 +62,6 @@ export class SuiviComponent implements OnInit {
   collaborateurInput = '';
   dateInput = '';
 
-
-
   @ViewChild(MatSort) sort: MatSort;
 
   ngOnInit() {
@@ -127,8 +125,16 @@ export class SuiviComponent implements OnInit {
 
   }
 
-  consultation(id: number) {
-    this.router.navigate(['mission/editer', { mid: id, isRead: this.connectedService.getConnectedUser().status !== 'HeadOfService'}]);
+  consultation(id: number, sid: number, status: string) {
+    let read = false;
+    if (sid !== this.connectedService.getConnectedUser().sid || this.connectedService.getConnectedUser().status !== 'HeadOfService') {
+      read = true;
+    }
+
+    if (status === 'Terminée' || status === 'Annulée') {
+      read = true;
+    }
+    this.router.navigate(['mission/editer', { mid: id, isRead: read}]);
     }
 
   newFilteredEvents(): void {

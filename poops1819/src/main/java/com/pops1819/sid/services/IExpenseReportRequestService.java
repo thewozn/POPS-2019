@@ -7,5 +7,7 @@ public interface IExpenseReportRequestService
 {
 	public boolean createExpenseReportForUsers();
 	public ExpenseReportRequest getLatestExpenseReport(Long uid);
-	public boolean addExpenseReportLineRepository(Long uid, ExpenseReportLineRequest expenseReportLineRequest);
+	public boolean addExpenseReportLineRequest(ExpenseReportLineRequest expenseReportLineRequest);
+	public boolean updateExpenseReportLineRequest(ExpenseReportLineRequest expenseReportLineRequest);
+	public boolean removeExpenseReportLineRequest(Long lndfid);
 }

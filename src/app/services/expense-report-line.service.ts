@@ -9,15 +9,6 @@ import { ExpenseReportLine } from '../models/expense-report-line.model';
 })
 export class ExpenseReportLineService {
 
-  erlsSubject = new Subject<ExpenseReportLine[]>();
-  private erls: ExpenseReportLine[] = [];
-
   constructor(private httpclient: HttpClient, private globalService: GlobalService) { }
-
-  emitUsersSubject() {
-    if (this.erls != null) {
-      this.erlsSubject.next(this.erls.slice());
-    }
-  }
 
 }

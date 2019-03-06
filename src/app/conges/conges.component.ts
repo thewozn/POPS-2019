@@ -44,7 +44,7 @@ export class CongesComponent implements OnInit {
         index: 0
       },
       {
-        label: 'Demander',
+        label: 'Demande',
         link: './demander',
         index: 1
       }
@@ -55,7 +55,7 @@ export class CongesComponent implements OnInit {
       this.connectedService.getConnectedUserService().name === 'Management') {
       this.navLinks.push(
         {
-          label: 'Accepter',
+          label: 'Validation',
           link: './accepter',
           index: 2
         },

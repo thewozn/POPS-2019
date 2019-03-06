@@ -21,40 +21,45 @@ public class ExpenseReportLine
 	private Long lndfid;
 	
 	@ManyToOne
-	@JoinColumn(name = "NDFID")
+	@JoinColumn(name = "did")
 	private ExpenseReport expenseReport;
 	
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "MID")
 	private Mission mission;
-	
-	private Date publishingDate;
-	private boolean advance;
-	private String typeLine;
+	private String typeOfExpense;
+	private String reasonOfRefund;
+	private Date dateOfOperation;
 	private double amount;
-	private String textDetails;
+	private String additionalDetail;
 	private String state;
+	private boolean advance;
 	private String refusalReason;
-	
+	private Date publishingDate;
+
 	public ExpenseReportLine() {
 		super();
 	}
 
-	public ExpenseReportLine(Long lndfid, ExpenseReport expenseReport, Mission mission,
-			Date publishingDate, boolean advance, String typeLine, double amount, String textDetails, String state,
-			String refusalReason) {
+	public ExpenseReportLine(Long lndfid, ExpenseReport expenseReport, Mission mission, String typeOfExpense,
+			String reasonOfRefund, Date dateOfOperation, double amount, String additionalDetail, String state,
+			boolean advance, String refusalReason, Date publishingDate) {
 		super();
 		this.lndfid = lndfid;
 		this.expenseReport = expenseReport;
 		this.mission = mission;
-		this.publishingDate = publishingDate;
-		this.advance = advance;
-		this.typeLine = typeLine;
+		this.typeOfExpense = typeOfExpense;
+		this.reasonOfRefund = reasonOfRefund;
+		this.dateOfOperation = dateOfOperation;
 		this.amount = amount;
-		this.textDetails = textDetails;
+		this.additionalDetail = additionalDetail;
 		this.state = state;
+		this.advance = advance;
 		this.refusalReason = refusalReason;
+		this.publishingDate = publishingDate;
 	}
+
+
 
 	public Long getLndfid() {
 		return lndfid;
@@ -96,13 +101,7 @@ public class ExpenseReportLine
 		this.advance = advance;
 	}
 
-	public String getTypeLine() {
-		return typeLine;
-	}
 
-	public void setTypeLine(String typeLine) {
-		this.typeLine = typeLine;
-	}
 
 	public double getAmount() {
 		return amount;
@@ -112,13 +111,7 @@ public class ExpenseReportLine
 		this.amount = amount;
 	}
 
-	public String getTextDetails() {
-		return textDetails;
-	}
 
-	public void setTextDetails(String textDetails) {
-		this.textDetails = textDetails;
-	}
 
 	public String getState() {
 		return state;
@@ -135,6 +128,66 @@ public class ExpenseReportLine
 	public void setRefusalReason(String refusalReason) {
 		this.refusalReason = refusalReason;
 	}
+
+
+
+	public String getTypeOfExpense() {
+		return typeOfExpense;
+	}
+
+
+
+	public void setTypeOfExpense(String typeOfExpense) {
+		this.typeOfExpense = typeOfExpense;
+	}
+
+
+
+	public String getReasonOfRefund() {
+		return reasonOfRefund;
+	}
+
+
+
+	public void setReasonOfRefund(String reasonOfRefund) {
+		this.reasonOfRefund = reasonOfRefund;
+	}
+
+
+
+	public Date getDateOfOperation() {
+		return dateOfOperation;
+	}
+
+
+
+	public void setDateOfOperation(Date dateOfOperation) {
+		this.dateOfOperation = dateOfOperation;
+	}
+
+
+
+	public String getAdditionalDetail() {
+		return additionalDetail;
+	}
+
+
+
+	public void setAdditionalDetail(String additionalDetail) {
+		this.additionalDetail = additionalDetail;
+	}
+
+
+
+	@Override
+	public String toString() {
+		return "ExpenseReportLine [lndfid=" + lndfid + ", expenseReport=" + expenseReport + ", typeOfExpense="
+				+ typeOfExpense + ", reasonOfRefund=" + reasonOfRefund + ", dateOfOperation=" + dateOfOperation
+				+ ", amount=" + amount + ", additionalDetail=" + additionalDetail + ", state=" + state + ", advance="
+				+ advance + ", refusalReason=" + refusalReason + ", publishingDate=" + publishingDate + "]";
+	}
+
+	
 	
 	
 	

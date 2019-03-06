@@ -10,16 +10,6 @@ import { ExpenseReportRequest } from '../models/expense-report-request.model';
 })
 export class ExpenseReportRequestService {
 
-
-  errsSubject = new Subject<ExpenseReportRequest[]>();
-  private errs: ExpenseReportRequest[] = [];
-
   constructor(private httpclient: HttpClient, private globalService: GlobalService) { }
-
-  emitUsersSubject() {
-    if (this.errs != null) {
-      this.errsSubject.next(this.errs.slice());
-    }
-  }
 
 }

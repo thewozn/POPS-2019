@@ -6,8 +6,14 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body">
+  <div class="modal-body" *ngIf="this.modalData?.status === 'En cours'">
     <h5>Mission créée</h5>
+  </div>
+<div class="modal-body" *ngIf="this.modalData?.status === 'En création'">
+    <h5>Mission enregistrée</h5>
+    <div *ngIf="this.modalData?.launch === true">
+      <p>Impossible de démarrer la mission car des collaborateurs de services différents ont été assigné à cette mission</p>
+    </div>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-success" (click)="endCreate()">OK</button>
@@ -89,13 +95,18 @@
     </div>
 
     <div class="column">
-      <button class="validate-button" type="submit" value="Register" (click)="validate(missionTitle.value, missionStart.value, missionEnd.value, missionDescription.value)"
+      <button class="validate-button" type="submit" value="Register" (click)="validate(missionTitle.value, missionStart.value, missionEnd.value, missionDescription.value, 'false')"
         ng-disabled="register.$invalid">Valider la création</button>
     </div>
     <div class="column">
       <button class="abort-button" (click)="endCreate()">Abandonner</button>
     </div>
-
+    <div class="column">
+      <button class="launch-button" type="submit" value="Register" (click)="validate(missionTitle.value, missionStart.value, missionEnd.value, missionDescription.value, 'true')"
+        ng-disabled="register.$invalid">
+        Valider et Démarrer la mission
+      </button>
+    </div>
 
   </div>
   <div class="column">

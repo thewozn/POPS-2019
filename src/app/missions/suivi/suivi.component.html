@@ -24,9 +24,10 @@
       <mat-form-field>
         <mat-select placeholder="Statut" [formControl]="statutControl" [(ngModel)]="statutInput" required>
           <mat-option value=""></mat-option>
+          <mat-option value="Annulée">Annulée</mat-option>
+          <mat-option value="En création">En création</mat-option>
           <mat-option value="En cours">En cours</mat-option>
-          <mat-option value="En validation">En validation</mat-option>
-          <mat-option value="Validée">Validée</mat-option>
+          <mat-option value="Terminée">Terminée</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
@@ -40,9 +41,8 @@
   </div>
 </div>
 <button class="validate-button" style="margin: 0 2% 0;" (click)="newFilteredEvents()">Rechercher</button>
-<div id="top_box_missions" class="top_div" style="">
+<div id="top_box_missions" class="top_div">
   <table mat-table [dataSource]="displayedMission" class="mat-elevation-z8">
-
 
     <ng-container matColumnDef="titreMission">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Titre Mission</th>
@@ -73,7 +73,7 @@
     <ng-container matColumnDef="consulter">
       <th mat-header-cell *matHeaderCellDef> Editer</th>
       <td mat-cell *matCellDef="let element">
-        <button routerLink="notfound" class="consult-button" (click)="consultation(element.mid)">
+        <button routerLink="notfound" class="consult-button" (click)="consultation(element.mid, element.sid, element.status)">
         </button>
       </td>
     </ng-container>

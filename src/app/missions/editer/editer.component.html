@@ -6,8 +6,11 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body">
+  <div class="modal-body" *ngIf="this.mission.status === 'En création'">
     <h5>Êtes-vous sûr de vouloir supprimer cette mission ? </h5>
+  </div>
+  <div class="modal-body" *ngIf="this.mission.status === 'En cours'">
+    <h5>Êtes-vous sûr de vouloir annuler cette mission ? </h5>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-success" (click)="removeMission()">OUI</button>
@@ -33,18 +36,19 @@
 
 <div style="padding: 10px 0px 0px; ">
   <h3 style="margin-left: 20px; display: block;">EDITION</h3>
+  <h3 style="margin-left: 20px; display: block;">STATUT : {{ this.mission.status }}</h3>
 </div>
 
 <div id="top_box_missions" class="top_div">
   <div id="infos_missions" class="column">
     <div class="labels_div">Informations</div>
 
-    <input type="text" id="m_name" name="m_name" placeholder="Intitulé de la mission (Requis)"
-      [(ngModel)]="mission.title" [disabled]="isReadOnly">
+    <input type="text" id="m_name" name="m_name" placeholder="Intitulé de la mission (Requis)" [(ngModel)]="mission.title"
+      [disabled]="isReadOnly">
     <div class="labels_div">Dates</div>
-    <input class="form-control" type="text" mwlFlatpickr dateFormat="Y-m-d" altFormat="F j, Y"
-      placeholder="Date de début (YYYY-MM-DD) (Requis)" [(ngModel)]="mission.startDate" minDate="{{ minDate }}"
-      (ngModelChange)="updateEndDate()" [disabled]="isReadOnly" required>
+    <input class="form-control" type="text" mwlFlatpickr dateFormat="Y-m-d" altFormat="F j, Y" placeholder="Date de début (YYYY-MM-DD) (Requis)"
+      [(ngModel)]="mission.startDate" minDate="{{ minDate }}" (ngModelChange)="updateEndDate()" [disabled]="isReadOnly"
+      required>
     <input class="form-control" type="text" mwlFlatpickr dateFormat="Y-m-d" altFormat="F j, Y" placeholder="Date de fin (Laisser vide pour indéfini)"
       [(ngModel)]="mission.endDate" minDate="{{ minDateEnd }}" [disabled]="isReadOnly">
 
@@ -92,7 +96,7 @@
         <ng-container matColumnDef="ACTION">
           <th mat-header-cell *matHeaderCellDef> ACTION </th>
           <td mat-cell *matCellDef="let element">
-            <div *ngIf="(this.connectedService.getConnectedUser().sid === this.mission.sid && colors[element.uid] !== '#FFBBBB')">
+<div *ngIf="((this.connectedService.getConnectedUser().sid === this.mission.sid && colors[element.uid] !== '#FFBBBB')  && this.connectedService.getConnectedUser().status === 'HeadOfService') && (this.mission.status !== 'Annulée' && this.mission.status !== 'Terminée')">
               <button class="refuse-button" (click)="popEmployee(element)">
               </button>
             </div>
@@ -102,7 +106,7 @@
         <ng-container matColumnDef="VALID">
           <th mat-header-cell *matHeaderCellDef> VAL. </th>
           <td mat-cell *matCellDef="let element">
-            <div *ngIf="((colors[element.uid] === '#F6FCAB' ||  colors[element.uid] === '#FFBBBB') && this.connectedService.getConnectedUser().sid === element.sid)">
+<div *ngIf="(((colors[element.uid] === '#F6FCAB') && this.connectedService.getConnectedUser().sid === element.sid) && this.connectedService.getConnectedUser().status === 'HeadOfService' )  && (this.mission.status !== 'Annulée' && this.mission.status !== 'Terminée')">
               <button class="accept-button" (click)="validateUser(element.uid)">
               </button>
             </div>
@@ -112,7 +116,7 @@
         <ng-container matColumnDef="REFUS">
           <th mat-header-cell *matHeaderCellDef> REF. </th>
           <td mat-cell *matCellDef="let element">
-            <div *ngIf="((colors[element.uid] === '#F6FCAB' || colors[element.uid] === '#B8FFA6') && this.connectedService.getConnectedUser().sid === element.sid)">
+<div *ngIf="(((colors[element.uid] === '#F6FCAB') && this.connectedService.getConnectedUser().sid === element.sid)  && this.connectedService.getConnectedUser().status === 'HeadOfService')  && (this.mission.status !== 'Annulée' && this.mission.status !== 'Terminée')">
               <button class="refuse-button" (click)="refuseUser(element.uid)">
               </button>
             </div>
@@ -126,12 +130,29 @@
     </div>
 
     <div *ngIf="this.connectedService.getConnectedUser().sid === this.mission.sid">
-      <div class="column">
-        <button class="validate-button" type="submit" value="Register" (click)="validate()"
-          ng-disabled="register.$invalid">Valider les modifications</button>
+      <div class="column" *ngIf="this.mission.status !== 'Annulée' && this.mission.status !== 'Terminée'">
+        <button class="validate-button" type="submit" value="Register" (click)="validate()" ng-disabled="register.$invalid">
+          Valider les modifications
+        </button>
       </div>
-      <div class="column">
+
+      <div class="column" *ngIf="this.mission.status === 'En création'">
         <button class="abort-button" (click)="removeModal()">Supprimer</button>
+      </div>
+      <div class="column" *ngIf="this.mission.status === 'En cours'">
+        <button class="abort-button" (click)="removeModal()">Annuler</button>
+      </div>
+
+      <div class="column" *ngIf="this.mission.status === 'En création'">
+        <button class="launch-button" type="submit" value="Register" (click)="validate('true')" ng-disabled="register.$invalid">
+          Démarrer la mission
+        </button>
+      </div>
+
+      <div class="column" *ngIf="this.mission.status === 'En cours'">
+        <button class="end-button" type="submit" value="Register" (click)="validate('true')" ng-disabled="register.$invalid">
+          Mettre fin à la mission
+        </button>
       </div>
     </div>
 
@@ -184,7 +205,7 @@
           <ng-container matColumnDef="ACTION">
             <th mat-header-cell *matHeaderCellDef> ACTION </th>
             <td mat-cell *matCellDef="let element">
-              <div *ngIf="this.connectedService.getConnectedUser().sid === this.mission.sid">
+<div *ngIf="(this.connectedService.getConnectedUser().sid === this.mission.sid  && this.connectedService.getConnectedUser().status === 'HeadOfService') && (this.mission.status !== 'Annulée' && this.mission.status !== 'Terminée')">
                 <button class="add-button" (click)="pushEmployee(element)">
                 </button>
               </div>

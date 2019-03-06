@@ -8,12 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pops1819.sid.entities.ExpenseReport;
+import com.pops1819.sid.entities.ExpenseReportLine;
+import com.pops1819.sid.entities.Mission;
 import com.pops1819.sid.entities.User;
 import com.pops1819.sid.mappers.ControllerMapper;
 import com.pops1819.sid.model.ExpenseReportLineRequest;
 import com.pops1819.sid.model.ExpenseReportRequest;
 import com.pops1819.sid.repository.IExpenseReportLineRepository;
 import com.pops1819.sid.repository.IExpenseReportRepository;
+import com.pops1819.sid.repository.IMissionRepository;
 import com.pops1819.sid.repository.IUserRepository;
 
 @Service
@@ -24,6 +27,8 @@ public class ExpenseReportRequestServiceImpl implements IExpenseReportRequestSer
 	private IUserRepository userRepository;
 	@Autowired
 	private IExpenseReportLineRepository expenseReportLineRepository;
+	@Autowired
+	private IMissionRepository missionRepository;
 	
 	@Autowired
 	private ControllerMapper mapper;
@@ -50,14 +55,43 @@ public class ExpenseReportRequestServiceImpl implements IExpenseReportRequestSer
 	}
 
 	@Override
-	public boolean addExpenseReportLineRepository(Long uid, ExpenseReportLineRequest expenseReportLineRequest) {
-		User user = userRepository.findByUid(uid);
-		if(user == null)
+	public boolean addExpenseReportLineRequest(ExpenseReportLineRequest expenseReportLineRequest) {
+		ExpenseReport expenseReport = expenseReportRepository.findByDid(expenseReportLineRequest.getDid());
+		ExpenseReportLine expenseReportLine = mapper.getExpenseReportLine(expenseReportLineRequest);
+		Mission mission = missionRepository.findByMid(expenseReportLineRequest.getMid());
+		if(mission == null || expenseReport == null || expenseReportLine == null)
 			return false;
-		
-		
+		expenseReportLine.setExpenseReport(expenseReport);
+		expenseReportLine.setMission(mission);
+		expenseReportLine.setExpenseReport(expenseReport);
+		expenseReportLineRepository.save(expenseReportLine);
 		
 		return true;
+	}
+
+	@Override
+	public boolean updateExpenseReportLineRequest(ExpenseReportLineRequest expenseReportLineRequest)
+	{
+		if(!expenseReportLineRepository.existsByLndfid(expenseReportLineRequest.getLndfid()))
+			return false;
+		ExpenseReport expenseReport = expenseReportRepository.findByDid(expenseReportLineRequest.getDid());
+		ExpenseReportLine expenseReportLine = mapper.getExpenseReportLine(expenseReportLineRequest);
+		Mission mission = missionRepository.findByMid(expenseReportLineRequest.getMid());
+		if(mission == null || expenseReport == null || expenseReportLine == null)
+			return false;
+		
+		expenseReportLine.setExpenseReport(expenseReport);
+		expenseReportLine.setMission(mission);
+		expenseReportLine.setExpenseReport(expenseReport);
+		expenseReportLineRepository.save(expenseReportLine);
+		
+		return false;
+	}
+
+	@Override
+	public boolean removeExpenseReportLineRequest(Long lndfid) {
+		
+		return false;
 	}
 	
 

@@ -11,11 +11,7 @@ import com.pops1819.sid.entities.User;
 public interface IMissionRepository extends JpaRepository<Mission, Long>{
 
 	Mission findByMid(Long mid);
-	
-	
 	List<Mission> findByService(Service sid);
-
-
 	void deleteByMid(Long mid);
 
 

@@ -144,7 +144,8 @@ public interface ControllerMapper {
 	
 	
 	@Mappings({ @Mapping(source = "expenseReport.did", target = "did"),
-		@Mapping(source = "expenseReport.user.uid", target = "uid")})
+		@Mapping(source = "expenseReport.user.uid", target = "uid"),
+		@Mapping(source = "expenseReport.expenseReportLines", target = "expenseReportLineRequest")})
 	ExpenseReportRequest getExpenseReportRequest(ExpenseReport expenseReport);
 	List<ExpenseReportRequest> getExpenseReportRequestList(List<ExpenseReport> expenseReportList);
 	

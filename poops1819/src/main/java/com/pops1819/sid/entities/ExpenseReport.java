@@ -63,8 +63,6 @@ public class ExpenseReport implements Serializable
 		this.expenseReportLines = expenseReportLines;
 	}
 
-
-
 	public String getStatus() {
 		return status;
 	}
@@ -87,6 +85,19 @@ public class ExpenseReport implements Serializable
 		this.expenseReportLines = expenseReportLines;
 	}
 
+
+	public void addExpenseReportLine(ExpenseReportLine expenseReportLine)
+	{
+		expenseReportLines.add(expenseReportLine);
+	}
+	
+	public void removeExpenseReportLine(ExpenseReportLine expenseReportLine)
+	{
+		expenseReportLines.remove(expenseReportLine);
+	}
+		
+	
+	
 
 	public Long getDid() {
 		return did;
@@ -127,12 +138,22 @@ public class ExpenseReport implements Serializable
 		this.traitmentDate = traitmentDate;
 	}
 
+	
+	@Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ExpenseReport)) return false;
+        return did != null && did.equals(((ExpenseReport) o).did);
+    }
+
 
 	@Override
 	public String toString() {
-		return "ExpenseReport [did=" + did + ", requestDate=" + requestDate + ", traitmentDate=" + traitmentDate
-				+ ", status=" + status + "]";
+		return "ExpenseReport [did=" + did + ", user=" + user + ", requestDate=" + requestDate + ", traitmentDate="
+				+ traitmentDate + ", status=" + status + ", expenseReportLines=" + expenseReportLines + "]";
 	}
+
+	
 	
 	
 	

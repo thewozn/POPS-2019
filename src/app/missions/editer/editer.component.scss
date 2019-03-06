@@ -261,3 +261,36 @@ table {
   background-size: contain;
   outline: none;
 }
+
+.launch-button {
+  border-radius: 3px;
+  background-color: #32CD32;
+  color: white;
+  border: 2px solid #32CD32;
+  width: 205%;
+  padding: 10px 10px 10px;
+  cursor: pointer;
+}
+
+.launch-button:hover {
+  border-radius: 3px;
+  background-color: white;
+  color: black;
+}
+
+.end-button {
+  border-radius: 3px;
+  background-color: #FFA500;
+  color: white;
+  border: 2px solid #FFA500;
+  width: 205%;
+  padding: 10px 10px 10px;
+  cursor: pointer;
+}
+
+.end-button:hover {
+  border-radius: 3px;
+  background-color: white;
+  color: black;
+}
+

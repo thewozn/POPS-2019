@@ -51,6 +51,11 @@ export class CreerComponent implements OnInit {
   minDate;
   minDateEnd;
 
+  modalData = {
+    status: '',
+    launch: false,
+  };
+
   constructor(
     private serviceService: ServiceService,
     private userService: UserService,
@@ -90,20 +95,25 @@ export class CreerComponent implements OnInit {
     this.dataSource_selected.data = this.dataSource_selected.data;
   }
 
-  validate(title: string, missionStart: string, missionEnd: string, description: string): void {
+  validate(title: string, missionStart: string, missionEnd: string, description: string, launch: boolean): void {
     if (title.length > 3) {
       if (missionStart !== '') {
-        status = 'Validée';
-
         if (this.dataSource_selected.data.length > 0) {
 
+          status = 'En création';
+
+        if (launch) {
+          console.log(launch);
+          status = 'En cours';
+        }
 
         for (const dS of this.dataSource_selected.data) {
           if (dS.sid !== this.connectedService.getConnectedUser().sid) {
-            status = 'En cours';
+            status = 'En création';
           }
         }
 
+        this.modalData = {status, launch};
         const newMission: Mission = new Mission(
           null,
           description, // description
@@ -126,7 +136,7 @@ export class CreerComponent implements OnInit {
               );
             }
             this.loadData();
-            this.modal.open(this.modalContent, { size: 'sm' });
+            this.modal.open(this.modalContent, { size: 'md' });
           },
           error => {
             console.log(error);
@@ -153,7 +163,7 @@ export class CreerComponent implements OnInit {
     this._error.subscribe(message => (this.errorMessage = message));
 
     const today = new Date();
-    today.setDate(today.getDate() + 7);
+    today.setDate(today.getDate());
     this.minDate = today.toISOString().substr(0, 10);
     this.minDateEnd = today.toISOString().substr(0, 10);
 

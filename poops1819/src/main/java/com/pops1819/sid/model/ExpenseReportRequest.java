@@ -15,7 +15,9 @@ public class ExpenseReportRequest
 	private Date traitmentDate;
 	
 	private String status;
-		
+	
+	private List<ExpenseReportLineRequest> expenseReportLineRequest = new ArrayList<>();
+
 	public ExpenseReportRequest() {
 		super();
 	}
@@ -31,7 +33,6 @@ public class ExpenseReportRequest
 		this.expenseReportLineRequest = expenseReportLineRequest;
 	}
 
-	private List<ExpenseReportLineRequest> expenseReportLineRequest = new ArrayList<>();
 
 	public Long getDid() {
 		return did;

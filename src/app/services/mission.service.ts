@@ -107,4 +107,9 @@ export class MissionService {
     return await this.httpclient.patch<Mission>(this.globalService.getbaseUrl() + '/refuseUserRequestedForMission/' + mid + '/' + uid,
       this.globalService.gethttpOptions()).toPromise();
   }
+
+  async removeUserFromMissionFromServer(mid: number, uid: number) {
+    return await this.httpclient.delete<Mission>(this.globalService.getbaseUrl() + '/removeUserFromMission/' +
+    mid + '/' + uid, this.globalService.gethttpOptions()).toPromise();
+  }
 }

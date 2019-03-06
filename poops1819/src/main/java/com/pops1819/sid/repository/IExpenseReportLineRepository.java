@@ -6,5 +6,6 @@ import com.pops1819.sid.entities.ExpenseReportLine;
 
 public interface IExpenseReportLineRepository extends JpaRepository<ExpenseReportLine, Long>
 {
+	public boolean existsByLndfid(Long lndfid);
 
 }
