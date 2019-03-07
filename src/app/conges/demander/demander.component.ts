@@ -267,10 +267,9 @@ export class DemanderComponent implements OnInit {
                 if (
                   this.vacationsService.getVacationsById(this.vacations, vr.vid).name === b.name
                 ) {
-                  t +=
-                    (new Date(vr.endDate).getTime() -
-                      new Date(vr.startDate).getTime()) /
-                    (1000 * 3600 * 24);
+                  t += Math.round((new Date(vr.endDate).getTime() -
+                    new Date(vr.startDate).getTime()) /
+                    (1000 * 3600 * 24));
                 }
               }
 

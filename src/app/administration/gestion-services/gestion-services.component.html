@@ -46,28 +46,29 @@
   <form (ngSubmit)="onSubmit(f)" #f="ngForm">
     <div class="modal-body">
       <div class="container">
-
+        <ngb-alert *ngIf="errorMessage" type="danger" (close)="errorMessage = null">{{ errorMessage }}</ngb-alert>
         <div class="form-group">
           <label for="name">
             Nom
           </label>
-          <input [(ngModel)]="name" name="name" type="text" id="name" class="form-control" ngModel required>
+          <input [(ngModel)]="this.modifServiceData.name" value="this.modalServiceData?.name" name="name" type="text"
+            id="name" class="form-control" required>
         </div>
 
         <div class="form-group">
           <label for="hos">
             Chef de service
           </label>
-          <select class="form-control" [(ngModel)]="hos" name="hos" id="hos" required>
-            <option *ngFor="let el of user" [value]="el.uid">{{el.lastName}}</option>
+          <select class="form-control" [(ngModel)]="this.modifServiceData.headOfService" value="this.modalServiceData?.headOfService"
+            name="hos" id="hos" required>
+            <option *ngFor="let el of user" [value]="el.uid">{{ el.lastName }} {{ el.firstName }}</option>
           </select>
         </div>
-
       </div>
     </div>
   </form>
   <div class="modal-footer">
-    <button type="button" class="btn btn-success" [disabled]="f.invalid" (click)="modifService(f)">Enregistrer</button>
+    <button type="button" class="btn btn-success" [disabled]="f.invalid" (click)="modifService()">Enregistrer</button>
     <button type="button" class="btn btn-danger" [disabled]="f.invalid" (click)="modal.dismiss('Annuler')">Annuler</button>
   </div>
 </ng-template>
@@ -85,34 +86,41 @@
   </div>
 </ng-template>
 
-<button id="btncreate" type="button" class="btn btn-success" (click)="openCreer(ajout)">Ajouter un service</button>
-<table mat-table #table [dataSource]="service" class="mat-elevation-z8">
-  <ng-container matColumnDef="name">
-    <th mat-header-cell *matHeaderCellDef> Nom</th>
-    <td mat-cell *matCellDef="let element"> {{ element.name }} </td>
-  </ng-container>
+<div id="top_box_missions" class="top_div">
+  <div style="margin-top: 10px;">
+    <button id="btncreate" type="button" class="btn btn-success" (click)="openCreer(ajout)">Ajouter un service</button>
+  </div>
+  <table mat-table #table [dataSource]="service" class="mat-elevation-z8">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Nom</th>
+      <td mat-cell *matCellDef="let element"> {{ element.name }} </td>
+    </ng-container>
+    <ng-container matColumnDef="head">
+      <th mat-header-cell *matHeaderCellDef> Chef de service </th>
+      <td mat-cell *matCellDef="let element"> {{ this.userService.getUserById(this.user,
+        element.headOfService).lastName
+        }}
+        {{ this.userService.getUserById(this.user, element.headOfService).firstName }} </td>
+    </ng-container>
 
-  <ng-container matColumnDef="head">
-    <th mat-header-cell *matHeaderCellDef> Chef de service </th>
-    <td mat-cell *matCellDef="let element"> {{ this.userService.getUserById(this.user, element.headOfService).lastName }}
-{{this.userService.getUserById(this.user, element.headOfService).firstName }} </td>
-  </ng-container>
+    <ng-container matColumnDef="modif">
+      <th mat-header-cell *matHeaderCellDef> Modif </th>
+      <td mat-cell *matCellDef="let element">
+        <div>
+          <button class="btn btn-success" (click)="openModif(modif, element)"><i class="fa fa-edit" aria-hidden="true"></i></button>
+        </div>
+      </td>
+    </ng-container>
 
-  <!--TODO : Ajouter la fonction au button -->
-  <ng-container matColumnDef="modif">
-    <th mat-header-cell *matHeaderCellDef> Modif </th>
-    <td mat-cell *matCellDef="let element">
-      <button class="btn btn-success" (click)="openModif(modif, element)"><i class="fa fa-edit" aria-hidden="true"></i></button>
-    </td>
-  </ng-container>
+    <!--TODO : Ajouter la fonction au button -->
+    <ng-container matColumnDef="supprimer">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let element">
+        <!-- <button class="btn btn-danger" (click)="openSuppr(suppr)"><i class="fa fa-trash" aria-hidden="true"></i></button> -->
+      </td>
+    </ng-container>
 
-  <!--TODO : Ajouter la fonction au button -->
-  <ng-container matColumnDef="supprimer">
-    <th mat-header-cell *matHeaderCellDef> Supprimer </th>
-    <td mat-cell *matCellDef="let element">
-      <button class="btn btn-danger" (click)="openSuppr(suppr)"><i class="fa fa-trash" aria-hidden="true"></i></button>
-    </td>
-  </ng-container>
-  <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-</table>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>

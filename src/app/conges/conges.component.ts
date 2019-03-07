@@ -15,25 +15,14 @@ export class CongesComponent implements OnInit {
   navLinks: any[] = [];
   activeLinkIndex = -1;
 
-
-  private service: Service[];
   constructor(private connectedService: ConnectedService, private serviceService: ServiceService, private router: Router) {
   }
 
   ngOnInit() {
-    this.serviceService.getServicesFromServer().then(
-      (response) => {
-        this.service = this.service;
-        this.generateNavLinks();
-
-        this.router.events.subscribe((res) => {
-          this.activeLinkIndex = this.navLinks.indexOf(this.navLinks.find(tab => tab.link === '.' + this.router.url));
-        });
-      },
-      (error) => {
-
-      }
-    );
+    this.generateNavLinks();
+    this.router.events.subscribe((res) => {
+      this.activeLinkIndex = this.navLinks.indexOf(this.navLinks.find(tab => tab.link === '.' + this.router.url));
+    });
   }
 
   generateNavLinks() {

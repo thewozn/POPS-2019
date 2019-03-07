@@ -95,14 +95,14 @@
     </div>
 
     <div class="column">
-      <button class="validate-button" type="submit" value="Register" (click)="validate(missionTitle.value, missionStart.value, missionEnd.value, missionDescription.value, 'false')"
+      <button class="validate-button" type="submit" value="Register" (click)="validate(missionTitle.value, missionStart.value, missionEnd.value, missionDescription.value, false)"
         ng-disabled="register.$invalid">Valider la création</button>
     </div>
     <div class="column">
       <button class="abort-button" (click)="endCreate()">Abandonner</button>
     </div>
     <div class="column">
-      <button class="launch-button" type="submit" value="Register" (click)="validate(missionTitle.value, missionStart.value, missionEnd.value, missionDescription.value, 'true')"
+      <button class="launch-button" type="submit" value="Register" (click)="validate(missionTitle.value, missionStart.value, missionEnd.value, missionDescription.value, true)"
         ng-disabled="register.$invalid">
         Valider et Démarrer la mission
       </button>

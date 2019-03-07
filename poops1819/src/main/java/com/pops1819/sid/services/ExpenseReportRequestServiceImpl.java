@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,6 +55,21 @@ public class ExpenseReportRequestServiceImpl implements IExpenseReportRequestSer
 		System.out.println(expenseReport.toString());
 		return mapper.getExpenseReportRequest(expenseReport);
 	}
+	
+	@Override
+	public ExpenseReportRequest getExpenseReportByDid(Long did) {
+		if(!expenseReportRepository.existsByDid(did)) {
+			return null;
+		}
+		return mapper.getExpenseReportRequest(expenseReportRepository.findByDid(did));
+		
+	}
+	
+	@Override
+	public List<ExpenseReportRequest> getExpenseReportByUID(Long uid) {
+		User user = userRepository.findByUid(uid);
+		return mapper.getExpenseReportRequestList(expenseReportRepository.findByUser(user));
+	}
 
 	@Override
 	public boolean addExpenseReportLineRequest(ExpenseReportLineRequest expenseReportLineRequest) {
@@ -85,13 +102,18 @@ public class ExpenseReportRequestServiceImpl implements IExpenseReportRequestSer
 		expenseReportLine.setExpenseReport(expenseReport);
 		expenseReportLineRepository.save(expenseReportLine);
 		
-		return false;
+		return true;
 	}
 
+	@Transactional
 	@Override
 	public boolean removeExpenseReportLineRequest(Long lndfid) {
+		//ExpenseReportLine expenseReportLine = expenseReportLineRepository.findByLndfid(lndfid);
+		if(!expenseReportLineRepository.existsByLndfid(lndfid))
+			return false;
 		
-		return false;
+		expenseReportLineRepository.deleteByLndfid(lndfid);
+		return true;
 	}
 	
 

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgForm } from '@angular/forms';
-
+import { Subject } from 'rxjs';
 
 import { Service } from '../../models/service.model';
 import { ServiceService } from '../../services/service.service';
@@ -15,13 +15,17 @@ import { User } from '../../models/user.model';
   styleUrls: ['./gestion-services.component.scss']
 })
 export class GestionServicesComponent implements OnInit {
+  private _error = new Subject<string>();
+  private errorMessage: string;
   displayedColumns: string[] = ['name', 'head', 'modif', 'supprimer'];
   service: Service[];
   user: User[];
-
+  modifServiceData;
+  serviceName;
   constructor(private serviceService: ServiceService, private userService: UserService, private modalService: NgbModal) { }
 
   ngOnInit() {
+    this._error.subscribe((message) => this.errorMessage = message);
     this.loadData();
   }
 
@@ -38,7 +42,7 @@ export class GestionServicesComponent implements OnInit {
   addService(form: NgForm) {
     const newService: Service = new Service(null, form.value['name'], form.value['hos']);
 
-    this.serviceService.addServiceServer(newService).then(
+    this.serviceService.addServiceFromServer(newService).then(
       (response) => {
         this.loadData();
       },
@@ -54,10 +58,31 @@ export class GestionServicesComponent implements OnInit {
   }
 
   openModif(content, element: Service) {
+    this.modifServiceData = element;
+    this.serviceName = element.name;
     this.modalService.open(content, { centered: true });
   }
 
   openSuppr(content) {
     this.modalService.open(content, { centered: true });
+  }
+
+  modifService() {
+    if ((this.serviceName === 'Accounting' ||
+      this.serviceName === 'HumanResource' ||
+      this.serviceName === 'Management') && this.serviceName !== this.modifServiceData.name) {
+      this._error.next('Interdiction de modifier le nom de ce service');
+    } else {
+      this.serviceService.updateServiceFromServer(this.modifServiceData).then(
+        (response) => {
+          this.loadData();
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+
+      this.modalService.dismissAll();
+    }
   }
 }

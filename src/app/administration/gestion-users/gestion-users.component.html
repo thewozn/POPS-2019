@@ -38,7 +38,15 @@
           <input [(ngModel)]="password" name="password" type="password" id="password" class="form-control" ngModel
             required>
         </div>
-        <!-- TODO : add a DatePicker for the Date of birth -->
+
+        <div class="form-group">
+          <label for="dateOfBirth">
+            Date de naissance
+          </label>
+          <input name="dateOfBirth" id="dateOfBirth" class="form-control" type="text" mwlFlatpickr dateFormat="Y-m-d"
+            altFormat="F j, Y" [(ngModel)]="dateOfBirth" required>
+        </div>
+
         <div class="form-group">
           <label for="adresse">
             Adresse
@@ -72,7 +80,7 @@
             Service
           </label>
           <select class="form-control" [(ngModel)]="sid" name="sid" id="sid" required>
-            <option *ngFor="let el of service" [value]="el.sid">{{el.name}}</option>
+            <option *ngFor="let el of service" [value]="el.sid">{{ el.name }}</option>
           </select>
         </div>
 
@@ -98,126 +106,185 @@
       <div class="container">
         <div class="form-group">
           <label for="lastName">
-            {{ lastName }}
+            Nom
           </label>
-          <input [(ngModel)]="lastName" name="lastName" type="text" id="lastName" class="form-control" ngModel required disabled>
+          <input [(ngModel)]="this.modifUserData.lastName" name="lastName" type="text" id="lastName" class="form-control"
+            value="this.modifUserData?.lastName" required>
         </div>
 
         <div class="form-group">
           <label for="firstName">
             Prénom
           </label>
-          <input [(ngModel)]="firstName" name="firstName" type="text" id="firstName" class="form-control" ngModel
-            required>
+          <input [(ngModel)]="this.modifUserData.firstName" name="firstName" type="text" id="firstName" class="form-control"
+            value="this.modifUserData?.firstName" required>
         </div>
 
         <div class="form-group">
           <label for="email">
             Email
           </label>
-          <input [(ngModel)]="email" name="email" type="text" id="email" class="form-control" ngModel required>
+          <input [(ngModel)]="this.modifUserData.email" name="email" type="text" id="email" class="form-control" value="this.modifUserData?.email"
+            required>
         </div>
 
         <div class="form-group">
           <label for="password">
             Mot de passe
           </label>
-          <input [(ngModel)]="password" name="password" type="password" id="password" class="form-control" ngModel
-            required>
+          <input [(ngModel)]="this.modifUserData.password" name="password" type="password" id="password" class="form-control"
+            value="this.modifUserData?.password" required>
         </div>
-        <!-- TODO : add a DatePicker for the Date of birth -->
+
+        <div class="form-group">
+          <label for="dateOfBirth">
+            Date de naissance
+          </label>
+          <input name="dateN" id="dateN" class="form-control" type="text" mwlFlatpickr dateFormat="Y-m-d" altFormat="F j, Y"
+            [(ngModel)]="this.modifUserData.dateN" value="this.modifUserData?.dateN">
+        </div>
+
         <div class="form-group">
           <label for="adresse">
             Adresse
           </label>
-          <input [(ngModel)]="address" name="address" type="text" id="address" class="form-control" ngModel required>
+          <input [(ngModel)]="this.modifUserData.address" name="address" type="text" id="address" class="form-control"
+            value="this.modifUserData?.address" required>
         </div>
 
         <div class="form-group">
           <label for="city">
             Ville
           </label>
-          <input [(ngModel)]="city" name="city" type="text" id="city" class="form-control" ngModel required>
+          <input [(ngModel)]="this.modifUserData.city" name="city" type="text" id="city" class="form-control" value="this.modifUserData?.city"
+            required>
         </div>
 
         <div class="form-group">
           <label for="cp">
             Code Postal
           </label>
-          <input [(ngModel)]="cp" name="cp" type="text" id="cp" class="form-control" ngModel required>
+          <input [(ngModel)]="this.modifUserData.cp" name="cp" type="text" id="cp" class="form-control" value="this.modifUserData?.cp"
+            required>
         </div>
 
         <div class="form-group">
           <label for="country">
             Pays
           </label>
-          <input [(ngModel)]="country" name="country" type="text" id="country" class="form-control" ngModel required>
+          <input [(ngModel)]="this.modifUserData.country" name="country" type="text" id="country" class="form-control"
+            value="this.modifUserData?.country" required>
         </div>
 
-        <!-- <div class="form-group">
-          <label for="hos">
-            Chef de service
+        <div class="form-group">
+          <label for="sid">
+            Service
           </label>
-          <select class="form-control" [(ngModel)]="hos" name="hos" id="hos" required>
-            <option *ngFor="let el of user" [value]="el.uid">{{el.lastName}}</option>
+          <select class="form-control" [(ngModel)]="this.modifUserData.sid" value="this.modifUserData?.sid" name="sid"
+            id="sid" required>
+            <option *ngFor="let el of service" [value]="el.sid">{{ el.name }}</option>
           </select>
-        </div> -->
+        </div>
 
       </div>
     </div>
   </form>
   <div class="modal-footer">
-    <button type="button" class="btn btn-success" [disabled]="f.invalid" (click)="modifUser(f)">Enregistrer</button>
+    <button type="button" class="btn btn-success" [disabled]="f.invalid" (click)="modifUser()">Enregistrer</button>
     <button type="button" class="btn btn-danger" [disabled]="f.invalid" (click)="modal.dismiss('Annuler')">Annuler</button>
   </div>
 </ng-template>
 
-<!--Modal de suppression d'utilisateur-->
+<!--Modal de désactivation d'utilisateur-->
 <ng-template #suppr let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Suppression d'utilisateur</h4>
+    <h4 class="modal-title" id="modal-basic-title">Désactivation</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body">
-    <p>MODAL DE SUPPRESION</p>
+    <p>Êtes-vous sûr de vouloir désactiver ce compte ?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success" (click)="desactivate()">OUI</button>
+    <button type="button" class="btn btn-danger" (click)="modal.dismiss()">NON</button>
   </div>
 </ng-template>
 
-<button id="btncreate" type="button" class="btn btn-success" (click)="openCreer(ajout)">Ajouter un utilisateur</button>
-<table mat-table #table [dataSource]="user" class="mat-elevation-z8">
-  <ng-container matColumnDef="lastName">
-    <th mat-header-cell *matHeaderCellDef> Nom</th>
-    <td mat-cell *matCellDef="let element"> {{ element.lastName }} </td>
-  </ng-container>
+<!--Modal de d'activation d'utilisateur-->
+<ng-template #activate let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Activation</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>Êtes-vous sûr de vouloir réactiver ce compte ?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success" (click)="desactivate()">OUI</button>
+    <button type="button" class="btn btn-danger" (click)="modal.dismiss()">NON</button>
+  </div>
+</ng-template>
 
-  <ng-container matColumnDef="firstName">
-    <th mat-header-cell *matHeaderCellDef> Prénom </th>
-    <td mat-cell *matCellDef="let element"> {{ element.firstName }} </td>
-  </ng-container>
+<div id="top_box_missions" class="top_div">
+  <div style="margin-top: 10px;">
 
-  <ng-container matColumnDef="service">
-    <th mat-header-cell *matHeaderCellDef> Service </th>
-    <td mat-cell *matCellDef="let element"> {{ this.serviceService.getServiceById(this.service, element.sid).name }} </td>
-  </ng-container>
+    <button id="btncreate" type="button" class="btn btn-success" (click)="openCreer(ajout)">Ajouter un utilisateur</button>
 
-  <!--TODO : Ajouter la fonction au button -->
-  <ng-container matColumnDef="modif">
-    <th mat-header-cell *matHeaderCellDef> Modif </th>
-    <td mat-cell *matCellDef="let element">
-      <button class="btn btn-success" (click)="openModif(modif, element)"><i class="fa fa-edit" aria-hidden="true"></i></button>
-    </td>
-  </ng-container>
+  </div>
+  <table mat-table #table [dataSource]="user" class="mat-elevation-z8">
 
-  <!--TODO : Ajouter la fonction au button -->
-  <ng-container matColumnDef="supprimer">
-    <th mat-header-cell *matHeaderCellDef> Supprimer </th>
-    <td mat-cell *matCellDef="let element">
-      <button class="btn btn-danger" (click)="openSuppr(suppr)"><i class="fa fa-trash" aria-hidden="true"></i></button>
-    </td>
-  </ng-container>
+    <ng-container matColumnDef="lastName">
+      <th mat-header-cell *matHeaderCellDef> Nom</th>
+      <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': colors[element.uid]}"> {{ element.lastName
+        }} </td>
+    </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-</table>
+    <ng-container matColumnDef="firstName">
+      <th mat-header-cell *matHeaderCellDef> Prénom </th>
+      <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': colors[element.uid]}"> {{
+        element.firstName
+        }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef> Email </th>
+      <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': colors[element.uid]}">
+        {{ element.email }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="service">
+      <th mat-header-cell *matHeaderCellDef> Service </th>
+      <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': colors[element.uid]}">
+        {{ this.serviceService.getServiceById(this.service, element.sid).name }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="modif">
+      <th mat-header-cell *matHeaderCellDef> Modif </th>
+      <td mat-cell *matCellDef="let element">
+        <button class="btn btn-primary" (click)="openModif(modif, element)"><i class="fa fa-edit" aria-hidden="true"></i></button>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="supprimer">
+      <th mat-header-cell *matHeaderCellDef> Action </th>
+      <td mat-cell *matCellDef="let element">
+        <div *ngIf="element.alive">
+          <button class="btn btn-danger" (click)="openModif(suppr, element)"><i class="fa fa-ban" aria-hidden="true"></i></button>
+        </div>
+        <div *ngIf="!element.alive">
+          <button class="btn btn-success" (click)="openModif(activate, element)"><i class="fa fa-plus" aria-hidden="true"></i></button>
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>

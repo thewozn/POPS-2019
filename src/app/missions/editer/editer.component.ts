@@ -145,13 +145,14 @@ export class EditerComponent implements OnInit {
     this.dataSource.filter = filters;
   }
 
-  validate(launch: boolean): void {
+   validate(launch: boolean) {
     let checkLaunch = true;
     if (this.mission.title.length > 3) {
       if (this.mission.startDate !== '') {
         if (this.dataSource_selected.data.length > 0) {
-
-          if (launch === true) {
+          console.log(launch);
+          if (launch) {
+            console.log('DEBUG');
             if (this.mission.status === 'En cours') {
               this.mission.status = 'Terminée';
             } else if (this.mission.status === 'En création') {
@@ -173,14 +174,15 @@ export class EditerComponent implements OnInit {
                 }
               }
 
-              if (checkLaunch === true) {
+              if (checkLaunch) {
                 this.mission.status = 'En cours';
               }
             }
           }
 
-          if (checkLaunch === true) {
-          this.missionService.updateMissionFromServer(this.mission).then(
+
+          if (checkLaunch) {
+           this.missionService.updateMissionFromServer(this.mission).then(
             response => {
               for (const dS of this.dataSource_selected.data) {
                 const valid = this.mission.users.some(item => item.uid === dS.uid);
@@ -189,10 +191,9 @@ export class EditerComponent implements OnInit {
 
                 if (!valid && !wait && !refused) {
                   console.log(dS);
-                  this.missionService.affectUserToMissionFromServer(this.mission.mid, dS.uid).then(
+                   this.missionService.affectUserToMissionFromServer(this.mission.mid, dS.uid).then(
                     (affect) => {
                       console.log(this.mission);
-                      this.loadData();
                     },
                     (error) => {
                       console.log(error);
@@ -206,10 +207,10 @@ export class EditerComponent implements OnInit {
                 const wait = this.mission.usersRequested.some(item => item.uid === u.uid);
 
                 if (valid === true || wait === true) {
-                  this.missionService.removeUserFromMissionFromServer(this.mission.mid, u.uid).then(
+                  console.log(u);
+                   this.missionService.removeUserFromMissionFromServer(this.mission.mid, u.uid).then(
                     (remove) => {
                       console.log(this.mission);
-                      this.loadData();
                     },
                     (error) => {
                       console.log(error);
@@ -218,7 +219,6 @@ export class EditerComponent implements OnInit {
                 }
               }
 
-              this.loadData();
               this.modal.open(this.modalContent, { size: 'sm' });
             },
             error => {

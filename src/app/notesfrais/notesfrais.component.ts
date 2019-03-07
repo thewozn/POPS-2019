@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from '@angular/router';
 
+import {ConnectedService} from '../services/connected.service';
+
 @Component({
   selector: 'app-notesfrais',
   templateUrl: './notesfrais.component.html',
@@ -8,11 +10,20 @@ import {Router} from '@angular/router';
 })
 export class NotesfraisComponent implements OnInit {
 
-  navLinks: any[];
+  navLinks: any[] = [];
   activeLinkIndex = -1;
 
-  constructor(private router: Router) {
-    this.navLinks = [
+  constructor(private router: Router, private connectedService: ConnectedService) {}
+
+  ngOnInit() {
+    this.generateNavLinks();
+    this.router.events.subscribe((res) => {
+      this.activeLinkIndex = this.navLinks.indexOf(this.navLinks.find(tab => tab.link === '.' + this.router.url));
+    });
+  }
+
+  generateNavLinks() {
+    this.navLinks.push(
       {
         label: 'Ma note de frais',
         link: './mynote',
@@ -21,17 +32,17 @@ export class NotesfraisComponent implements OnInit {
         label: 'Suivi',
         link: './suivi',
         index: 1
-      }, {
-        label: 'Valider',
-        link: './valider',
-        index: 2
-      }
-    ]; }
+      },
+    );
 
-  ngOnInit() {
-    this.router.events.subscribe((res) => {
-      this.activeLinkIndex = this.navLinks.indexOf(this.navLinks.find(tab => tab.link === '.' + this.router.url));
-    });
+    if (this.connectedService.getConnectedUser().status === 'HeadOfService') {
+      this.navLinks.push(
+        {
+          label: 'Valider',
+          link: './valider',
+          index: 2
+        }
+      );
+    }
   }
-
 }

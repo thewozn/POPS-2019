@@ -1,5 +1,7 @@
 package com.pops1819.sid.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +20,21 @@ public class ExpenseReportRestController
 {
 	@Autowired
 	private ExpenseReportRequestServiceImpl expenseReportRequestServiceImpl;
+	
+	@RequestMapping(value = "/getExpenseReportByDid/{did}", method = RequestMethod.GET)
+	public ExpenseReportRequest getExpenseReportByDid(@PathVariable Long did) {
+		return expenseReportRequestServiceImpl.getExpenseReportByDid(did);
+	}
+
+	@RequestMapping(value = "/updateExpenseReportLineRequest", method = RequestMethod.PATCH)
+	public boolean updateExpenseReportLineRequest(@RequestBody ExpenseReportLineRequest expenseReportLineRequest) {
+		return expenseReportRequestServiceImpl.updateExpenseReportLineRequest(expenseReportLineRequest);
+	}
+	
+	@RequestMapping(value = "/deleteExpenseReportLineRequest/{lndfid}", method = RequestMethod.DELETE)
+	public boolean removeExpenseReportLineRequest(@PathVariable Long lndfid) {
+		return expenseReportRequestServiceImpl.removeExpenseReportLineRequest(lndfid);
+	}
 
 	@RequestMapping(value = "/addExpenseReportLineRequest", method = RequestMethod.POST)
 	public boolean addExpenseReportLineRepository(@RequestBody ExpenseReportLineRequest expenseReportLineRequest) {
@@ -29,7 +46,10 @@ public class ExpenseReportRestController
 		return expenseReportRequestServiceImpl.getLatestExpenseReport(uid);
 	}
 	
-	
+	@RequestMapping(value = "/getExpenseReportByUid/{uid}", method = RequestMethod.GET)
+	public List<ExpenseReportRequest> getExpenseReportRequestByUID(@PathVariable Long uid) {
+		return expenseReportRequestServiceImpl.getExpenseReportByUID(uid);
+	}
 	
 	
 }

@@ -21,17 +21,10 @@
 <div id="top_box_missions" class="top_div" style="padding-top: 10px;">
   <div id="infos_missions" class="column">
     <div style="margin-top: 10px; padding: 0 0 20px;">
-      <!-- <select id='type_selector' class="soflow" [(ngModel)]="user_event.type" (ngModelChange)="refresh.next()" required>
+      <select id='type_selector' class="soflow" [(ngModel)]="user_event.type" value="user_event.type"
+        (ngModelChange)="refresh.next()" required>
         <option selected *ngFor="let el of vacations" [value]="el.vid">{{ el.name }}</option>
-      </select> -->
-
-      <mat-form-field>
-        <mat-select placeholder="Type" id='type_selector' [(ngModel)]="user_event.type" (ngModelChange)="refresh.next()"
-          required>
-          <mat-option value="-1"></mat-option>
-          <mat-option *ngFor="let el of vacations" [value]="el.vid">{{ el.name }}</mat-option>
-        </mat-select>
-      </mat-form-field>
+      </select>
     </div>
 
     <div class="labels_div" style="margin-top: 20px; padding: 30px 0 0px;">Jours restants</div>

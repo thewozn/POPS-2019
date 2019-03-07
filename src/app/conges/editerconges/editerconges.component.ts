@@ -238,9 +238,9 @@ draggable: false
                   this.vacationsService.getVacationsById(this.vacations, vr.vid).name === b.name
                 ) {
                   t +=
-                    (new Date(vr.endDate).getTime() -
+                    Math.round((new Date(vr.endDate).getTime() -
                       new Date(vr.startDate).getTime()) /
-                    (1000 * 3600 * 24);
+                      (1000 * 3600 * 24));
                 }
               }
 

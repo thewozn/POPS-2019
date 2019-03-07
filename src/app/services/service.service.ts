@@ -28,13 +28,13 @@ export class ServiceService {
     return await this.httpclient.get<Service[]>(this.globalService.getbaseUrl() + '/getServiceList').toPromise();
   }
 
-   async addServiceServer(service: Service) {
+   async addServiceFromServer(service: Service) {
     await this.httpclient.post<Service>(this.globalService.getbaseUrl() + '/createService', JSON.stringify(service),
     this.globalService.gethttpOptions()).toPromise();
   }
 
-  async modifServiceServer(service: Service) {
-    await this.httpclient.patch<Service>(this.globalService.getbaseUrl() + '/updateUser', JSON.stringify(service),
+  async updateServiceFromServer(service: Service) {
+    await this.httpclient.patch<Service>(this.globalService.getbaseUrl() + '/updateService', JSON.stringify(service),
     this.globalService.gethttpOptions()).toPromise();
   }
 }

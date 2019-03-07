@@ -1,5 +1,7 @@
 package com.pops1819.sid.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.pops1819.sid.entities.ExpenseReport;
@@ -11,4 +13,8 @@ public interface IExpenseReportRepository extends JpaRepository<ExpenseReport, L
 	public ExpenseReport findFirstByUserOrderByRequestDateDesc(User user);
 
 	public ExpenseReport findByDid(Long did);
+	public List<ExpenseReport> findByUser(User user);
+
+	public boolean existsByDid(Long did);
+
 }

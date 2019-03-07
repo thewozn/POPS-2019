@@ -102,8 +102,8 @@ export class CreerComponent implements OnInit {
 
           status = 'En création';
 
-        if (launch) {
-          console.log(launch);
+        if (launch === true) {
+          console.log('DEBUG' + launch);
           status = 'En cours';
         }
 
@@ -136,7 +136,7 @@ export class CreerComponent implements OnInit {
               );
             }
             this.loadData();
-            this.modal.open(this.modalContent, { size: 'md' });
+            this.modal.open(this.modalContent, { size: 'lg' });
           },
           error => {
             console.log(error);

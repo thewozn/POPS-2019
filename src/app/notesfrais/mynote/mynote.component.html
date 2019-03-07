@@ -24,18 +24,15 @@
   <div>
     <div class="top_div" style="">
       <div class = "column">
-        <h4 style="font-size: 20px">1 > Créer une ligne</h4>
         <select #selectedMission class="soflow" style="display: inline-block; width: 100%;">
-          <option [value]="modal_line.MISSION" selected>{{modal_line.MISSION}}</option>
-          <option *ngFor="let option of missions_list" [value]="option">
-              {{option}}
-          </option>
-        </select>
+            <option *ngFor="let element of mission" [value]="element.mid">{{element.title}}
+            </option>
+          </select>
 
-        <input #selectedMotive [value]="modal_line.REMBOURSEMENT" type="text" style="float: left; width: 100%; display: inline-block;" placeholder="Motif de remboursement">
-        <input #selectedTypeR  [value]="modal_line.TYPE" type="text" style="float: left; width: 100%; display: inline-block;" placeholder="Type de dépense">
-
-        <input
+        <input [(ngModel)]="modal_line.reasonOfRefund" #selectedMotive [value]="modal_line.reasonOfRefund" type="text" style="float: left; width: 100%; display: inline-block;" placeholder="Motif de remboursement">
+        <input [(ngModel)]="modal_line.typeOfExpense" #selectedTypeR  [value]="modal_line.typeOfExpense" type="text" style="float: left; width: 100%; display: inline-block;" placeholder="Type de dépense">
+        
+        <input [(ngModel)]="modal_line.dateOfOperation" 
           #selectedDate
           class="form-control"
           type="text"
@@ -44,14 +41,14 @@
           dateFormat="Y-m-d"
           altFormat="F j, Y"
           placeholder="Date de l'opération"
-          [value] = "modal_line.DATE"
+          [value] = "modal_line.dateOfOperation"
           required>
 
       </div>
       <div class = "column">
         <h4 style="font-size: 20px">2 > Renseigner les détails</h4>
-        <input #selectedMontant [value]="modal_line.MONTANT" type="text" style="float: left; width: 100%; display: inline-block;" placeholder="Montant (EUR)">
-        <textarea #description [value]="modal_line.DETAILS" class="style-textarea"  name="message" placeholder="Détails supplémentaires"></textarea>
+        <input [(ngModel)]="modal_line.amount"  [value]="modal_line.amount" type="text" style="float: left; width: 100%; display: inline-block;" placeholder="Montant (EUR)">
+        <textarea [(ngModel)]="modal_line.additionalDetail"  [value]="modal_line.additionalDetail" class="style-textarea"  name="message" placeholder="Détails supplémentaires"></textarea>
       </div>
 
       <div class = "column">
@@ -62,7 +59,7 @@
           </file-drop>
         </div>
         <button class="validate-button" type="submit" value="Register" style="margin-top: 32px; width: 100%;"
-                (click)="modifyLine(modal_line, selectedMission.value, selectedMotive.value, selectedTypeR.value, selectedDate.value, description.value, selectedMontant.value); close()"
+                (click)="modifyLine(modal_line); close()"
         >Sauvegarder</button>
 
       </div>
@@ -110,11 +107,10 @@
 <div id="top_box_reports" class="top_div" style="">
   <div id="linepart_one" class = "column">
     <h4 style="font-size: 20px">1 > Créer une ligne</h4>
-    <select #selectedMission id='selector_mission' class="soflow" style="display: inline-block;">
-      <option value="" selected>Mission</option>
-      <option *ngFor="let option of missions_list" [value]="option">{{option}}</option>
+    <select [(ngModel)]="missionMid" #selectedMission id='selector_mission' class="soflow" style="display: inline-block;">
+      <option value="" selected>Mission </option>
+      <option *ngFor="let option of mission" [value]="option.mid" >{{option.title}}</option>
     </select>
-
     <input #selectedMotive type="text" style="float: left; width: 100%; display: inline-block;" placeholder="Motif de remboursement">
     <input #selectedTypeR type="text" style="float: left; width: 100%; display: inline-block;" placeholder="Type de dépense">
 
@@ -182,32 +178,32 @@
         <!-- Position Column -->
         <ng-container matColumnDef="MISSION">
           <th mat-header-cell *matHeaderCellDef> Mission</th>
-          <td mat-cell *matCellDef="let element"> {{element.MISSION}} </td>
+          <td mat-cell *matCellDef="let element"> {{ element.mid }} </td>
         </ng-container>
 
         <ng-container matColumnDef="REMBOURSEMENT">
           <th mat-header-cell *matHeaderCellDef> Remboursement</th>
-          <td mat-cell *matCellDef="let element"> {{element.REMBOURSEMENT}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.reasonOfRefund}} </td>
         </ng-container>
 
         <ng-container matColumnDef="TYPE">
           <th mat-header-cell *matHeaderCellDef> Type</th>
-          <td mat-cell *matCellDef="let element"> {{element.TYPE}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.typeOfExpense}} </td>
         </ng-container>
 
         <ng-container matColumnDef="DATE">
           <th mat-header-cell *matHeaderCellDef> Date</th>
-          <td mat-cell *matCellDef="let element"> {{element.DATE |  date:'MM/dd/yyyy'}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.dateOfOperation |  date:'MM/dd/yyyy'}} </td>
         </ng-container>
 
         <ng-container matColumnDef="DETAILS">
           <th mat-header-cell *matHeaderCellDef> Détails</th>
-          <td mat-cell *matCellDef="let element"> {{element.DETAILS.substring(0, 30)}}... </td>
+          <td mat-cell *matCellDef="let element"> {{element.additionalDetail.substring(0, 30)}}... </td>
         </ng-container>
 
         <ng-container matColumnDef="MONTANT">
           <th mat-header-cell *matHeaderCellDef> Montant</th>
-          <td mat-cell *matCellDef="let element"> {{element.MONTANT}} EUR </td>
+          <td mat-cell *matCellDef="let element"> {{element.amount}} EUR </td>
         </ng-container>
 
         <ng-container matColumnDef="ACTION">
@@ -222,19 +218,19 @@
           </td>
         </ng-container>
 
-        <!--<ng-container matColumnDef="AVANCE">
+        <ng-container matColumnDef="AVANCE">
           <th mat-header-cell *matHeaderCellDef> Avance</th>
           <td mat-cell *matCellDef="let element">
             <button class="delete-button" (click)="pop(element)">
             </button>
 
           </td>
-        </ng-container>-->
+        </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
     </div>
-
+ <button class="validate-button" type="submit" value="Register" style="margin-top: 32px; width: 100%;">Soumettre la note de frais</button>
   </div>
 </div>

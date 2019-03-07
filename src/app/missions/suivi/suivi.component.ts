@@ -31,7 +31,31 @@ export class SuiviComponent implements OnInit {
   private displayedMission: Mission[];
   private service: Service[];
 
+  colors = {
+    'Annulée': '#F0EFEE',
+    'Terminée': '#B8FFA6',
+    'En cours': '#F6FCAB',
+    'En création': '#FFDEBF',
+  };
 
+  displayedColumns: string[] = ['titreMission', 'dateDebut', 'status', 'serviceName', 'consulter', 'action', 'infos'];
+  toppings = new FormControl();
+
+  users_events = [];
+  collaborateurListService: string[] = [];
+
+  options: string[] = [];
+  filteredOptions: Observable<string[]>;
+
+  statutControl = new FormControl('', [Validators.required]);
+  selectFormControl = new FormControl('', Validators.required);
+  myControl = new FormControl();
+  nameInput = '';
+  statutInput = '';
+  collaborateurInput = '';
+  dateInput = '';
+
+  alert = {};
   constructor(
     private connectedService: ConnectedService,
     private missionService: MissionService,
@@ -42,25 +66,6 @@ export class SuiviComponent implements OnInit {
 
   }
 
-  // To udpate with new functions
-  displayedColumns: string[] = ['titreMission', 'dateDebut', 'status', 'serviceName', 'consulter'];
-  toppings = new FormControl();
-
-  users_events = [];
-  collaborateurListService: string[] = [];
-
-
-  options: string[] = [];
-  filteredOptions: Observable<string[]>;
-
-  statutControl = new FormControl('', [Validators.required]);
-  selectFormControl = new FormControl('', Validators.required);
-  myControl = new FormControl();
-  colors = {};
-  nameInput = '';
-  statutInput = '';
-  collaborateurInput = '';
-  dateInput = '';
 
   @ViewChild(MatSort) sort: MatSort;
 
@@ -94,17 +99,14 @@ export class SuiviComponent implements OnInit {
 
           for (const m of this.mission) {
             let found = false;
+
             for (const u of m.usersRequested) {
               if (u.sid === this.connectedService.getConnectedUser().sid) {
                 found = true;
               }
             }
 
-            if (found) {
-              this.colors[m.mid] = '#F6FCAB';
-            } else {
-              this.colors[m.mid] = 'white';
-            }
+            alert[m.mid] = found;
             this.options.push(m.title);
           }
         }

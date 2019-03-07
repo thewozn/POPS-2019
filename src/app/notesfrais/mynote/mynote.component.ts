@@ -7,6 +7,12 @@ import {MatSnackBar} from '@angular/material';
 
 import { ConnectedService } from '../../services/connected.service';
 import { MissionService } from '../../services/mission.service';
+import { ExpenseReportLine } from '../../models/expense-report-line.model'
+
+import { Mission } from './../../models/mission.model';
+import { User } from './../../models/user.model';
+import { ExpenseReportLineService } from '../../services/expense-report-line.service';
+import { ExpenseReportRequest } from '../../models/expense-report-request.model'
 
 @Component({
   selector: 'app-mynote',
@@ -15,15 +21,23 @@ import { MissionService } from '../../services/mission.service';
 })
 export class MynoteComponent implements OnInit {
 
+
   date = new Date().toLocaleString('fr', { month: 'long' }).toUpperCase() + ' ' +  new Date().getFullYear();
-  missions_list = [];
+  mission : Mission[] = [];
   displayedColumns = ['MISSION', 'REMBOURSEMENT', 'TYPE', 'DATE', 'DETAILS', 'MONTANT', 'ACTION'];
   fileColumns = ['FILE', 'ACTION'];
-  public files: UploadFile[] = [];
+  missionMid: number;
+  missionTitle: string;
+  midElement: number;
 
-  dataSource = new MatTableDataSource();
+  public files: UploadFile[] = [];
+  
+  dataSource: ExpenseReportLine[] = [];
   filesSource = new MatTableDataSource();
   filesSource_modal = new MatTableDataSource();
+
+  erRequest :ExpenseReportRequest;
+
 
   @ViewChild('imageList')
   imageList: TemplateRef<any>;
@@ -34,8 +48,10 @@ export class MynoteComponent implements OnInit {
   modal_line: any;
   line__files = [];
 
+
   constructor(private modal: NgbModal, private connectedService: ConnectedService,
-              private missionService: MissionService, private ers: ExpenseReportRequestService,
+              private missionService: MissionService, private erlService: ExpenseReportLineService,
+              private erService: ExpenseReportRequestService,
               private snackBar: MatSnackBar) { }
 
 
@@ -108,7 +124,6 @@ export class MynoteComponent implements OnInit {
     if (index > -1) {
       this.files.splice(index, 1);
     }
-
     this.filesSource = new MatTableDataSource(this.files);
   }
 
@@ -117,17 +132,18 @@ export class MynoteComponent implements OnInit {
     if (index > -1) {
       this.line__files.splice(index, 1);
     }
-
     this.filesSource_modal = new MatTableDataSource(this.line__files);
   }
 
-  public popLine(line: Line) {
-    const index = this.dataSource.data.indexOf(line, 0);
-    if (index > -1) {
-      this.dataSource.data.splice(index, 1);
-    }
-
-    this.dataSource.data = this.dataSource.data;
+  public popLine(line: ExpenseReportLine) {
+    this.erlService.deleteExpenseReportLineFromServer(line.lndfid).then(
+      (response) => {
+        this.loadData();
+      },
+      (error) => {
+        console.log(error);
+      }
+    )
   }
 
   showGalleryEvent(element: Line): void {
@@ -135,27 +151,43 @@ export class MynoteComponent implements OnInit {
     this.modal.open(this.imageList, { size: 'lg' });
   }
 
-  editLineEvent(element: Line): void {
+  editLineEvent(element: ExpenseReportLine): void {
     this.line__files = [];
     this.modal_line = element;
     this.modal.open(this.editLine, { size: 'lg' });
   }
 
   public pushLine(mission: string, remboursement: string, type: string, date: string, details: string, montant: string) {
-    // TODO: Envoyer au back la nouvelle ligne pour que les images soient enregistrée !
 
+    
     if (remboursement.length > 0 && type.length > 0) {
-      const newLine = {
-        MISSION: mission, REMBOURSEMENT: remboursement, TYPE: type, DATE: new Date(date),
-        DETAILS: details, MONTANT: parseFloat(montant), AVANCE: false, FILE: this.files
-      };
+      const newExpenseReportLine: ExpenseReportLine = new ExpenseReportLine(
+        null, //id ligne note de frais
+        this.erRequest.did, //
+        +this.missionMid, // id mission
+        "null", //date de la demande 
+        false, // avance?
+        +montant, //montant
+        "null", // statut
+        "null",     //Raison du refus
+        type, //Type de dépense
+        remboursement, //motif de remboursement 
+        date, //date de l'event mission
+        details //additionalDetails
+      );
 
-      this.dataSource.data.push(newLine);
 
+      this.erlService.addExpenseReportLineFromServer(newExpenseReportLine).then(
+        response => {
+          this.loadData();
+        },
+        error => {
+          console.log(error);
+        }
+      )
+    
       this.files = [];
       this.filesSource = new MatTableDataSource(this.files);
-
-      this.dataSource.data = this.dataSource.data;
 
       this.openSnackBar('La ligne a bien été ajoutée', '✔');
     } else {
@@ -163,20 +195,22 @@ export class MynoteComponent implements OnInit {
     }
   }
 
-  public modifyLine(element: any, mission: string, remboursement: string, type: string, date: string, details: string, montant: string) {
-    // TODO: Envoyer au back la nouvelle ligne pour que les images soient enregistrée sur le serveur !
-    if (remboursement.length > 0 && type.length > 0) {
-      const modifier_entry = this.dataSource.data.indexOf(element);
-      this.dataSource.data[modifier_entry] = {
-        MISSION: mission, REMBOURSEMENT: remboursement, TYPE: type, DATE: new Date(date),
-        DETAILS: details, MONTANT: parseFloat(montant), AVANCE: false, FILE: this.line__files
-      };
+  public modifyLine(element: ExpenseReportLine) {
+
+    if (element.reasonOfRefund.length > 0 && element.typeOfExpense.length > 0) {
+      const modifier_entry = this.dataSource.indexOf(element);
+      
+      this.erlService.updateExpenseReportLineFromServer(element).then(
+        response => {
+          this.loadData();
+        },
+        error => {
+          console.log(error);
+        }
+      )
 
       this.line__files = [];
       this.filesSource = new MatTableDataSource(this.line__files);
-
-      this.dataSource.data = this.dataSource.data;
-
       this.openSnackBar('La ligne a bien été modifiée', '✔');
     } else {
       this.openSnackBar('Veuillez vérifier les valeurs saisies', '❌');
@@ -190,20 +224,32 @@ export class MynoteComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Chargement des missions de l'employé
-    for (const self_mission of this.missionService.user_missions) {
-      this.missions_list.push(self_mission.name);
-    }
 
+    this.loadData();
     this.filesSource = new MatTableDataSource(this.files);
-    this.dataSource = new MatTableDataSource(ELEMENT_DATA);
+    //this.dataSource = new MatTableDataSource();
   }
 
+  loadData(){
+    this.missionService.getMissionsByConUserUidFromServer().then(
+      (response) => {
+        for(const r of response){
+          if((r.status === "En cours" || r.status === "Terminée" ) && !this.mission.some(item => 
+            item.mid===r.mid)){
+            this.mission.push(r);
+          }
+        }
+      }
+    );
+
+    this.erService.getExpenseReportByConUserUidFromServer().then(
+      (response) => {
+        this.erRequest = response;
+        this.dataSource = this.erRequest.expenseReportLineRequest;
+      }
+    );
+  }
 }
-
-
-
-
 
 export interface Files {
   PATH: string;
@@ -225,25 +271,4 @@ export interface Line {
  * LISTE DE TOUTES LES LIGNES ACTUELLES
  */
 const ELEMENT_DATA: Line[] = [
-  {MISSION: 'Machine Learning', REMBOURSEMENT: 'Conférence NY Tech', TYPE: 'Transport', DATE: new Date('2019-03-15'),
-    DETAILS: 'billet d\'avion aller-retour vol Paris New-York', MONTANT: 1300, AVANCE: false, FILE: [
-      {
-        PATH: 'assets/test01.jpg',
-        TYPE: '.jpg'
-      },
-      {
-        PATH: 'assets/Test02.png',
-        TYPE: '.png'
-      }
-    ]},
-  {MISSION: 'Machine Learning', REMBOURSEMENT: 'Conférence NY Tech', TYPE: 'Transport', DATE: new Date('2019-03-16'),
-    DETAILS: 'Taxi aéroport-Hotel', MONTANT: 50, AVANCE: false, FILE: []},
-  {MISSION: 'Machine Learning', REMBOURSEMENT: 'Conférence NY Tech', TYPE: 'Restaurant', DATE: new Date('2019-03-16'),
-    DETAILS: 'Diner d\'affaire avec investisseurs', MONTANT: 70, AVANCE: false, FILE: []},
-  {MISSION: 'Machine Learning', REMBOURSEMENT: 'Conférence NY Tech', TYPE: 'Hôtel', DATE: new Date('2019-03-19'),
-    DETAILS: 'Hotel Roger Smith 3 jours', MONTANT: 520, AVANCE: false, FILE: []},
-  {MISSION: 'Machine Learning', REMBOURSEMENT: 'Conférence NY Tech', TYPE: 'Transport', DATE: new Date('2019-03-19'),
-    DETAILS: 'Taxi Hotel-aéroport', MONTANT: 53, AVANCE: false, FILE: []},
-  {MISSION: 'Machine Learning', REMBOURSEMENT: 'Intervention chez client', TYPE: 'Transport', DATE: new Date('2019-03-25'),
-    DETAILS: 'Essence trajet aller-retour Paris-Tours', MONTANT: 130, AVANCE: false, FILE: []},
 ];

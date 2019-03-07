@@ -15,7 +15,7 @@ export class ConnexionComponent implements OnInit {
   constructor(
     private connectedService: ConnectedService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this._error.subscribe((message) => this.errorMessage = message);
@@ -29,13 +29,18 @@ export class ConnexionComponent implements OnInit {
           this._error.next('Compte inactif');
           this.connectedService.signOut();
         } else {
-          this.router.navigate(['annuaire/employe']);
+          if (this.connectedService.getConnectedUser().sid === null || this.connectedService.getConnectedUser().sid === undefined) {
+            this._error.next('Aucun service affecté à ce compte');
+            this.connectedService.signOut();
+          } else {
+            this.router.navigate(['mission/suivi']);
+          }
         }
 
       },
-      (reject) => {
-        this._error.next('Email ou Mot de passe incorrect');
-      },
+        (reject) => {
+          this._error.next('Email ou Mot de passe incorrect');
+        },
       );
   }
 }

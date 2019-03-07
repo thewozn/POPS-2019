@@ -22,9 +22,9 @@ public class ExpenseReportLine
 	
 	@ManyToOne
 	@JoinColumn(name = "did")
-	private ExpenseReport expenseReport;
+private ExpenseReport expenseReport;
 	
-	@OneToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "MID")
 	private Mission mission;
 	private String typeOfExpense;
@@ -41,25 +41,24 @@ public class ExpenseReportLine
 		super();
 	}
 
+
 	public ExpenseReportLine(Long lndfid, ExpenseReport expenseReport, Mission mission, String typeOfExpense,
-			String reasonOfRefund, Date dateOfOperation, double amount, String additionalDetail, String state,
-			boolean advance, String refusalReason, Date publishingDate) {
-		super();
-		this.lndfid = lndfid;
-		this.expenseReport = expenseReport;
-		this.mission = mission;
-		this.typeOfExpense = typeOfExpense;
-		this.reasonOfRefund = reasonOfRefund;
-		this.dateOfOperation = dateOfOperation;
-		this.amount = amount;
-		this.additionalDetail = additionalDetail;
-		this.state = state;
-		this.advance = advance;
-		this.refusalReason = refusalReason;
-		this.publishingDate = publishingDate;
-	}
-
-
+		String reasonOfRefund, Date dateOfOperation, double amount, String additionalDetail, String state,
+		boolean advance, String refusalReason, Date publishingDate) {
+	super();
+	this.lndfid = lndfid;
+	this.expenseReport = expenseReport;
+	this.mission = mission;
+	this.typeOfExpense = typeOfExpense;
+	this.reasonOfRefund = reasonOfRefund;
+	this.dateOfOperation = dateOfOperation;
+	this.amount = amount;
+	this.additionalDetail = additionalDetail;
+	this.state = state;
+	this.advance = advance;
+	this.refusalReason = refusalReason;
+	this.publishingDate = publishingDate;
+}
 
 	public Long getLndfid() {
 		return lndfid;
@@ -69,13 +68,17 @@ public class ExpenseReportLine
 		this.lndfid = lndfid;
 	}
 
+	
+
 	public ExpenseReport getExpenseReport() {
 		return expenseReport;
 	}
 
+
 	public void setExpenseReport(ExpenseReport expenseReport) {
 		this.expenseReport = expenseReport;
 	}
+
 
 	public Mission getMission() {
 		return mission;
@@ -177,8 +180,18 @@ public class ExpenseReportLine
 		this.additionalDetail = additionalDetail;
 	}
 
+	
+	@Override
+	public String toString() {
+		return "ExpenseReportLine [lndfid=" + lndfid + ", typeOfExpense=" + typeOfExpense + ", reasonOfRefund="
+				+ reasonOfRefund + ", dateOfOperation=" + dateOfOperation + ", amount=" + amount + ", additionalDetail="
+				+ additionalDetail + ", state=" + state + ", advance=" + advance + ", refusalReason=" + refusalReason
+				+ ", publishingDate=" + publishingDate + "]";
+	}
 
 
+
+	/*
 	@Override
 	public String toString() {
 		return "ExpenseReportLine [lndfid=" + lndfid + ", expenseReport=" + expenseReport + ", typeOfExpense="
@@ -186,6 +199,7 @@ public class ExpenseReportLine
 				+ ", amount=" + amount + ", additionalDetail=" + additionalDetail + ", state=" + state + ", advance="
 				+ advance + ", refusalReason=" + refusalReason + ", publishingDate=" + publishingDate + "]";
 	}
+	*/
 
 	
 	

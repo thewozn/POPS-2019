@@ -20,13 +20,12 @@
 <div id="top_box_missions" class="top_div" style="padding-top: 10px;">
   <div id="infos_missions" class="column">
     <div style="margin-top: 10px; padding: 0 0 20px;">
-      <mat-form-field>
-        <mat-select placeholder="Type" id='type_selector' [(ngModel)]="user_event.type" (ngModelChange)="refresh.next()"
-          required>
-          <mat-option value="-1"></mat-option>
-          <mat-option *ngFor="let el of vacations" [value]="el.vid">{{ el.name }}</mat-option>
-        </mat-select>
-      </mat-form-field>
+
+      <select id='type_selector' class="soflow" [(ngModel)]="user_event.type" value="user_event.type" (ngModelChange)="refresh.next()"
+        required>
+        <option selected *ngFor="let el of vacations" [value]="el.vid">{{ el.name }}</option>
+      </select>
+
     </div>
 
     <div class="labels_div" style="margin-top: 20px; padding: 30px 0 0px;">Jours restants</div>
@@ -65,9 +64,9 @@
         </tr>
       </thead>
       <td style="padding:0 0 0;">
-        <input class="form-control" type="text" mwlFlatpickr [(ngModel)]="new_event.start"
-          [altInput]="true" [convertModelValue]="true" [enableTime]="true" dateFormat="Y-m-d" altFormat="F j, Y"
-          placeholder="Not set" minDate="{{ minDate }}" (ngModelChange)="updateEndDate()">
+        <input class="form-control" type="text" mwlFlatpickr [(ngModel)]="new_event.start" [altInput]="true"
+          [convertModelValue]="true" [enableTime]="true" dateFormat="Y-m-d" altFormat="F j, Y" placeholder="Not set"
+          minDate="{{ minDate }}" (ngModelChange)="updateEndDate()">
       </td>
       <td style="padding:0 0 0;">
         <select class="soflow" id="depart" style="margin: 12px 3px 10px;" [(ngModel)]="start_period">
@@ -84,9 +83,9 @@
         </tr>
       </thead>
       <td style="padding:0 0 0;">
-        <input class="form-control" type="text" mwlFlatpickr [(ngModel)]="new_event.end"
-          [altInput]="true" [convertModelValue]="true" [enableTime]="true" dateFormat="Y-m-d" altFormat="F j, Y"
-          placeholder="Not set" minDate="{{ minDateEnd }}">
+        <input class="form-control" type="text" mwlFlatpickr [(ngModel)]="new_event.end" [altInput]="true"
+          [convertModelValue]="true" [enableTime]="true" dateFormat="Y-m-d" altFormat="F j, Y" placeholder="Not set"
+          minDate="{{ minDateEnd }}">
       </td>
       <td style="padding:0 0 0;">
         <select class="soflow" id="Retour" style="margin: 12px 3px 10px;" [(ngModel)]="end_period">

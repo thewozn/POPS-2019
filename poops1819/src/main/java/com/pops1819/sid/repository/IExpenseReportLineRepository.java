@@ -8,4 +8,8 @@ public interface IExpenseReportLineRepository extends JpaRepository<ExpenseRepor
 {
 	public boolean existsByLndfid(Long lndfid);
 
+	public ExpenseReportLine findByLndfid(Long lndfid);
+
+	public void deleteByLndfid(Long lndfid);
+
 }

@@ -40,6 +40,8 @@ import { NavigationComponent } from './navigation/navigation.component';
 import { SuiviReportComponent } from './notesfrais/suivi-report/suivi-report.component';
 import { ValiderReportComponent } from './notesfrais/valider-report/valider-report.component';
 import { MynoteComponent } from './notesfrais/mynote/mynote.component';
+import { MesLignesComponent } from './notesfrais/mes-lignes/mes-lignes.component';
+
 import { SnackbarNoteComponentComponent } from './notesfrais/snackbar-note-component/snackbar-note-component.component';
 
 import { ConnexionComponent } from './connexion/connexion.component';
@@ -96,6 +98,7 @@ registerLocaleData(localeFr);
     AnnuaireComponent,
     AnnEmploeComponent,
     MynoteComponent,
+    MesLignesComponent,
     SnackbarNoteComponentComponent,
     SuiviReportComponent,
     ValiderReportComponent,

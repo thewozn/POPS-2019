@@ -16,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.UniqueConstraint;
 
@@ -32,8 +33,8 @@ public class Mission implements Serializable{
 	@Column(name="MID", unique=true, nullable=false, precision=10)
 	private Long mid;
 	
-	@OneToOne(mappedBy = "mission", fetch = FetchType.EAGER)
-	private ExpenseReportLine expenseReportLine;
+	@OneToMany(mappedBy = "mission", fetch = FetchType.EAGER)
+	private List<ExpenseReportLine> expenseReportLine;
 	
 	@ManyToMany(cascade = {
 	        CascadeType.PERSIST,
@@ -86,21 +87,10 @@ public class Mission implements Serializable{
 	}
 	
 
-	public Mission(Long mid, ExpenseReportLine expenseReportLine, List<User> users, Service service, String title,
-			String status, String description, Date startDate, Date endDate) {
-		super();
-		this.mid = mid;
-		this.expenseReportLine = expenseReportLine;
-		this.users = users;
-		this.service = service;
-		this.title = title;
-		this.status = status;
-		this.description = description;
-		this.startDate = startDate;
-		this.endDate = endDate;
-	}
 
-	public Mission(Long mid, ExpenseReportLine expenseReportLine, List<User> users, List<User> requestedUsers,
+
+
+	public Mission(Long mid, List<ExpenseReportLine> expenseReportLine, List<User> users, List<User> requestedUsers,
 			List<User> refusedUsers, Service service, String title, String status, String description, Date startDate,
 			Date endDate) {
 		super();
@@ -116,6 +106,27 @@ public class Mission implements Serializable{
 		this.startDate = startDate;
 		this.endDate = endDate;
 	}
+
+
+
+
+
+	public Mission(Long mid, List<ExpenseReportLine> expenseReportLine, List<User> users, Service service, String title,
+			String status, String description, Date startDate, Date endDate) {
+		super();
+		this.mid = mid;
+		this.expenseReportLine = expenseReportLine;
+		this.users = users;
+		this.service = service;
+		this.title = title;
+		this.status = status;
+		this.description = description;
+		this.startDate = startDate;
+		this.endDate = endDate;
+	}
+
+
+
 
 
 	public void addRefusedUser(User user)
@@ -205,13 +216,22 @@ public class Mission implements Serializable{
 		this.mid = mid;
 	}
 
-	public ExpenseReportLine getExpenseReportLine() {
+
+	public List<ExpenseReportLine> getExpenseReportLine() {
 		return expenseReportLine;
 	}
 
-	public void setExpenseReportLine(ExpenseReportLine expenseReportLine) {
+
+
+
+
+	public void setExpenseReportLine(List<ExpenseReportLine> expenseReportLine) {
 		this.expenseReportLine = expenseReportLine;
 	}
+
+
+
+
 
 	public List<User> getUsers() {
 		return users;

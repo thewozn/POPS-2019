@@ -29,6 +29,7 @@ import { NotesfraisComponent } from './notesfrais/notesfrais.component';
 import { MynoteComponent } from './notesfrais/mynote/mynote.component';
 import { SuiviReportComponent } from './notesfrais/suivi-report/suivi-report.component';
 import { ValiderReportComponent } from './notesfrais/valider-report/valider-report.component';
+import { MesLignesComponent } from './notesfrais/mes-lignes/mes-lignes.component';
 
 const routes: Routes = [
   { path: 'connexion', component: ConnexionComponent },
@@ -69,6 +70,7 @@ children: [
       { path: 'mynote', canActivate: [AuthGuard], component: MynoteComponent },
       { path: 'suivi', canActivate: [AuthGuard], component: SuiviReportComponent },
       { path: 'valider', canActivate: [AuthGuard], component: ValiderReportComponent },
+      { path: 'meslignes', canActivate: [AuthGuard], component: MesLignesComponent },
       { path: '**', redirectTo: 'notfound' }
     ]
   },
