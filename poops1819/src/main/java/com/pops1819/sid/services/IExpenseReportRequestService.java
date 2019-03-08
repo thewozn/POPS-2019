@@ -14,4 +14,6 @@ public interface IExpenseReportRequestService
 	public boolean removeExpenseReportLineRequest(Long lndfid);
 	public List<ExpenseReportRequest> getExpenseReportByUID(Long uid);
 	public ExpenseReportRequest getExpenseReportByDid(Long did);
+	public List<ExpenseReportRequest> getExpenseReportList();
+	public boolean updateExpenseReport(ExpenseReportRequest expenseReportRequest);
 }

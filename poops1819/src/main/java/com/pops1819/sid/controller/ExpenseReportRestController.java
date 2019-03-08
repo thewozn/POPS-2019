@@ -40,7 +40,12 @@ public class ExpenseReportRestController
 	public boolean addExpenseReportLineRepository(@RequestBody ExpenseReportLineRequest expenseReportLineRequest) {
 		return expenseReportRequestServiceImpl.addExpenseReportLineRequest(expenseReportLineRequest);
 	}
-
+	
+	@RequestMapping(value = "/updateExpenseReport", method = RequestMethod.PATCH)
+	public boolean updateExpenseReport(@RequestBody ExpenseReportRequest expenseReport) {
+		return expenseReportRequestServiceImpl.updateExpenseReport(expenseReport);
+	}
+	
 	@RequestMapping(value = "/getLatestExpenseReport/{uid}", method = RequestMethod.GET)
 	public ExpenseReportRequest getLatestExpenseReport(@PathVariable Long uid) {
 		return expenseReportRequestServiceImpl.getLatestExpenseReport(uid);
@@ -51,5 +56,8 @@ public class ExpenseReportRestController
 		return expenseReportRequestServiceImpl.getExpenseReportByUID(uid);
 	}
 	
-	
+	@RequestMapping(value = "/getExpenseReportList", method = RequestMethod.GET)
+	public List<ExpenseReportRequest> getExpenseReportRequestList() {
+		return expenseReportRequestServiceImpl.getExpenseReportList();
+	}
 }

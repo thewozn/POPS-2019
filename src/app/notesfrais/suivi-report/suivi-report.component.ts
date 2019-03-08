@@ -9,7 +9,15 @@ import { ExpenseReportRequestService } from '../../services/expense-report-reque
   styleUrls: ['./suivi-report.component.scss']
 })
 export class SuiviReportComponent implements OnInit {
-
+  colors = {
+    'Brouillon': '#DBFCFF',
+    'En cours de validation 1': '#FFDEBF',
+    'En cours de validation 2': '#F6FCAB',
+    'Validée': '#B8FFA6',
+    'A actualisée 1': '#FFBBBB',
+    'A actualisée 2': '#FFBBBB',
+  };
+  
   dataSource: ExpenseReportRequest[] = []; // tableau des notes de frais
   displayedColumns = ['MOIS', 'STATUT', 'ACTION'];
 
@@ -27,10 +35,6 @@ export class SuiviReportComponent implements OnInit {
       (response) => {
         // this.erRequest = response;
         this.dataSource = response;
-        console.log(this.dataSource);
-        for(const ndf of this.dataSource){
-           console.log("LA note de frais est"+ndf.requestDate);
-         }
       }
     );
   }

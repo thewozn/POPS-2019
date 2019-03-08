@@ -9,6 +9,7 @@ import { VacationRequest } from '../models/vacation-request.model';
 import { User } from '../models/user.model';
 import { Service } from '../models/service.model';
 import { Vacations } from '../models/vacations.model';
+import { ExpenseReportRequest } from '../models/expense-report-request.model';
 
 const colors: any = {
   valide: {
@@ -67,8 +68,8 @@ export class ParsingService {
     private connectedService: ConnectedService
   ) {
     Promise.all([this.userService.getUsersFromServer(),
-      this.serviceService.getServicesFromServer(),
-      this.vacationsService.getVacationsListFromServer()]).then(
+    this.serviceService.getServicesFromServer(),
+    this.vacationsService.getVacationsListFromServer()]).then(
       values => {
         this.user = values[0];
         this.service = values[1];
@@ -235,4 +236,71 @@ export class ParsingService {
       return vacationRequest.uid === this.connecteduser.uid ? colors.self_ev2 : colors.ev2;
     }
   }
+
+  filterExpenseReport(brutData: ExpenseReportRequest[]) {
+    this.connecteduser = this.connectedService.getConnectedUser();
+    this.connecteduserservice = this.connectedService.getConnectedUserService();
+    while (this.connecteduser === undefined || this.connecteduserservice === undefined) {
+      this.connecteduser = this.connectedService.getConnectedUser();
+      this.connecteduserservice = this.connectedService.getConnectedUserService();
+    }
+
+    const filteredData: ExpenseReportRequest[] = [];
+    if (this.connecteduserservice.name === 'Accounting') {
+      if (this.connecteduser.status === 'HeadOfService') {
+        // DF
+        for (const err of brutData) {
+          const user = this.userService.getUserById(this.user, err.uid);
+          if (err.status !== 'Brouillon' && err.status !== 'Annulée') {
+            if (user.sid === this.connecteduser.sid || this.serviceService.getServiceById(this.service, user.sid).name === 'Management') {
+              filteredData.push(err);
+            } else if (err.status !== 'En cours de validation 1' && err.status !== 'A actualisée 1') {
+              filteredData.push(err);
+            }
+          }
+        }
+      } else {
+        // CO
+        for (const err of brutData) {
+          const user = this.userService.getUserById(this.user, err.uid);
+          if (this.serviceService.getServiceById(this.service, user.sid).name !== 'Management' &&
+            this.serviceService.getServiceById(this.service, user.sid).name !== 'Accounting') {
+            if (err.status !== 'En cours de validation 1' && err.status !== 'Brouillon' && err.status !== 'Annulée'
+            && err.status !== 'A actualisée 1') {
+              filteredData.push(err);
+            }
+          }
+        }
+      }
+    } else if (this.connecteduser.status === 'HeadOfService' && this.connecteduserservice.name !== 'Management') {
+      // CS
+      for (const err of brutData) {
+        const user = this.userService.getUserById(this.user, err.uid);
+
+        if (user.sid === this.connecteduser.sid) {
+          if (err.status !== 'En cours de validation 2' && err.status !== 'Brouillon' && err.status !== 'Annulée' 
+          && err.status !== 'A actualisée 2') {
+            filteredData.push(err);
+          }
+        }
+      }
+    } else {
+      // CEO
+      for (const err of brutData) {
+        const user = this.userService.getUserById(this.user, err.uid);
+        if (err.status !== 'Brouillon' && err.status !== 'Annulée') {
+          if (user.status === 'HeadOfService') {
+            if (this.serviceService.getServiceById(this.service, user.sid).name === 'Accounting') {
+              filteredData.push(err);
+            } else if (err.status !== 'En cours de validation 2' && err.status !== 'A actualisée 2') {
+              filteredData.push(err);
+            }
+          }
+        }
+      }
+    }
+
+    return filteredData;
+  }
+
 }

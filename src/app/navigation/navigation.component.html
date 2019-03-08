@@ -5,19 +5,19 @@
       <!-- <img src="../../assets/user.png" style="height: 40px; width: 40px; margin-left: 10px;"> -->
       <a id="conges_href" routerLink="profil">
         <font color="white" style="font-size: 15px; margin-left: 10px">
-          {{ this.connectedService.getConnectedUser().lastName }} 
+          {{ this.connectedService.getConnectedUser().lastName }}
           {{ this.connectedService.getConnectedUser().firstName }}
         </font>
       </a>
     </div>
   </div>
 
-  <a id="missions_href" routerLink="mission/suivi">Missions</a>
-  <a id="conges_href" routerLink="conges/historique">Congés</a>
-  <a id="frais_href" routerLink="notesfrais/mynote">Notes de frais</a>
-  <a id="annuaire_href" routerLink="annuaire/employe">Annuaire</a>
-  <a id="administration_href" routerLink="administration/gestionusers">Admin</a>
-  <!-- *ngIf="this.connectedService.getConnectedUser().status === 'Admin'" -->
+  <a id="missions_href" routerLink="mission/suivi" *ngIf="this.connectedService.getConnectedUser().lastName !== 'Admin'">Missions</a>
+  <a id="conges_href" routerLink="conges/historique" *ngIf="this.connectedService.getConnectedUser().lastName !== 'Admin'">Congés</a>
+  <a id="frais_href" routerLink="notesfrais/mynote" *ngIf="this.connectedService.getConnectedUser().lastName !== 'Admin'">Notes
+    de frais</a>
+  <a id="annuaire_href" *ngIf="this.connectedService.getConnectedUser().lastName !== 'Admin'" routerLink="annuaire/employe">Annuaire</a>
+  <a id="administration_href" routerLink="administration/gestionusers" *ngIf="this.connectedService.getConnectedUser().lastName === 'Admin'">Admin</a>
 
   <input type="button" class="button buttonDisc" value="Deconnexion" (click)="onSignOut()">
   <br>

@@ -35,7 +35,9 @@ export class NotesfraisComponent implements OnInit {
       },
     );
 
-    if (this.connectedService.getConnectedUser().status === 'HeadOfService') {
+    if (this.connectedService.getConnectedUser().status === 'HeadOfService' || 
+    this.connectedService.getConnectedUserService().name === 'Accounting' ||
+      this.connectedService.getConnectedUserService().name === 'Management') {
       this.navLinks.push(
         {
           label: 'Valider',

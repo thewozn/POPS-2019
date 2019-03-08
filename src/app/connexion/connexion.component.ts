@@ -33,7 +33,11 @@ export class ConnexionComponent implements OnInit {
             this._error.next('Aucun service affecté à ce compte');
             this.connectedService.signOut();
           } else {
-            this.router.navigate(['mission/suivi']);
+            if (this.connectedService.getConnectedUser().lastName === 'Admin') {
+              this.router.navigate(['administration/gestionusers']);
+            } else {
+              this.router.navigate(['mission/suivi']);
+            }
           }
         }
 

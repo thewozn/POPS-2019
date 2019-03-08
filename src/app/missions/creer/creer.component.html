@@ -9,10 +9,11 @@
   <div class="modal-body" *ngIf="this.modalData?.status === 'En cours'">
     <h5>Mission créée</h5>
   </div>
-<div class="modal-body" *ngIf="this.modalData?.status === 'En création'">
+  <div class="modal-body" *ngIf="this.modalData?.status === 'En création'">
     <h5>Mission enregistrée</h5>
     <div *ngIf="this.modalData?.launch === true">
-      <p>Impossible de démarrer la mission car des collaborateurs de services différents ont été assigné à cette mission</p>
+      <p>Impossible de démarrer la mission car des collaborateurs de services différents ont été assigné à cette
+        mission</p>
     </div>
   </div>
   <div class="modal-footer">
@@ -127,7 +128,7 @@
 
       <button class="validate-button" style="margin: 0 2% 0;" (click)="newFilteredEvents()">Rechercher</button>
 
-      <div class="example-container mat-elevation-z8" style="height:200px;">
+      <div class="example-container mat-elevation-z8" style="height:320px;">
         <table mat-table [dataSource]="dataSource">
 
           <!-- Position Column -->
@@ -157,9 +158,10 @@
           <ng-container matColumnDef="ACTION">
             <th mat-header-cell *matHeaderCellDef> ACTION </th>
             <td mat-cell *matCellDef="let element">
-              <button class="add-button" (click)="pushEmployee(element)">
-              </button>
-
+              <div *ngIf="element.lastName !=='Admin'">
+                <button class="add-button" (click)="pushEmployee(element)">
+                </button>
+              </div>
             </td>
           </ng-container>
 

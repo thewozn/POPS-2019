@@ -1,5 +1,22 @@
 <div style="padding: 10px 0px 0px; ">
   <h3 style="margin-left: 20px; display: block;">NOTE DE FRAIS | {{erDate}}</h3>
+  <h3 style="margin-left: 20px; display: block;">{{ this.userService.getUserById(this.user,
+    this.erRequest.uid).lastName
+    }} {{
+    this.userService.getUserById(this.user,
+    this.erRequest.uid).firstName }} | {{ this.serviceService.getServiceById(this.service,
+    this.userService.getUserById(this.user,
+    this.erRequest.uid).sid).name }}</h3>
+</div>
+
+<div id="top_box_reports" class="top_div">
+  <div>
+    <button class="btn btn-success" type="submit" value="Register" style="margin-top: 32px; width: 50%;" (click)="allValid()">Tout valider</button>
+  </div>
+
+  <div>
+    <button class="btn btn-danger" type="submit" value="Register" style="margin-top: 32px; width: 50%;" (click)="allRefuse()">Tout refuser</button>
+  </div>
 </div>
 <div id="low_box_reports" class="top_div">
   <div style="padding: 10px 10px 0px;">
@@ -44,25 +61,24 @@
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="ACTION">
-          <th mat-header-cell *matHeaderCellDef> Action</th>
+
+        <ng-container matColumnDef="VALIDER">
+          <th mat-header-cell *matHeaderCellDef>VAL. </th>
           <td mat-cell *matCellDef="let element">
-            <div>
-              <button class="gallery-button" (click)="showGalleryEvent(element)">
+            <div *ngIf="element.state !== 'Refusée' && element.state !== 'Validée' && element.state === this.erRequest.status">
+              <button class="accept-button" (click)="validLine(element.lndfid)">
               </button>
-              <div *ngIf="element.state !== 'Validée'">
-                <button class="edit-button" (click)="editLineEvent(element)">
-                </button>
-                <button class="delete-button" (click)="popLine(element)">
-                </button>
-              </div>
             </div>
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="AVANCE">
-          <th mat-header-cell *matHeaderCellDef> Avance</th>
-          <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': colors[element.state]}">
+        <ng-container matColumnDef="REFUSER">|
+          <th mat-header-cell *matHeaderCellDef>REF.</th>
+          <td mat-cell *matCellDef="let element">
+            <div *ngIf="element.state !== 'Refusée' && element.state !== 'Validée' && element.state === this.erRequest.status">
+              <button class="refuse-button" (click)="refuseLine(element.lndfid)">
+              </button>
+            </div>
           </td>
         </ng-container>
 

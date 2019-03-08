@@ -1,6 +1,6 @@
 /*###Tablet(medium)###*/
-@media screen and (min-width: 1024px){
-  .top_div{
+@media screen and (min-width: 1024px) {
+  .top_div {
     border: 1px solid lightgray;
     width: 96%;
     margin: 20px 2% 20px;
@@ -204,81 +204,13 @@ table {
   outline: none;
 }
 
-.accept-button {
-  background-color: transparent;
-  color: black;
-  border: none;
-  width: 30px;
-  height: 30px;
-  background-image: url("../specific-assets/validate.png");
-  background-size: contain;
-  outline: none;
-}
-
-.accept-button:hover {
-  background-color: transparent;
-  color: black;
-  border: none;
-  width: 30px;
-  height: 30px;
-  background-image: url("../specific-assets/validate_hover.png");
-  background-size: contain;
-  outline: none;
-}
-
-.accept-button:active {
-  background-color: transparent;
-  color: black;
-  border: none;
-  width: 30px;
-  height: 30px;
-  background-image: url("../specific-assets/validate_action.png");
-  background-size: contain;
-  outline: none;
-}
-
-.refuse-button {
-  background-color: transparent;
-  color: black;
-  border: none;
-  width: 30px;
-  height: 30px;
-  background-image: url("../specific-assets/refuse.png");
-  background-size: contain;
-  outline: none;
-}
-
-.refuse-button:hover {
-  background-color: transparent;
-  color: black;
-  border: none;
-  width: 30px;
-  height: 30px;
-  background-image: url("../specific-assets/refuse_hover.png");
-  background-size: contain;
-  outline: none;
-}
-
-.refuse-button:active {
-  background-color: transparent;
-  color: black;
-  border: none;
-  width: 30px;
-  height: 30px;
-  background-image: url("../specific-assets/refuse_action.png");
-  background-size: contain;
-  outline: none;
-}
-
 .validate-button {
   border-radius: 3px;
   background-color: #008CBA;
   color: white;
   border: 2px solid #008CBA;
   width: 96%;
-  margin: 10px 10px 0;
-  overflow: hidden;
-  padding: 5px 20px 5px 40px;
+  padding: 10px 10px 10px;
   cursor: pointer;
 }
 
@@ -304,7 +236,8 @@ table {
   color: black;
 }
 
-.soflow, .soflow-color {
+.soflow,
+.soflow-color {
   -webkit-appearance: button;
   -webkit-border-radius: 2px;
   -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
@@ -355,39 +288,72 @@ table {
 }
 
 .highlight {
-  background:#F84072;
+  background: #F84072;
   border: 2px red solid;
 }
 
-.consult-button {
+.accept-button {
   background-color: transparent;
   color: black;
   border: none;
   width: 30px;
   height: 30px;
-  background-image: url("../../conges/specific-assets/list.png");
+  background-image: url("../../conges/specific-assets/validate.png");
   background-size: contain;
   outline: none;
 }
 
-.consult-button:hover {
+.accept-button:hover {
   background-color: transparent;
   color: black;
   border: none;
   width: 30px;
   height: 30px;
-  background-image: url("../../conges/specific-assets/list_action.png");
+  background-image: url("../../conges/specific-assets/validate_hover.png");
   background-size: contain;
   outline: none;
 }
 
-.consult-button:active {
+.accept-button:active {
   background-color: transparent;
   color: black;
   border: none;
   width: 30px;
   height: 30px;
-  background-image: url("../../conges/specific-assets/list_hover.png");
+  background-image: url("../../conges/specific-assets/validate_action.png");
+  background-size: contain;
+  outline: none;
+}
+
+.refuse-button {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../../conges/specific-assets/refuse.png");
+  background-size: contain;
+  outline: none;
+}
+
+.refuse-button:hover {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../../conges/specific-assets/refuse_hover.png");
+  background-size: contain;
+  outline: none;
+}
+
+.refuse-button:active {
+  background-color: transparent;
+  color: black;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background-image: url("../../conges/specific-assets/refuse_action.png");
   background-size: contain;
   outline: none;
 }

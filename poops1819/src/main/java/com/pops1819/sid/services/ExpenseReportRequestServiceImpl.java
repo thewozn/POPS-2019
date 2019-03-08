@@ -45,7 +45,27 @@ public class ExpenseReportRequestServiceImpl implements IExpenseReportRequestSer
 		expenseReportRepository.saveAll(expenseReportList);
 		return true;
 	}
-
+	
+	@Override
+	public boolean updateExpenseReport(ExpenseReportRequest expenseReportRequest) {
+		ExpenseReport toupdate = expenseReportRepository.findByDid(expenseReportRequest.getDid());
+		User user = userRepository.findByUid(expenseReportRequest.getUid());
+		if(user == null  || toupdate == null)
+			return false;
+		
+		ExpenseReport newExpenseReport = mapper.getExpenseReport(expenseReportRequest);
+		
+		toupdate.setRequestDate(newExpenseReport.getRequestDate());
+		toupdate.setStatus(newExpenseReport.getStatus());
+		toupdate.setTraitmentDate(newExpenseReport.getTraitmentDate());
+		toupdate.setUser(user);
+		toupdate.setExpenseReportLines(newExpenseReport.getExpenseReportLines());
+		
+		expenseReportRepository.save(toupdate);
+		
+		return true;
+	}	
+	
 	@Override
 	public ExpenseReportRequest getLatestExpenseReport(Long uid) {
 		User user = userRepository.findByUid(uid);
@@ -116,8 +136,11 @@ public class ExpenseReportRequestServiceImpl implements IExpenseReportRequestSer
 		return true;
 	}
 	
+	
+	@Override
+	public List<ExpenseReportRequest> getExpenseReportList() {
+		return mapper.getExpenseReportRequestList(expenseReportRepository.findAll());
+	}
 
 	
-
-
 }

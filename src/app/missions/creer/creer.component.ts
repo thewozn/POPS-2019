@@ -40,7 +40,7 @@ export class CreerComponent implements OnInit {
 
   collaborateurInput = '';
 
-  user: User[];
+  user: User[] = [];
   service: Service[] = [];
   collaborateurList: string[] = [];
   options: string[] = [];
@@ -186,6 +186,13 @@ export class CreerComponent implements OnInit {
       this.service = values[1];
 
       for (const u of this.user) {
+
+        if (u.sid === this.connectedService.getConnectedUser().sid) {
+          this.colors[u.uid] = '#B8FFA6';
+        } else {
+          this.colors[u.uid] = '#F6FCAB';
+        }
+
         this.collaborateurList.push(u.lastName);
         this.options.push(
           u.lastName +
@@ -194,12 +201,6 @@ export class CreerComponent implements OnInit {
             ' | ' +
             this.serviceService.getServiceById(this.service, u.sid).name
         );
-
-        if (u.sid === this.connectedService.getConnectedUser().sid) {
-          this.colors[u.uid] = '#B8FFA6';
-        } else {
-          this.colors[u.uid] = '#F6FCAB';
-        }
       }
     });
   }

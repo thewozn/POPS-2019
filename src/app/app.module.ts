@@ -69,6 +69,7 @@ import { NotfoundComponent } from './notfound/notfound.component';
 
 import { AnnuaireComponent } from './annuaire/annuaire.component';
 import { AnnEmploeComponent } from './annuaire/ann-emploe/ann-emploe.component';
+import { ValidlignesComponent } from './notesfrais/validlignes/validlignes.component';
 
 
 
@@ -102,6 +103,7 @@ registerLocaleData(localeFr);
     SnackbarNoteComponentComponent,
     SuiviReportComponent,
     ValiderReportComponent,
+    ValidlignesComponent,
   ],
   imports: [
     FormsModule,

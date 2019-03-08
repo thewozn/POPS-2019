@@ -1,18 +1,20 @@
 import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {ExpenseReportRequestService} from '../../services/expense-report-request.service';
 import { UploadEvent, UploadFile, FileSystemFileEntry, FileSystemDirectoryEntry } from 'ngx-file-drop';
 import {MatTableDataSource} from '@angular/material';
 import {MatSnackBar} from '@angular/material';
+import { Subject } from 'rxjs';
 
 import { ConnectedService } from '../../services/connected.service';
 import { MissionService } from '../../services/mission.service';
-import { ExpenseReportLine } from '../../models/expense-report-line.model'
+import { ExpenseReportLineService } from '../../services/expense-report-line.service';
+import { ExpenseReportRequestService } from '../../services/expense-report-request.service';
+
 
 import { Mission } from './../../models/mission.model';
 import { User } from './../../models/user.model';
-import { ExpenseReportLineService } from '../../services/expense-report-line.service';
-import { ExpenseReportRequest } from '../../models/expense-report-request.model'
+import { ExpenseReportLine } from '../../models/expense-report-line.model';
+import { ExpenseReportRequest } from '../../models/expense-report-request.model';
 
 @Component({
   selector: 'app-mynote',
@@ -20,23 +22,32 @@ import { ExpenseReportRequest } from '../../models/expense-report-request.model'
   styleUrls: ['./mynote.component.scss']
 })
 export class MynoteComponent implements OnInit {
+  colors = {
+    'Brouillon': '#DBFCFF',
+    'En cours de validation 1': '#FFDEBF',
+    'En cours de validation 2': '#F6FCAB',
+    'Validée': '#B8FFA6',
+    'A actualisée 1': '#FFBBBB',
+    'A actualisée 2': '#FFBBBB',
+  };
 
-
+  private _error = new Subject<string>();
+  private errorMessage: string;
   date = new Date().toLocaleString('fr', { month: 'long' }).toUpperCase() + ' ' +  new Date().getFullYear();
-  mission : Mission[] = [];
+  mission: Mission[] = [];
   displayedColumns = ['MISSION', 'REMBOURSEMENT', 'TYPE', 'DATE', 'DETAILS', 'MONTANT', 'ACTION'];
   fileColumns = ['FILE', 'ACTION'];
   missionMid: number;
   missionTitle: string;
   midElement: number;
-
-  public files: UploadFile[] = [];
   
+  public files: UploadFile[] = [];
+
   dataSource: ExpenseReportLine[] = [];
   filesSource = new MatTableDataSource();
   filesSource_modal = new MatTableDataSource();
 
-  erRequest :ExpenseReportRequest;
+  erRequest: ExpenseReportRequest;
 
 
   @ViewChild('imageList')
@@ -143,13 +154,13 @@ export class MynoteComponent implements OnInit {
       (error) => {
         console.log(error);
       }
-    )
+    );
   }
 
-  showGalleryEvent(element: Line): void {
-    this.modal_element = element;
-    this.modal.open(this.imageList, { size: 'lg' });
-  }
+  // showGalleryEvent(element: Line): void {
+  //   this.modal_element = element;
+  //   this.modal.open(this.imageList, { size: 'lg' });
+  // }
 
   editLineEvent(element: ExpenseReportLine): void {
     this.line__files = [];
@@ -159,21 +170,20 @@ export class MynoteComponent implements OnInit {
 
   public pushLine(mission: string, remboursement: string, type: string, date: string, details: string, montant: string) {
 
-    
     if (remboursement.length > 0 && type.length > 0) {
       const newExpenseReportLine: ExpenseReportLine = new ExpenseReportLine(
-        null, //id ligne note de frais
+        null, // id ligne note de frais
         this.erRequest.did, //
         +this.missionMid, // id mission
-        "null", //date de la demande 
+        'null', // date de la demande
         false, // avance?
-        +montant, //montant
-        "null", // statut
-        "null",     //Raison du refus
-        type, //Type de dépense
-        remboursement, //motif de remboursement 
-        date, //date de l'event mission
-        details //additionalDetails
+        +montant, // montant
+        'En cours de validation 1', // statut
+        'null',     // Raison du refus
+        type, // Type de dépense
+        remboursement, // motif de remboursement
+        date, // date de l'event mission
+        details // additionalDetails
       );
 
 
@@ -184,8 +194,8 @@ export class MynoteComponent implements OnInit {
         error => {
           console.log(error);
         }
-      )
-    
+      );
+
       this.files = [];
       this.filesSource = new MatTableDataSource(this.files);
 
@@ -199,7 +209,7 @@ export class MynoteComponent implements OnInit {
 
     if (element.reasonOfRefund.length > 0 && element.typeOfExpense.length > 0) {
       const modifier_entry = this.dataSource.indexOf(element);
-      
+
       this.erlService.updateExpenseReportLineFromServer(element).then(
         response => {
           this.loadData();
@@ -207,7 +217,7 @@ export class MynoteComponent implements OnInit {
         error => {
           console.log(error);
         }
-      )
+      );
 
       this.line__files = [];
       this.filesSource = new MatTableDataSource(this.line__files);
@@ -224,18 +234,18 @@ export class MynoteComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    this._error.subscribe((message) => this.errorMessage = message);
     this.loadData();
     this.filesSource = new MatTableDataSource(this.files);
-    //this.dataSource = new MatTableDataSource();
+    // this.dataSource = new MatTableDataSource();
   }
 
-  loadData(){
+  loadData() {
     this.missionService.getMissionsByConUserUidFromServer().then(
       (response) => {
-        for(const r of response){
-          if((r.status === "En cours" || r.status === "Terminée" ) && !this.mission.some(item => 
-            item.mid===r.mid)){
+        for (const r of response) {
+          if ((r.status === 'En cours' || r.status === 'Terminée' ) && !this.mission.some(item =>
+            item.mid === r.mid)) {
             this.mission.push(r);
           }
         }
@@ -249,26 +259,44 @@ export class MynoteComponent implements OnInit {
       }
     );
   }
-}
 
-export interface Files {
-  PATH: string;
-  TYPE: string;
-}
+  sendNote() {
+    this.erRequest.status = 'En cours de validation 1';
+    this.erService.updateExpenseReport(this.erRequest);
+  }
 
-export interface Line {
-  MISSION: string;
-  REMBOURSEMENT: string;
-  TYPE: string;
-  DATE: Date;
-  DETAILS: string;
-  MONTANT: number;
-  AVANCE: boolean;
-  FILE: Files[];
-}
+  resend() {
+    let sizeRefuse = 0;
+    for (const line of this.erRequest.expenseReportLineRequest) {
+      if (line.state === 'A actualisée 1' || line.state === 'A actualisée 2') {
+        sizeRefuse = sizeRefuse + 1;
+      }
+    }
 
-/**
- * LISTE DE TOUTES LES LIGNES ACTUELLES
- */
-const ELEMENT_DATA: Line[] = [
-];
+    if (sizeRefuse > 0) {
+      this._error.next('Impossible de renvoyer la note de frais car certaines lignes sont toujours a actualiser');
+    } else {
+      if (this.erRequest.status === 'A actualisée 1') {
+        this.erRequest.status = 'En cours de validation 1';
+        this.erService.updateExpenseReport(this.erRequest).then(
+          (response) => {
+            console.log(response);
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      } else {
+        this.erRequest.status = 'En cours de validation 2';
+        this.erService.updateExpenseReport(this.erRequest).then(
+          (response) => {
+            console.log(response);
+          },
+          (error) => {
+            console.log(error);
+          }
+        );;
+      }
+    }
+  }
+}

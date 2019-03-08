@@ -1,19 +1,16 @@
 <div style="padding: 10px 0px 0px; ">
   <h3 style="margin-left: 20px; display: block;">SUIVI DES NOTES DE FRAIS</h3>
 </div>
-<div id="top_box_missions" class="top_div" style="">
+<div id="top_box_missions" class="top_div">
   <select #selectedReport id='selector_report' class="soflow" style="display: inline-block;">
     <option value="2019" selected>2019</option>
     <option value="2020">2020</option>
     <option value="2021">2021</option>
   </select>
 
-
+  <button class="validate-button" type="submit" value="Register" style="margin-top: 32px; width: 100%;">Rechercher</button>
 </div>
-<button class="validate-button" type="submit" value="Register" style="margin-top: 32px; width: 100%;">Rechercher</button>
-
-
-<div id="low_box_reports" class="top_div" style="">
+<div id="low_box_reports" class="top_div">
   <div style="padding: 10px 10px 0px;">
     <h4 style="font-size: 20px">Votre note de frais</h4>
     <div class="example-container" style="height: auto;">
@@ -22,18 +19,22 @@
         <!-- Position Column -->
         <ng-container matColumnDef="MOIS">
           <th mat-header-cell *matHeaderCellDef> MOIS </th>
-          <td mat-cell *matCellDef="let element"> {{ element.requestDate |
+          <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': colors[element.status]}"> {{
+            element.requestDate
+            |
             date: 'MM/yyyy'}} </td>
         </ng-container>
 
         <ng-container matColumnDef="STATUT">
           <th mat-header-cell *matHeaderCellDef> STATUT </th>
-          <td mat-cell *matCellDef="let element"> {{element.status }} </td>
+          <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': colors[element.status]}">
+            {{element.status }}
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="ACTION">
           <th mat-header-cell *matHeaderCellDef> ACTION </th>
-          <td mat-cell *matCellDef="let element">
+          <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': colors[element.status]}">
             <button routerLink="notfound" class="consult-button" (click)="consultation(element.did)">
             </button>
           </td>

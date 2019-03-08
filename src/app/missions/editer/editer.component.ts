@@ -36,7 +36,7 @@ export class EditerComponent implements OnInit {
   isReadOnly = this.route.snapshot.params['isRead'];
   collaborateurInput = '';
 
-  user: User[];
+  user: User[] = [];
   service: Service[] = [];
 
   dataSource: MatTableDataSource<User>;
@@ -247,6 +247,7 @@ export class EditerComponent implements OnInit {
     ]).then(values => {
       this.user = values[0];
       this.service = values[1];
+
       this.missionService
         .getMissionByMidFromServer(+this.route.snapshot.params['mid'])
         .then(
