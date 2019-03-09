@@ -51,6 +51,10 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
     </div>
+
+<button class="save-button" (click)="saveEvent(false)">
+  Sauvegarder
+</button>
   </div>
 
 
@@ -94,9 +98,6 @@
       </td>
     </table>
 
-    <button class="save-button" (click)="saveEvent(false)">
-      Sauvegarder
-    </button>
     <button class="validate-button" (click)="saveEvent(true)">
       Valider la demande
     </button>
